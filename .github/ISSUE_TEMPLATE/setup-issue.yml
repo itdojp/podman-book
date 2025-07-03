@@ -1,0 +1,99 @@
+name: 🚨 Setup Issue / セットアップ問題
+description: Report problems during setup process / セットアップ中の問題を報告
+title: "[Setup Issue] "
+labels: ["setup", "bug", "high-priority"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Having trouble with setup? Let us help you get started!
+        セットアップでお困りですか？解決をお手伝いします！
+
+  - type: input
+    id: step-failed
+    attributes:
+      label: Which step failed? / どのステップで失敗しましたか？
+      description: "Example: git clone, npm install, node easy-setup.js..."
+      placeholder: "Step that caused the issue"
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Error message / エラーメッセージ
+      description: Please paste the complete error message
+      placeholder: |
+        Paste the full error output here...
+        完全なエラー出力をここに貼り付けてください...
+      render: shell
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating System / オペレーティングシステム
+      options:
+        - Windows
+        - macOS
+        - Linux (Ubuntu)
+        - Linux (other)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version / Node.jsバージョン
+      description: "Run `node --version` to check"
+      placeholder: "v18.17.0"
+    validations:
+      required: true
+
+  - type: input
+    id: npm-version
+    attributes:
+      label: npm version / npmバージョン
+      description: "Run `npm --version` to check"
+      placeholder: "9.6.7"
+    validations:
+      required: false
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce / 再現手順
+      description: What steps did you take before the error occurred?
+      placeholder: |
+        1. git clone https://github.com/itdojp/book-publishing-template2.git
+        2. cd book-publishing-template2
+        3. node easy-setup.js
+        4. ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: pre-requirements
+    attributes:
+      label: Pre-requirements check / 前提条件チェック
+      description: Please confirm you have checked these
+      options:
+        - label: I have Node.js 18+ installed / Node.js 18以上がインストール済み
+          required: true
+        - label: I have git installed / gitがインストール済み
+          required: true
+        - label: I can access GitHub / GitHubにアクセス可能
+          required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context / 追加情報
+      description: Any other information that might help
+      placeholder: |
+        Network restrictions, proxy settings, previous attempts...
+        ネットワーク制限、プロキシ設定、過去の試行など...
+    validations:
+      required: false

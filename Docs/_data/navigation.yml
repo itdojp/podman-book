@@ -1,0 +1,10 @@
+# Auto-generated navigation data
+chapters:
+  - title: "第1章: v3.0デザインシステムの基本概念"
+    path: "/chapters/chapter01/"
+  - title: "第2章: 実装方法とカスタマイズ"
+    path: "/chapters/chapter02/"
+
+appendices:
+  - title: "付録A: 設定リファレンス"
+    path: "/appendices/appendix-a/"

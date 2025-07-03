@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>{{ page.title | default: site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ '/assets/images/itdo_logo_48x48_blue.png' | relative_url }}">
+    <link rel="shortcut icon" type="image/png" href="{{ '/assets/images/itdo_logo_48x48_blue.png' | relative_url }}">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/print.css' | relative_url }}" media="print">
+    
+    <!-- MathJax for mathematical formulas -->
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            TeX: {
+                equationNumbers: { autoNumber: "AMS" },
+                extensions: ["AMSmath.js", "AMSsymbols.js"]
+            }
+        });
+    </script>
+    
+    <!-- Mermaid for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                themeVariables: {
+                    fontFamily: '"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif',
+                    fontSize: '16px'
+                }
+            });
+            
+            // Process any code blocks marked as mermaid
+            document.querySelectorAll('pre > code.language-mermaid').forEach(function(element) {
+                // Create a div to replace the code block
+                const graphDiv = document.createElement('div');
+                graphDiv.className = 'mermaid';
+                graphDiv.textContent = element.textContent;
+                
+                // Replace the pre element with the mermaid div
+                const preElement = element.parentElement;
+                preElement.parentElement.replaceChild(graphDiv, preElement);
+            });
+            
+            // Re-run mermaid on the new divs
+            mermaid.init();
+        });
+    </script>
+    
+    <!-- Syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        // Configure highlight.js to ignore mermaid blocks
+        hljs.configure({
+            ignoreUnescapedHTML: true
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Only highlight code blocks that are not mermaid
+            document.querySelectorAll('pre > code:not(.language-mermaid)').forEach(function(block) {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #06b6d4;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            bottom: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .header .description {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 800px;
+        }
+        
+        /* Navigation Styles */
+        .navigation {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            padding: 20px;
+            margin-bottom: 40px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        
+        .navigation ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .navigation li {
+            margin: 0;
+        }
+        
+        .navigation a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .navigation a:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-color);
+            transform: translateY(-1px);
+        }
+        
+        /* Content Styles */
+        .content {
+            min-height: 70vh;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Chapter Grid Styles */
+        .chapter-section {
+            margin-bottom: 50px;
+        }
+        
+        .chapter-section h2 {
+            color: var(--text-primary);
+            font-size: 1.875rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chapter-section h2::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--border-color) 0%, transparent 100%);
+            margin-left: 20px;
+        }
+        
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .chapter-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+        
+        .chapter-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .chapter-card h3 {
+            margin: 0 0 12px 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chapter-card .emoji {
+            font-size: 2rem;
+            display: inline-block;
+        }
+        
+        .chapter-card .description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .chapter-card .meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Difficulty Badges */
+        .difficulty {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .difficulty-basic { 
+            background: #d1fae5; 
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .difficulty-intermediate { 
+            background: #fef3c7; 
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        
+        .difficulty-advanced { 
+            background: #fee2e2; 
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .difficulty-expert { 
+            background: #e0e7ff; 
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+        }
+        
+        /* Progress Indicator */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--bg-tertiary);
+            z-index: 1000;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* Learning Path Section */
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .learning-path {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .learning-path:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .learning-path h3 {
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .learning-path .duration {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+        
+        .learning-path .description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        /* Statistics Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .stat-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: var(--bg-primary);
+            margin-top: 60px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h4 {
+            color: var(--text-primary);
+            margin: 0 0 16px 0;
+            font-size: 1.125rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .navigation {
+                position: static;
+                margin-bottom: 20px;
+            }
+            
+            .navigation ul {
+                gap: 8px;
+            }
+            
+            .navigation a {
+                padding: 6px 12px;
+                font-size: 0.875rem;
+            }
+            
+            .content {
+                padding: 24px;
+            }
+            
+            .chapter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+        
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-primary: #f3f4f6;
+                --text-secondary: #9ca3af;
+                --bg-primary: #1f2937;
+                --bg-secondary: #111827;
+                --bg-tertiary: #374151;
+                --border-color: #4b5563;
+            }
+            
+            .header {
+                background: linear-gradient(135deg, #4338ca 0%, #5b21b6 100%);
+            }
+            
+            .navigation a:hover {
+                background: var(--bg-tertiary);
+            }
+        }
+        
+        /* Mermaid diagram styling */
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        /* Code block styling */
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-secondary); }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mt-0 { margin-top: 0; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+    </style>
+</head>
+
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>{{ site.title }}</h1>
+                <div class="subtitle">{{ site.subtitle }}</div>
+                <p class="description">{{ site.description }}</p>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <div class="container">
+        <nav class="navigation">
+            <ul>
+                <li><a href="{{ '/' | relative_url }}"><span>🏠</span> ホーム</a></li>
+                <li><a href="{{ '/table-of-contents.html' | relative_url }}"><span>📚</span> 目次</a></li>
+                <li><a href="{{ '/learning-paths.html' | relative_url }}"><span>🎯</span> 学習パス</a></li>
+                <li><a href="{{ '/tutorials/' | relative_url }}"><span>💡</span> チュートリアル</a></li>
+                <li><a href="{{ '/exercises/' | relative_url }}"><span>📝</span> 練習問題</a></li>
+                <li><a href="{{ '/resources.html' | relative_url }}"><span>🔗</span> リソース</a></li>
+                <li><a href="{{ '/discussions' | relative_url }}"><span>💬</span> ディスカッション</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="content">
+            {{ content }}
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>📖 コンテンツ</h4>
+                    <ul>
+                        <li><a href="{{ '/introduction/' | relative_url }}">はじめに</a></li>
+                        <li><a href="{{ '/chapters/' | relative_url }}">本章</a></li>
+                        <li><a href="{{ '/tutorials/' | relative_url }}">チュートリアル</a></li>
+                        <li><a href="{{ '/appendices/' | relative_url }}">付録</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🔗 プラットフォーム</h4>
+                    <ul>
+                        <li><a href="https://github.com/{{ site.repository.github | default: site.author.github }}/{{ site.repository.name }}">GitHub</a></li>
+                        <li><a href="https://zenn.dev/{{ site.author.github }}/books/{{ site.repository.zenn | default: site.repository.name }}">Zenn</a></li>
+                        <li><a href="{{ site.kindle_url | default: '#' }}">Kindle</a></li>
+                        <li><a href="{{ '/feed.xml' | relative_url }}">RSS</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🤝 コミュニティ</h4>
+                    <ul>
+                        <li><a href="https://github.com/{{ site.repository.github }}/discussions">Discussions</a></li>
+                        <li><a href="https://github.com/{{ site.repository.github }}/issues">Issues</a></li>
+                        <li><a href="https://github.com/{{ site.repository.github }}/pulls">Pull Requests</a></li>
+                        <li><a href="{{ '/contributing.html' | relative_url }}">貢献ガイド</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>ℹ️ 情報</h4>
+                    <ul>
+                        <li><a href="{{ '/about.html' | relative_url }}">著者について</a></li>
+                        <li><a href="{{ '/license.html' | relative_url }}">ライセンス</a></li>
+                        <li><a href="{{ '/changelog.html' | relative_url }}">更新履歴</a></li>
+                        <li><a href="mailto:{{ site.author.email }}">お問い合わせ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ 'now' | date: '%Y' }} {{ site.author.name }}. Licensed under {{ site.license | default: 'MIT License' }}.</p>
+                <p>Published by <a href="https://itdo.jp">ITDO Inc.</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Additional JavaScript for enhanced functionality -->
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Progress indicator for reading
+        function updateProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = scrolled + '%';
+            }
+        }
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Add reading time estimator
+        function estimateReadingTime() {
+            const content = document.querySelector('.content');
+            if (!content) return 0;
+            
+            const text = content.innerText;
+            const wpm = 400; // Japanese reading speed (characters per minute)
+            const words = text.length;
+            const time = Math.ceil(words / wpm);
+            
+            // Display reading time if element exists
+            const readingTimeElement = document.getElementById('readingTime');
+            if (readingTimeElement) {
+                readingTimeElement.textContent = `読了時間: 約${time}分`;
+            }
+            
+            return time;
+        }
+        
+        // Call on page load
+        document.addEventListener('DOMContentLoaded', estimateReadingTime);
+        
+        // Enhanced copy code blocks functionality
+        function addCopyButtons() {
+            document.querySelectorAll('pre code').forEach((block) => {
+                // Skip if button already exists
+                if (block.parentNode.querySelector('.copy-button')) return;
+                
+                const button = document.createElement('button');
+                button.className = 'copy-button';
+                button.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                `;
+                button.style.cssText = `
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    background: var(--bg-tertiary);
+                    color: var(--text-secondary);
+                    border: 1px solid var(--border-color);
+                    padding: 4px 8px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    transition: all 0.2s ease;
+                    opacity: 0;
+                `;
+                
+                const pre = block.parentNode;
+                pre.style.position = 'relative';
+                pre.appendChild(button);
+                
+                // Show button on hover
+                pre.addEventListener('mouseenter', () => {
+                    button.style.opacity = '1';
+                });
+                
+                pre.addEventListener('mouseleave', () => {
+                    button.style.opacity = '0';
+                });
+                
+                button.addEventListener('mouseenter', () => {
+                    button.style.background = 'var(--primary-color)';
+                    button.style.color = 'white';
+                    button.style.borderColor = 'var(--primary-color)';
+                });
+                
+                button.addEventListener('mouseleave', () => {
+                    button.style.background = 'var(--bg-tertiary)';
+                    button.style.color = 'var(--text-secondary)';
+                    button.style.borderColor = 'var(--border-color)';
+                });
+                
+                button.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(block.textContent);
+                        const span = button.querySelector('span');
+                        span.textContent = 'Copied!';
+                        button.style.background = 'var(--success-color)';
+                        button.style.color = 'white';
+                        button.style.borderColor = 'var(--success-color)';
+                        
+                        setTimeout(() => {
+                            span.textContent = 'Copy';
+                            button.style.background = 'var(--bg-tertiary)';
+                            button.style.color = 'var(--text-secondary)';
+                            button.style.borderColor = 'var(--border-color)';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
+                });
+            });
+        }
+        
+        // Call on page load and after dynamic content updates
+        document.addEventListener('DOMContentLoaded', addCopyButtons);
+        
+        // Observe for dynamically added code blocks
+        const observer = new MutationObserver(() => {
+            addCopyButtons();
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        // Image lazy loading and responsive image support
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add lazy loading to all images
+            const images = document.querySelectorAll('img');
+            
+            images.forEach(img => {
+                // Skip if already has lazy loading attributes
+                if (img.loading) return;
+                
+                // Add lazy loading
+                img.loading = 'lazy';
+                
+                // Add responsive image support for WebP
+                const imgSrc = img.src;
+                if (imgSrc && !imgSrc.includes('.svg')) {
+                    // Create picture element for WebP support
+                    const picture = document.createElement('picture');
+                    
+                    // WebP source
+                    const webpSource = document.createElement('source');
+                    const webpSrc = imgSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+                    webpSource.srcset = webpSrc;
+                    webpSource.type = 'image/webp';
+                    
+                    // Original source as fallback
+                    const originalSource = document.createElement('source');
+                    originalSource.srcset = imgSrc;
+                    
+                    // Clone the original img element
+                    const newImg = img.cloneNode(true);
+                    newImg.loading = 'lazy';
+                    
+                    // Build picture element
+                    picture.appendChild(webpSource);
+                    picture.appendChild(originalSource);
+                    picture.appendChild(newImg);
+                    
+                    // Replace original img with picture
+                    img.parentNode.replaceChild(picture, img);
+                }
+            });
+            
+            // Enhanced Intersection Observer for multiple purposes
+            if ('IntersectionObserver' in window) {
+                // Image lazy loading
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            if (img.dataset.src) {
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                                img.classList.add('loaded');
+                            }
+                            observer.unobserve(img);
+                        }
+                    });
+                }, {
+                    rootMargin: '50px 0px',
+                    threshold: 0.01
+                });
+                
+                // Animate elements on scroll
+                const animateObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animate-in');
+                        }
+                    });
+                }, {
+                    threshold: 0.1
+                });
+                
+                // Observe elements
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+                
+                document.querySelectorAll('.chapter-card, .learning-path, .stat-card').forEach(el => {
+                    animateObserver.observe(el);
+                });
+            }
+        });
+        
+        // Add smooth animations CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            .animate-in {
+                animation: fadeInUp 0.6s ease-out;
+            }
+            
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            img.loaded {
+                animation: fadeIn 0.4s ease-out;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

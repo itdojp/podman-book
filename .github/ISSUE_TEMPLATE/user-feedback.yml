@@ -1,0 +1,107 @@
+name: 📝 User Feedback / ユーザーフィードバック
+description: Share your experience with v2.0 template / v2.0テンプレートの使用感をお聞かせください
+title: "[Feedback] "
+labels: ["feedback", "user-experience"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for using Book Publishing Template v2.0! 
+        Your feedback helps us improve the experience for everyone.
+        
+        Book Publishing Template v2.0をご利用いただき、ありがとうございます！
+        皆様のフィードバックが、より良いテンプレートづくりに役立ちます。
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: User Type / ユーザータイプ
+      description: Which describes you best? / あなたに最も近いタイプは？
+      options:
+        - First-time user / 初回利用者
+        - Migrating from v1 template / v1テンプレートからの移行
+        - Experienced user / 経験豊富なユーザー
+    validations:
+      required: true
+
+  - type: dropdown
+    id: overall-satisfaction
+    attributes:
+      label: Overall Satisfaction / 総合満足度
+      description: How satisfied are you with the v2.0 template? / v2.0テンプレートにどの程度満足していますか？
+      options:
+        - 5 - Very satisfied / とても満足
+        - 4 - Satisfied / 満足
+        - 3 - Neutral / 普通
+        - 2 - Dissatisfied / 不満
+        - 1 - Very dissatisfied / とても不満
+    validations:
+      required: true
+
+  - type: dropdown
+    id: setup-experience
+    attributes:
+      label: Setup Experience / セットアップ体験
+      description: How was the setup process? / セットアップはいかがでしたか？
+      options:
+        - 5 - Very easy / とても簡単
+        - 4 - Easy / 簡単
+        - 3 - Moderate / 普通
+        - 2 - Difficult / 難しい
+        - 1 - Very difficult / とても難しい
+    validations:
+      required: true
+
+  - type: textarea
+    id: liked-features
+    attributes:
+      label: What you liked most / 最も気に入った機能
+      description: What features or aspects do you like most about v2.0? / v2.0で最も気に入った機能や側面は何ですか？
+      placeholder: |
+        Example: Easy setup with easy-setup.js, faster build times, clear error messages...
+        例：easy-setup.jsによる簡単セットアップ、ビルド時間の短縮、分かりやすいエラーメッセージ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: pain-points
+    attributes:
+      label: Pain points / 困った点
+      description: What challenges or issues did you encounter? / どのような課題や問題に遭遇しましたか？
+      placeholder: |
+        Example: Documentation unclear in some parts, missing features from v1...
+        例：一部ドキュメントが不明確、v1からの機能不足...
+    validations:
+      required: false
+
+  - type: textarea
+    id: feature-requests
+    attributes:
+      label: Feature requests / 機能要望
+      description: What features would you like to see added? / 追加して欲しい機能はありますか？
+      placeholder: |
+        Example: PDF generation, better theme customization, plugin system...
+        例：PDF生成、テーマカスタマイズ機能、プラグインシステム...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: would-recommend
+    attributes:
+      label: Recommendation / 推薦
+      description: Would you recommend v2.0 to others? / v2.0を他の人に推薦しますか？
+      options:
+        - label: Yes, I would recommend v2.0 to others / はい、他の人にv2.0を推薦します
+        - label: I would suggest improvements first / 改善してから推薦したいです
+        - label: No, I would not recommend it / いいえ、推薦しません
+
+  - type: textarea
+    id: additional-comments
+    attributes:
+      label: Additional comments / その他のコメント
+      description: Any other thoughts or suggestions? / その他のご意見や提案はありますか？
+      placeholder: |
+        Feel free to share any other thoughts about your experience...
+        体験に関するその他のご意見をお聞かせください...
+    validations:
+      required: false

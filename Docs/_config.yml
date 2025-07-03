@@ -1,0 +1,21 @@
+title: "Book Publishing Template v3.0 Preview"
+description: "モダンデザインシステムのプレビュー"
+baseurl: "/book-publishing-template2"
+url: "https://itdojp.github.io"
+
+# GitHub Pages設定
+theme: minima
+plugins:
+  - jekyll-feed
+
+# Markdown設定
+markdown: kramdown
+highlighter: rouge
+
+# 除外ファイル
+exclude:
+  - node_modules/
+  - scripts/
+  - templates/
+  - src/
+  - "*.json"

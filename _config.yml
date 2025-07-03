@@ -1,0 +1,38 @@
+# Jekyll設定
+title: {{BOOK_TITLE}}
+description: {{BOOK_DESCRIPTION}}
+author: 
+  name: ITDO Inc. (株式会社アイティードゥ)
+  github: {{GITHUB_USERNAME}}
+  email: {{AUTHOR_EMAIL}}
+baseurl: "/{{PUBLIC_REPO_NAME}}"
+url: "https://{{GITHUB_USERNAME}}.github.io"
+
+# Repository settings for links
+repository:
+  github: {{GITHUB_USERNAME}}/{{PUBLIC_REPO_NAME}}  # GitHub repository path
+  zenn: books/{{PUBLIC_REPO_NAME}}                  # Zenn book path
+
+# テーマ
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
+
+# 言語設定
+lang: ja
+
+# その他の設定
+show_downloads: false
+google_analytics:
+
+# ビルド設定
+exclude:
+  - README.md
+  - package.json
+  - package-lock.json
+  - node_modules/
+  - scripts/
+  - .gitignore
+  - LICENSE
+  - CONTRIBUTING.md
+  - src/

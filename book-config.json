@@ -1,0 +1,52 @@
+{
+  "book": {
+    "title": "Book Publishing Template v3.0 サンプル",
+    "description": "モダンデザインシステムを使用した技術書籍テンプレートのサンプル",
+    "author": {
+      "name": "Book Publishing Template",
+      "email": "example@example.com"
+    },
+    "version": "3.0.0",
+    "language": "ja"
+  },
+  "contentSections": [
+    {
+      "name": "introduction",
+      "directory": "introduction",
+      "enabled": true,
+      "order": 1,
+      "title": "はじめに"
+    },
+    {
+      "name": "chapters",
+      "directory": "chapters",
+      "enabled": true,
+      "order": 2,
+      "title": "章"
+    },
+    {
+      "name": "appendices",
+      "directory": "appendices",
+      "enabled": true,
+      "order": 3,
+      "title": "付録"
+    }
+  ],
+  "excludePatterns": [
+    "draft.md",
+    "*.tmp",
+    ".DS_Store",
+    "Thumbs.db"
+  ],
+  "contentExcludePatterns": [
+    "<\!-- PRIVATE:",
+    "<\!-- TODO:",
+    "<\!-- DRAFT:"
+  ],
+  "build": {
+    "outputDirectory": "docs",
+    "enableV3DesignSystem": true,
+    "enableNavigation": true,
+    "enableSyntaxHighlighting": true
+  }
+}

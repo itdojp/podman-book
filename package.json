@@ -1,0 +1,50 @@
+{
+  "name": "book-publishing-template-improved",
+  "version": "2.0.0",
+  "description": "Improved Book Publishing Template with Easy Setup",
+  "author": "Book Publishing Template Contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "setup": "node easy-setup.js",
+    "build": "node scripts/build-simple.js",
+    "build:full": "node scripts/build.js",
+    "preview": "npm run build && npx http-server public -p 8080 --silent",
+    "deploy": "bash scripts/deploy.sh",
+    "clean": "rm -rf public output temp",
+    "configure:workflows": "node scripts/configure-workflows.js",
+    "lint:light": "markdownlint 'src/**/*.md' --ignore node_modules",
+    "test:light": "npm run lint:light && npm run build",
+    "help": "echo 'Available commands:\n  npm run setup - Interactive setup\n  npm run build - Build the book\n  npm run preview - Local preview\n  npm run configure:workflows - Disable problematic workflows\n  npm run deploy - Deploy to GitHub Pages'"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.0",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "markdownlint-cli": "^0.33.0"
+  },
+  "optionalDependencies": {
+    "puppeteer": "^21.0.0",
+    "sharp": "^0.34.2"
+  },
+  "keywords": [
+    "book",
+    "publishing",
+    "markdown",
+    "github-pages",
+    "template",
+    "easy-setup"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itdojp/book-publishing-template2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itdojp/book-publishing-template2/issues"
+  },
+  "homepage": "https://github.com/itdojp/book-publishing-template2#readme"
+}

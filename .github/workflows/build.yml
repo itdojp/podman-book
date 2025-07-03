@@ -37,7 +37,7 @@ jobs:
         
     - name: Install dependencies
       run: |
-        npm install fs-extra gray-matter --no-optional --no-save
+        npm install
         
     - name: Build HTML (for GitHub Pages)
       run: |

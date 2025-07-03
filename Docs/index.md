@@ -1,131 +1,60 @@
-# Book Publishing Template ドキュメント
+# Podman完全ガイド
 
-このテンプレートを使用して効率的に書籍を作成・公開するための包括的なガイド集です。
+コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法
 
-## 📚 ドキュメント一覧
+## 📖 本書について
 
-### 🚀 開始ガイド
-- **[セットアップガイド](../setup-guide.md)** - 初期設定と環境構築
-- **[クイックスタート](quick-start.md)** - 5分で始める書籍作成
-- **[基本概念](concepts.md)** - テンプレートの構造と仕組み
+本書は、Podmanコンテナ技術の包括的なガイドブックです。基礎知識から実践的な活用法まで、エンタープライズ環境でのPodman導入・運用に必要な知識を体系的に学ぶことができます。
 
-### 📝 執筆ガイド
-- **[コンテンツ作成](writing-guide.md)** - Markdownでの執筆方法
-- **[構造化ガイド](content-structure.md)** - 章立てとファイル構成
-- **[スタイルガイド](style-guide.md)** - 一貫した書式と表現
+## 🗂️ 目次
 
-### 🔧 設定とカスタマイズ
-- **[設定リファレンス](configuration.md)** - book-config.jsonの詳細設定
-- **[テーマカスタマイズ](theming.md)** - 見た目とレイアウトの変更
-- **[プラグイン開発](plugins.md)** - 機能拡張の方法
+### はじめに
+- **[はじめに](introduction/)** - 本書の構成と学習の進め方
 
-### 📤 出力と公開
-- **[複数フォーマット対応](output-formats.md)** - Web, PDF, EPUB出力
-- **[GitHub Pages デプロイ](deployment.md)** - 自動公開の設定
-- **[CI/CD設定](ci-cd.md)** - 継続的な統合とデプロイ
+### 第I部：基礎編 (第1章〜第5章)
+- **[第1章 コンテナ技術の基礎](chapters/chapter01/)** - コンテナ技術の基本概念
+- **[第2章 Podmanのインストールと設定](chapters/chapter02/)** - 環境構築と初期設定
+- **[第3章 Podman環境構築の最適化](chapters/chapter03/)** - パフォーマンスとセキュリティの最適化
+- **[第4章 コンテナの基本操作](chapters/chapter04/)** - 基本的なコマンドと操作方法
+- **[第5章 イメージの作成と管理](chapters/chapter05/)** - Containerfileとイメージ管理
 
-### 🛠️ 開発とメンテナンス
-- **[ベストプラクティス](best-practices.md)** - 効率的な開発手法
-- **[トラブルシューティング](../TROUBLESHOOTING.md)** - 問題解決ガイド
-- **[FAQ](faq.md)** - よくある質問と回答
+### 第II部：実践編 (第6章〜第10章)
+- **[第6章 ネットワークとストレージ](chapters/chapter06/)** - ネットワーク設定とデータ管理
+- **[第7章 Podとマルチコンテナ管理](chapters/chapter07/)** - 複数コンテナの統合管理
+- **[第8章 セキュリティとRootlessコンテナ](chapters/chapter08/)** - セキュリティ強化と権限管理
+- **[第9章 systemd統合と本番運用](chapters/chapter09/)** - サービス化と運用自動化
+- **[第10章 CI/CDパイプライン構築](chapters/chapter10/)** - 継続的インテグレーション・デプロイ
 
-### 🎯 高度な活用
-- **[自動化](automation.md)** - ワークフローの自動化
-- **[チーム開発](collaboration.md)** - 複数人での執筆管理
-- **[パフォーマンス最適化](performance.md)** - ビルド時間とファイルサイズの最適化
+### 第III部：応用編 (第11章〜第15章)
+- **[第11章 Kubernetes連携](chapters/chapter11/)** - Kubernetesとの統合
+- **[第12章 パフォーマンスチューニング](chapters/chapter12/)** - 性能最適化技術
+- **[第13章 マイクロサービスアーキテクチャ](chapters/chapter13/)** - アーキテクチャ設計パターン
+- **[第14章 エンタープライズ環境での活用](chapters/chapter14/)** - 企業導入事例と運用ノウハウ
+- **[第15章 トラブルシューティング完全ガイド](chapters/chapter15/)** - 問題解決の手法とテクニック
 
-## 📋 チュートリアル
+### 付録
+- **[付録A コマンドリファレンス](appendices/appendix-a/)** - Podman主要コマンド一覧
+- **[付録B 設定ファイルリファレンス](appendices/appendix-b/)** - 設定ファイルの詳細
+- **[付録C トラブルシューティングFAQ](appendices/appendix-c/)** - よくある問題と解決方法
 
-### 初心者向け
-1. **[はじめての書籍作成](tutorials/first-book.md)**
-2. **[GitHub Pagesでの公開](tutorials/github-pages.md)**
-3. **[基本的なカスタマイズ](tutorials/basic-customization.md)**
+### おわりに
+- **[あとがき](afterword/)** - 今後の展望と学習リソース
 
-### 中級者向け
-1. **[複数フォーマット出力](tutorials/multi-format.md)**
-2. **[自動化ワークフロー](tutorials/automation.md)**
-3. **[SEO最適化](tutorials/seo-optimization.md)**
+## 🎯 対象読者
 
-### 上級者向け
-1. **[カスタムテーマ開発](tutorials/custom-theme.md)**
-2. **[プラグイン作成](tutorials/plugin-development.md)**
-3. **[大規模プロジェクト管理](tutorials/large-projects.md)**
+- Dockerからの移行を検討している開発者・運用者
+- コンテナ技術をエンタープライズ環境で活用したい方
+- セキュアなコンテナ運用を実現したい方
+- Kubernetes環境でPodmanを活用したい方
 
-## 🔗 外部リソース
+## 📚 本書の特徴
 
-### 公式リンク
-- **[GitHub Repository](https://github.com/itdojp/book-publishing-template)**
-- **[Issues & Bug Reports](https://github.com/itdojp/book-publishing-template/issues)**
-- **[Discussions](https://github.com/itdojp/book-publishing-template/discussions)**
-
-### 関連技術
-- **[Markdown記法](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)**
-- **[GitHub Pages Documentation](https://docs.github.com/pages)**
-- **[Pandoc User's Guide](https://pandoc.org/MANUAL.html)**
-- **[Jekyll Documentation](https://jekyllrb.com/docs/)**
-
-### コミュニティ
-- **[ユーザーコミュニティ](#)** - 情報交換と質問
-- **[事例集](#)** - 実際の使用例
-- **[貢献ガイド](../CONTRIBUTING.md)** - プロジェクトへの貢献方法
-
-## 📊 ステータス
-
-| 機能 | 状態 | ドキュメント |
-|------|------|-------------|
-| 基本ビルド | ✅ 完成 | [セットアップガイド](../setup-guide.md) |
-| Web出力 | ✅ 完成 | [出力フォーマット](output-formats.md) |
-| PDF出力 | ✅ 完成 | [出力フォーマット](output-formats.md) |
-| EPUB出力 | ✅ 完成 | [出力フォーマット](output-formats.md) |
-| 自動デプロイ | ✅ 完成 | [デプロイ](deployment.md) |
-| 国際化 | 🚧 開発中 | [多言語対応](i18n.md) |
-
-## 💡 使い方のヒント
-
-### 効率的な学習順序
-1. **[セットアップガイド](../setup-guide.md)** で環境を構築
-2. **[クイックスタート](quick-start.md)** でサンプル書籍を作成
-3. **[コンテンツ作成](writing-guide.md)** で執筆方法を学習
-4. **[設定リファレンス](configuration.md)** でカスタマイズ
-5. **[出力フォーマット](output-formats.md)** で公開形式を選択
-
-### よく使うコマンド
-```bash
-# 開発サーバー起動
-npm run preview
-
-# 全フォーマットビルド
-npm run build:all
-
-# デプロイ
-npm run deploy
-
-# クリーンビルド
-npm run clean && npm run build
-```
-
-### トラブル時の対処
-1. **[トラブルシューティング](../TROUBLESHOOTING.md)** で一般的な問題を確認
-2. **[FAQ](faq.md)** でよくある質問をチェック
-3. **[Issues](https://github.com/itdojp/book-publishing-template/issues)** で既知の問題を検索
-4. 解決しない場合は新しいIssueを作成
-
-## 🤝 サポート
-
-### 質問・相談
-- **GitHub Discussions**: 一般的な質問や使用法の相談
-- **GitHub Issues**: バグ報告や機能要望
-- **Email**: knowledge@itdo.jp（緊急時のみ）
-
-### コントリビューション
-このプロジェクトはオープンソースです。改善提案やバグ修正など、あらゆる貢献を歓迎します。
-
-- **[貢献ガイド](../CONTRIBUTING.md)** - 貢献方法の詳細
-- **[開発環境構築](development.md)** - 開発者向けセットアップ
-- **[コーディング規約](coding-standards.md)** - コード品質の基準
+- **実践重視**: 豊富なサンプルコードと実際の運用例
+- **セキュリティ強化**: Rootlessコンテナとセキュリティベストプラクティス
+- **運用ノウハウ**: systemd統合とCI/CD自動化
+- **トラブル対応**: 包括的なトラブルシューティングガイド
 
 ---
 
-**📅 最終更新:** 2024年6月16日  
-**📧 メンテナー:** ITDO Inc. <knowledge@itdo.jp>  
-**📄 ライセンス:** MIT License
+**著者**: 太田和彦（株式会社アイティードゥ）  
+**GitHub**: [itdojp/podman-book](https://github.com/itdojp/podman-book)

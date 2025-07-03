@@ -31,7 +31,7 @@ title: "第12章 パフォーマンスチューニング"
 podman stats
 
 # 特定コンテナの詳細統計
-podman stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
+podman stats --format "table \{\{.Container\}\}\t\{\{.CPUPerc\}\}\t\{\{.MemUsage\}\}\t\{\{.NetIO\}\}\t\{\{.BlockIO\}\}"
 
 # JSON形式での出力（自動化用）
 podman stats --no-stream --format json > metrics.json
@@ -339,7 +339,7 @@ class PerformanceTestFramework:
             # 起動完了を待つ
             while True:
                 result = subprocess.run(
-                    ['podman', 'inspect', container, '--format', '{{.State.Status}}'],
+                    ['podman', 'inspect', container, '--format', '\{\{.State.Status\}\}'],
                     capture_output=True, text=True
                 )
                 if result.stdout.strip() == 'running':

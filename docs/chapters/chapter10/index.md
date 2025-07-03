@@ -259,7 +259,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: $\{\{ github.repository \}\}
 
 jobs:
   build:
@@ -289,7 +289,7 @@ jobs:
           # - GitHubとの完全統合
           # - きめ細かいアクセス制御
           # - パッケージとコードの紐付け
-          echo "${{ secrets.GITHUB_TOKEN }}" | podman login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+          echo "$\{\{ secrets.GITHUB_TOKEN \}\}" | podman login $\{\{ env.REGISTRY \}\} -u $\{\{ github.actor \}\} --password-stdin
       
       - name: Build image
         run: |
@@ -297,20 +297,20 @@ jobs:
           # GitHub Actions特有の環境変数を活用
           podman build . \
             --file Containerfile \
-            --tag ${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            --build-arg BUILD_SHA=${{ github.sha }} \
+            --tag $\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\} \
+            --build-arg BUILD_SHA=$\{\{ github.sha \}\} \
             --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
       
       - name: Run tests
         run: |
           # コンテナ内でのテスト実行
           # なぜコンテナ内か：本番と同じ環境を保証
-          podman run --rm ${{ env.IMAGE_NAME }}:${{ github.sha }} npm test
+          podman run --rm $\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\} npm test
       
       - name: Security scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image-ref: $\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\}
           format: 'sarif'  # GitHub Security タブ統合
           output: 'trivy-results.sarif'
       
@@ -325,10 +325,10 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           # プルリクエストではプッシュしない（セキュリティ）
-          podman tag ${{ env.IMAGE_NAME }}:${{ github.sha }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          podman tag ${{ env.IMAGE_NAME }}:${{ github.sha }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          podman push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          podman push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          podman tag $\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\} $\{\{ env.REGISTRY \}\}/$\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\}
+          podman tag $\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\} $\{\{ env.REGISTRY \}\}/$\{\{ env.IMAGE_NAME \}\}:latest
+          podman push $\{\{ env.REGISTRY \}\}/$\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\}
+          podman push $\{\{ env.REGISTRY \}\}/$\{\{ env.IMAGE_NAME \}\}:latest
 
   deploy:
     needs: build
@@ -338,14 +338,14 @@ jobs:
     steps:
       - name: Deploy to Kubernetes
         env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBE_CONFIG: $\{\{ secrets.KUBE_CONFIG \}\}
         run: |
           # Kubernetesへの安全なデプロイ
           echo "$KUBE_CONFIG" | base64 -d > kubeconfig
           export KUBECONFIG=kubeconfig
           
           # デプロイメントの更新
-          kubectl set image deployment/app app=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          kubectl set image deployment/app app=$\{\{ env.REGISTRY \}\}/$\{\{ env.IMAGE_NAME \}\}:$\{\{ github.sha \}\}
           
           # ロールアウト待機（タイムアウト付き）
           kubectl rollout status deployment/app --timeout=300s
@@ -720,7 +720,7 @@ NEW_VERSION=$1
 # - 視覚的な状態管理
 
 # 現在の環境を確認
-CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "{{.Labels.environment}}")
+CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "\{\{.Labels.environment\}\}")
 if [ "$CURRENT_ENV" = "blue" ]; then
     NEW_ENV="green"
 else
@@ -756,7 +756,7 @@ done
 
 # スモークテスト - 基本機能の確認
 echo "Running smoke tests..."
-CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '{{.NetworkSettings.IPAddress}}')
+CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '\{\{.NetworkSettings.IPAddress\}\}')
 ./smoke-tests.sh $CONTAINER_IP || {
     echo "Smoke tests failed"
     podman stop ${APP_NAME}-${NEW_ENV}
@@ -881,13 +881,13 @@ class CanaryController:
         - ユーザー影響の定量化
         - 自動判断の基準
         """
-        query = f'rate(http_requests_total{{app="{self.app_name}",version="{version}",status=~"5.."}}[5m])'
+        query = f'rate(http_requests_total\{\{app="{self.app_name}",version="{version}",status=~"5.."\}\}[5m])'
         response = requests.get(f'{self.prometheus_url}/api/v1/query', params={'query': query})
         # ... パース処理
         
     def get_latency(self, version):
         """レイテンシを取得"""
-        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{{app="{self.app_name}",version="{version}"}}[5m]))'
+        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket\{\{app="{self.app_name}",version="{version}"\}\}[5m]))'
         # ... 
         
     def adjust_traffic(self, new_weight):
@@ -900,10 +900,10 @@ class CanaryController:
         """
         # Nginxの設定を更新
         config = f"""
-        upstream myapp {{
+        upstream myapp \{\{
             server myapp-stable weight={int((1-new_weight)*10)};
             server myapp-canary weight={int(new_weight*10)};
-        }}
+        \}\}
         """
         # ... 設定適用
         

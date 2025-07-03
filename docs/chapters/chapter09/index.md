@@ -221,7 +221,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 podman run -d \
   --name app \
   --log-driver=journald \
-  --log-opt tag="{{.Name}}/{{.ID}}" \  # 識別しやすいタグ
+  --log-opt tag="\{\{.Name\}\}/\{\{.ID\}\}" \  # 識別しやすいタグ
   myapp:latest
 
 # journaldの利点：
@@ -293,7 +293,7 @@ EOF
 
 SERVICE_NAME="container-myapp.service"
 NEW_IMAGE="myapp:new"
-OLD_IMAGE=$(podman inspect myapp --format '{{.ImageName}}')
+OLD_IMAGE=$(podman inspect myapp --format '\{\{.ImageName\}\}')
 
 # ヘルスチェック関数
 health_check() {
@@ -455,7 +455,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Container {{ $labels.name }} is down"
+          summary: "Container \{\{ $labels.name \}\} is down"
           
       - alert: HighMemoryUsage
         expr: container_memory_usage_bytes / container_spec_memory_limit_bytes > 0.9
@@ -463,7 +463,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Container {{ $labels.name }} memory usage is above 90%"
+          summary: "Container \{\{ $labels.name \}\} memory usage is above 90%"
           
       - alert: HighCPUUsage
         expr: rate(container_cpu_usage_seconds_total[5m]) > 0.9
@@ -471,7 +471,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Container {{ $labels.name }} CPU usage is above 90%"
+          summary: "Container \{\{ $labels.name \}\} CPU usage is above 90%"
 ```
 
 ### 9.6 パフォーマンスチューニング

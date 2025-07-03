@@ -137,10 +137,10 @@ $ ls -ln /tmp/test/file
 
 ```bash
 # 現在のストレージドライバー確認
-$ podman info --format '{{.Store.GraphDriverName}}'
+$ podman info --format '\{\{.Store.GraphDriverName\}\}'
 overlay
 
-$ podman info --format '{{.Store.GraphOptions}}'
+$ podman info --format '\{\{.Store.GraphOptions\}\}'
 overlay.mount_program=/usr/bin/fuse-overlayfs
 
 # パフォーマンス測定

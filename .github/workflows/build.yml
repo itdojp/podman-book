@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Publish Book
 
 on:
   push:
@@ -6,15 +6,20 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      build_formats:
+        description: 'Additional formats to build (pdf, epub, all)'
+        required: false
+        default: 'html'
+        type: choice
+        options:
+        - html
+        - pdf
+        - epub
+        - all
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  contents: write
 
 jobs:
   build:
@@ -34,30 +39,93 @@ jobs:
       run: |
         npm install fs-extra gray-matter --no-optional --no-save
         
-    - name: Build book
+    - name: Build HTML (for GitHub Pages)
       run: |
         npm run build
         
-    - name: Upload artifact
-      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-      uses: actions/upload-pages-artifact@v3
+    - name: Setup Pandoc (if additional formats requested)
+      if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_formats != 'html'
+      uses: r-lib/actions/setup-pandoc@v2
       with:
-        path: ./docs
-
-  deploy:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    needs: build
-    runs-on: ubuntu-latest
-    
-    permissions:
-      pages: write
-      id-token: write
-      
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-      
-    steps:
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        pandoc-version: '3.1.8'
+        
+    - name: Install LaTeX (for PDF)
+      if: github.event_name == 'workflow_dispatch' && (github.event.inputs.build_formats == 'pdf' || github.event.inputs.build_formats == 'all')
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-latex-base texlive-fonts-recommended texlive-latex-extra texlive-lang-japanese
+        
+    - name: Build PDF
+      if: github.event_name == 'workflow_dispatch' && (github.event.inputs.build_formats == 'pdf' || github.event.inputs.build_formats == 'all')
+      run: |
+        mkdir -p output
+        # Combine all markdown files for PDF
+        echo "# Podman完全ガイド" > output/book.md
+        echo "" >> output/book.md
+        cat src/introduction/index.md >> output/book.md
+        echo "" >> output/book.md
+        for i in {01..15}; do
+          if [ -f "src/chapters/chapter${i}/index.md" ]; then
+            cat "src/chapters/chapter${i}/index.md" >> output/book.md
+            echo "" >> output/book.md
+          fi
+        done
+        cat src/appendices/*/index.md >> output/book.md 2>/dev/null || true
+        cat src/afterword/index.md >> output/book.md 2>/dev/null || true
+        
+        # Convert to PDF
+        pandoc output/book.md -o output/podman-complete-guide.pdf \
+          --pdf-engine=xelatex \
+          --variable=mainfont:"Noto Sans CJK JP" \
+          --variable=geometry:margin=2cm \
+          --toc \
+          --number-sections
+          
+    - name: Build EPUB
+      if: github.event_name == 'workflow_dispatch' && (github.event.inputs.build_formats == 'epub' || github.event.inputs.build_formats == 'all')
+      run: |
+        mkdir -p output
+        # Use same combined markdown for EPUB
+        if [ ! -f output/book.md ]; then
+          echo "# Podman完全ガイド" > output/book.md
+          echo "" >> output/book.md
+          cat src/introduction/index.md >> output/book.md
+          echo "" >> output/book.md
+          for i in {01..15}; do
+            if [ -f "src/chapters/chapter${i}/index.md" ]; then
+              cat "src/chapters/chapter${i}/index.md" >> output/book.md
+              echo "" >> output/book.md
+            fi
+          done
+          cat src/appendices/*/index.md >> output/book.md 2>/dev/null || true
+          cat src/afterword/index.md >> output/book.md 2>/dev/null || true
+        fi
+        
+        # Convert to EPUB
+        pandoc output/book.md -o output/podman-complete-guide.epub \
+          --toc \
+          --epub-cover-image=assets/images/cover.png \
+          --metadata title="Podman完全ガイド" \
+          --metadata author="太田和彦（株式会社アイティードゥ）" \
+          --metadata language=ja
+        
+    - name: Upload additional formats as artifacts
+      if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_formats != 'html'
+      uses: actions/upload-artifact@v4
+      with:
+        name: book-formats
+        path: output/
+        retention-days: 30
+        
+    - name: Commit and push HTML build
+      if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.build_formats == 'html')
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Auto-update docs from build [skip ci]"
+          git push
+        fi

@@ -14,9 +14,9 @@ repository:
   zenn: books/podman-book     # Zenn book path
 
 # テーマ
-remote_theme: pages-themes/minimal@v0.2.0
+theme: minima
 plugins:
-  - jekyll-remote-theme
+  - jekyll-feed
 
 # 言語設定
 lang: ja

@@ -1,10 +1,18 @@
 # Auto-generated navigation data
+introduction:
+  - title: "はじめに"
+    path: "/introduction/"
+
 chapters:
-  - title: "第1章: v3.0デザインシステムの基本概念"
+  - title: "第1章：コンテナ技術の基礎"
     path: "/chapters/chapter01/"
-  - title: "第2章: 実装方法とカスタマイズ"
+  - title: "第2章：Podmanのインストールと初期設定"
     path: "/chapters/chapter02/"
 
 appendices:
-  - title: "付録A: 設定リファレンス"
+  - title: "付録A：コマンドリファレンス"
     path: "/appendices/appendix-a/"
+
+afterword:
+  - title: "あとがき"
+    path: "/afterword/"

@@ -1,55 +1,65 @@
 <!-- Page Navigation (Previous/Next) -->
 {% assign navigation = site.data.navigation %}
+
+<!-- Build complete page sequence -->
+{% assign all_pages = '' | split: '' %}
+
+<!-- Add introduction -->
+{% if navigation.introduction %}
+    {% for item in navigation.introduction %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
+<!-- Add chapters -->
+{% if navigation.chapters %}
+    {% for item in navigation.chapters %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
+<!-- Add appendices -->
+{% if navigation.appendices %}
+    {% for item in navigation.appendices %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
+<!-- Add afterword -->
+{% if navigation.afterword %}
+    {% for item in navigation.afterword %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
+<!-- Find current page and set prev/next -->
 {% assign current_found = false %}
 {% assign prev_item = nil %}
 {% assign next_item = nil %}
+{% assign current_index = nil %}
 
-<!-- Search through introduction first -->
-{% if navigation.introduction %}
-    {% for item in navigation.introduction %}
-        {% if current_found == false and page.url contains item.path %}
-            {% assign current_found = true %}
-        {% elsif current_found == false %}
-            {% assign prev_item = item %}
-        {% elsif current_found == true and next_item == nil %}
-            {% assign next_item = item %}
-            {% break %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
+{% for item in all_pages %}
+    <!-- Normalize URLs for comparison -->
+    {% assign normalized_item_path = item.path | remove_first: "/" | append: "/" %}
+    {% assign normalized_page_url = page.url | remove_first: "/" | append: "/" %}
+    
+    {% if normalized_page_url == normalized_item_path %}
+        {% assign current_index = forloop.index0 %}
+        {% break %}
+    {% endif %}
+{% endfor %}
 
-<!-- Search through chapters -->
-{% if current_found == false %}
-    {% for item in navigation.chapters %}
-        {% if current_found == false and page.url contains item.path %}
-            {% assign current_found = true %}
-            {% if forloop.first and navigation.introduction.size > 0 %}
-                {% assign prev_item = navigation.introduction.last %}
-            {% endif %}
-        {% elsif current_found == false %}
-            {% assign prev_item = item %}
-        {% elsif current_found == true and next_item == nil %}
-            {% assign next_item = item %}
-            {% break %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-
-<!-- Search through appendices -->
-{% if current_found == false %}
-    {% for item in navigation.appendices %}
-        {% if current_found == false and page.url contains item.path %}
-            {% assign current_found = true %}
-            {% if forloop.first and navigation.chapters.size > 0 %}
-                {% assign prev_item = navigation.chapters.last %}
-            {% endif %}
-        {% elsif current_found == false %}
-            {% assign prev_item = item %}
-        {% elsif current_found == true and next_item == nil %}
-            {% assign next_item = item %}
-            {% break %}
-        {% endif %}
-    {% endfor %}
+{% if current_index %}
+    {% assign prev_index = current_index | minus: 1 %}
+    {% assign next_index = current_index | plus: 1 %}
+    
+    {% if prev_index >= 0 %}
+        {% assign prev_item = all_pages[prev_index] %}
+    {% endif %}
+    
+    {% if next_index < all_pages.size %}
+        {% assign next_item = all_pages[next_index] %}
+    {% endif %}
 {% endif %}
 
 <!-- Navigation Container -->

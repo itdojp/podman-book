@@ -1,3 +1,8 @@
+---
+layout: book
+title: "第1章: 基本機能"
+---
+
 # 第1章: 基本機能
 
 {% include navigation.html %}

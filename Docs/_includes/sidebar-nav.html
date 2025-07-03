@@ -10,6 +10,17 @@
     <!-- Introduction -->
     {% if site.data.navigation.introduction %}
     <div class="nav-section">
+        {% if site.data.navigation.introduction.size == 1 %}
+        <!-- Single introduction - display as direct link -->
+        {% for item in site.data.navigation.introduction %}
+        <a href="{{ site.baseurl }}{{ item.path }}" 
+           class="nav-link nav-single-item{% if page.url contains item.path %} active{% endif %}"
+           aria-current="{% if page.url contains item.path %}page{% endif %}">
+            {{ item.title }}
+        </a>
+        {% endfor %}
+        {% else %}
+        <!-- Multiple introduction items - display with section header -->
         <h3 class="nav-section-title">はじめに</h3>
         <ul class="nav-list">
             {% for item in site.data.navigation.introduction %}
@@ -22,6 +33,7 @@
             </li>
             {% endfor %}
         </ul>
+        {% endif %}
     </div>
     {% endif %}
 
@@ -75,6 +87,36 @@
             </li>
             {% endfor %}
         </ul>
+    </div>
+    {% endif %}
+
+    <!-- Afterword -->
+    {% if site.data.navigation.afterword %}
+    <div class="nav-section">
+        {% if site.data.navigation.afterword.size == 1 %}
+        <!-- Single afterword - display as direct link -->
+        {% for afterword in site.data.navigation.afterword %}
+        <a href="{{ site.baseurl }}{{ afterword.path }}" 
+           class="nav-link nav-single-item{% if page.url contains afterword.path %} active{% endif %}"
+           aria-current="{% if page.url contains afterword.path %}page{% endif %}">
+            {{ afterword.title }}
+        </a>
+        {% endfor %}
+        {% else %}
+        <!-- Multiple afterword items - display with section header -->
+        <h3 class="nav-section-title">あとがき</h3>
+        <ul class="nav-list">
+            {% for afterword in site.data.navigation.afterword %}
+            <li class="nav-item">
+                <a href="{{ site.baseurl }}{{ afterword.path }}" 
+                   class="nav-link{% if page.url contains afterword.path %} active{% endif %}"
+                   aria-current="{% if page.url contains afterword.path %}page{% endif %}">
+                    {{ afterword.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     {% endif %}
 </div>
@@ -179,6 +221,11 @@
     background-color: var(--color-primary);
     color: white;
     border-left-color: var(--color-primary-hover);
+    font-weight: 500;
+}
+
+.nav-single-item {
+    margin-bottom: var(--space-4);
     font-weight: 500;
 }
 

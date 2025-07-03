@@ -1,21 +1,38 @@
-title: "Book Publishing Template v3.0 Preview"
-description: "モダンデザインシステムのプレビュー"
-baseurl: "/book-publishing-template2"
-url: "https://itdojp.github.io"
+# Jekyll設定
+title: {{BOOK_TITLE}}
+description: {{BOOK_DESCRIPTION}}
+author: 
+  name: ITDO Inc. (株式会社アイティードゥ)
+  github: {{GITHUB_USERNAME}}
+  email: {{AUTHOR_EMAIL}}
+baseurl: "/{{PUBLIC_REPO_NAME}}"
+url: "https://{{GITHUB_USERNAME}}.github.io"
 
-# GitHub Pages設定
-theme: minima
+# Repository settings for links
+repository:
+  github: {{GITHUB_USERNAME}}/{{PUBLIC_REPO_NAME}}  # GitHub repository path
+  zenn: books/{{PUBLIC_REPO_NAME}}                  # Zenn book path
+
+# テーマ
+remote_theme: pages-themes/minimal@v0.2.0
 plugins:
-  - jekyll-feed
+  - jekyll-remote-theme
 
-# Markdown設定
-markdown: kramdown
-highlighter: rouge
+# 言語設定
+lang: ja
 
-# 除外ファイル
+# その他の設定
+show_downloads: false
+google_analytics:
+
+# ビルド設定
 exclude:
+  - README.md
+  - package.json
+  - package-lock.json
   - node_modules/
   - scripts/
-  - templates/
+  - .gitignore
+  - LICENSE
+  - CONTRIBUTING.md
   - src/
-  - "*.json"

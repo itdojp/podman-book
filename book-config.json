@@ -1,12 +1,14 @@
 {
   "book": {
-    "title": "Book Publishing Template v3.0 サンプル",
-    "description": "モダンデザインシステムを使用した技術書籍テンプレートのサンプル",
+    "title": "Podman完全ガイド",
+    "subtitle": "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法",
+    "description": "Podmanを使用したコンテナ技術の包括的なガイドブック",
     "author": {
-      "name": "Book Publishing Template",
-      "email": "example@example.com"
+      "name": "太田和彦（株式会社アイティードゥ）",
+      "email": "knowledge@itdo.jp",
+      "github": "itdojp"
     },
-    "version": "3.0.0",
+    "version": "1.0.0",
     "language": "ja"
   },
   "contentSections": [
@@ -30,6 +32,13 @@
       "enabled": true,
       "order": 3,
       "title": "付録"
+    },
+    {
+      "name": "afterword",
+      "directory": "afterword",
+      "enabled": true,
+      "order": 4,
+      "title": "あとがき"
     }
   ],
   "excludePatterns": [

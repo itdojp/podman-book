@@ -10,14 +10,12 @@
   "scripts": {
     "setup": "node easy-setup.js",
     "build": "node scripts/build-simple.js",
-    "build:full": "node scripts/build.js",
     "preview": "npm run build && npx http-server docs -p 8080 --silent",
-    "deploy": "bash scripts/deploy.sh",
     "clean": "rm -rf public output temp docs",
     "configure:workflows": "node scripts/configure-workflows.js",
     "lint:light": "markdownlint 'src/**/*.md' --ignore node_modules",
     "test:light": "npm run lint:light && npm run build",
-    "help": "echo 'Available commands:\n  npm run setup - Interactive setup\n  npm run build - Build the book\n  npm run preview - Local preview\n  npm run configure:workflows - Disable problematic workflows\n  npm run deploy - Deploy to GitHub Pages'"
+    "help": "echo 'Available commands:\n  npm run setup - Interactive setup\n  npm run build - Build the book\n  npm run preview - Local preview\n  npm run configure:workflows - Disable problematic workflows'"
   },
   "dependencies": {
     "fs-extra": "^11.3.0",

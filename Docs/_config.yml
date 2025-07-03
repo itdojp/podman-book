@@ -1,17 +1,17 @@
 # Jekyll設定
-title: {{BOOK_TITLE}}
-description: {{BOOK_DESCRIPTION}}
+title: "Podman完全ガイド"
+description: "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法"
 author: 
-  name: ITDO Inc. (株式会社アイティードゥ)
-  github: {{GITHUB_USERNAME}}
-  email: {{AUTHOR_EMAIL}}
-baseurl: "/{{PUBLIC_REPO_NAME}}"
-url: "https://{{GITHUB_USERNAME}}.github.io"
+  name: "太田和彦（株式会社アイティードゥ）"
+  github: itdojp
+  email: knowledge@itdo.jp
+baseurl: "/podman-book"
+url: "https://itdojp.github.io"
 
 # Repository settings for links
 repository:
-  github: {{GITHUB_USERNAME}}/{{PUBLIC_REPO_NAME}}  # GitHub repository path
-  zenn: books/{{PUBLIC_REPO_NAME}}                  # Zenn book path
+  github: itdojp/podman-book  # GitHub repository path
+  zenn: books/podman-book     # Zenn book path
 
 # テーマ
 remote_theme: pages-themes/minimal@v0.2.0
@@ -36,3 +36,15 @@ exclude:
   - LICENSE
   - CONTRIBUTING.md
   - src/
+
+# v3.0 Design System Configuration
+markdown: kramdown
+highlighter: rouge
+
+# Use custom book layout as default
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "book"

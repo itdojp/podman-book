@@ -371,7 +371,7 @@ echo "=== Container Security Audit ==="
 
 # 実行中のコンテナ確認
 echo -e "\n[Running Containers]"
-podman ps --format "table \{\{.Names\}\}\t\{\{.Status\}\}\t\{\{.Ports\}\}"
+podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
 # 特権コンテナの確認
 echo -e "\n[Privileged Containers]"

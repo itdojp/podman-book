@@ -278,7 +278,7 @@ podman logs --since 2024-01-01T00:00:00 mycontainer
 podman run -d \
   --name logged-container \
   --log-driver journald \
-  --log-opt tag="\{\{.Name\}\}" \
+  --log-opt tag="{{.Name}}" \
   nginx:alpine
 ```
 
@@ -295,7 +295,7 @@ podman stats mycontainer
 podman stats --no-stream
 
 # フォーマット指定
-podman stats --format "table \{\{.Container\}\}\t\{\{.CPUPerc\}\}\t\{\{.MemUsage\}\}"
+podman stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}"
 
 # プロセス一覧
 podman top mycontainer

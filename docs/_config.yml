@@ -8,22 +8,8 @@ author:
 baseurl: "/podman-book"
 url: "https://itdojp.github.io"
 
-# Repository settings for links
-repository:
-  github: itdojp/podman-book  # GitHub repository path
-  zenn: books/podman-book     # Zenn book path
-
-# テーマ
-theme: minima
-plugins:
-  - jekyll-feed
-
-# 言語設定
-lang: ja
-
-# その他の設定
-show_downloads: false
-google_analytics:
+# Disable Jekyll processing for pre-built HTML
+plugins: []
 
 # ビルド設定
 exclude:
@@ -36,15 +22,15 @@ exclude:
   - LICENSE
   - CONTRIBUTING.md
   - src/
+  - "*.md"
+  - chapters/
+  - introduction/
+  - appendices/
+  - afterword/
 
-# v3.0 Design System Configuration
-markdown: kramdown
-highlighter: rouge
-
-# Use custom book layout as default
-defaults:
-  - scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "book"
+# Include only HTML files
+include:
+  - "*.html"
+  - assets/
+  - _includes/
+  - _layouts/

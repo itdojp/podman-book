@@ -135,7 +135,7 @@ CPU Limit: \{\{.HostConfig.CpuQuota\}\}
 if podman inspect $CONTAINER --format '\{\{.Config.Healthcheck\}\}' | grep -q "map"; then
     echo -e "\nヘルスチェック結果:"
     podman inspect $CONTAINER --format '\{\{.State.Health.Status\}\}'
-    podman inspect $CONTAINER --format '{{range .State.Health.Log}}\{\{.Output\}\}{{end}}'
+    podman inspect $CONTAINER --format '\{\{range .State.Health.Log\}\}\{\{.Output\}\}\{\{end\}\}'
 fi
 ```
 

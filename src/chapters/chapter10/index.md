@@ -720,7 +720,7 @@ NEW_VERSION=$1
 # - 視覚的な状態管理
 
 # 現在の環境を確認
-CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "{{.Labels.environment}}")
+CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "\{\{.Labels.environment\}\}")
 if [ "$CURRENT_ENV" = "blue" ]; then
     NEW_ENV="green"
 else
@@ -756,7 +756,7 @@ done
 
 # スモークテスト - 基本機能の確認
 echo "Running smoke tests..."
-CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '{{.NetworkSettings.IPAddress}}')
+CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '\{\{.NetworkSettings.IPAddress\}\}')
 ./smoke-tests.sh $CONTAINER_IP || {
     echo "Smoke tests failed"
     podman stop ${APP_NAME}-${NEW_ENV}

@@ -221,7 +221,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 podman run -d \
   --name app \
   --log-driver=journald \
-  --log-opt tag="{{.Name}}/{{.ID}}" \  # 識別しやすいタグ
+  --log-opt tag="\{\{.Name\}\}/\{\{.ID\}\}" \  # 識別しやすいタグ
   myapp:latest
 
 # journaldの利点：
@@ -293,7 +293,7 @@ EOF
 
 SERVICE_NAME="container-myapp.service"
 NEW_IMAGE="myapp:new"
-OLD_IMAGE=$(podman inspect myapp --format '{{.ImageName}}')
+OLD_IMAGE=$(podman inspect myapp --format '\{\{.ImageName\}\}')
 
 # ヘルスチェック関数
 health_check() {

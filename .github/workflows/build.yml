@@ -66,7 +66,66 @@ jobs:
         # Install gems outside the source directory to avoid Jekyll processing them
         bundle config set --local path '../vendor/bundle'
         bundle install
-        JEKYLL_ENV=production bundle exec jekyll build --verbose
+        # Create a temporary config that explicitly excludes vendor directories
+        cat > _config_build.yml << EOF
+        title: "Podman完全ガイド"
+        description: "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法"
+        author: 
+          name: "太田和彦（株式会社アイティードゥ）"
+          github: itdojp
+          email: knowledge@itdo.jp
+        baseurl: "/podman-book"
+        url: "https://itdojp.github.io"
+        
+        # Repository settings for links
+        repository:
+          github: itdojp/podman-book
+          zenn: books/podman-book
+        
+        # テーマ
+        theme: minima
+        plugins:
+          - jekyll-feed
+        
+        # 言語設定
+        lang: ja
+        
+        # その他の設定
+        show_downloads: false
+        
+        # ビルド設定 - vendor directories excluded
+        exclude:
+          - README.md
+          - package.json
+          - package-lock.json
+          - node_modules/
+          - scripts/
+          - .gitignore
+          - LICENSE
+          - CONTRIBUTING.md
+          - src/
+          - vendor/
+          - ../vendor/
+          - Gemfile
+          - Gemfile.lock
+          - "*.gem"
+          - "*.gemspec"
+        
+        # v3.0 Design System Configuration
+        markdown: kramdown
+        highlighter: rouge
+        
+        # Use custom book layout as default
+        defaults:
+          - scope:
+              path: ""
+              type: "pages"
+            values:
+              layout: "book"
+        EOF
+        # Remove any vendor directories that might exist in docs
+        rm -rf vendor ../vendor
+        JEKYLL_ENV=production bundle exec jekyll build --config _config_build.yml --verbose
         
     - name: Upload Pages artifact from _site
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'

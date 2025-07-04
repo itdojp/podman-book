@@ -455,7 +455,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Container {{ $labels.name }} is down"
+          summary: "Container \{\{ $labels.name \}\} is down"
           
       - alert: HighMemoryUsage
         expr: container_memory_usage_bytes / container_spec_memory_limit_bytes > 0.9
@@ -463,7 +463,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Container {{ $labels.name }} memory usage is above 90%"
+          summary: "Container \{\{ $labels.name \}\} memory usage is above 90%"
           
       - alert: HighCPUUsage
         expr: rate(container_cpu_usage_seconds_total[5m]) > 0.9
@@ -471,7 +471,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Container {{ $labels.name }} CPU usage is above 90%"
+          summary: "Container \{\{ $labels.name \}\} CPU usage is above 90%"
 ```
 
 ### 9.6 パフォーマンスチューニング

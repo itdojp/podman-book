@@ -900,10 +900,10 @@ class CanaryController:
         """
         # Nginxの設定を更新
         config = f"""
-        upstream myapp {{
+        upstream myapp \{\{
             server myapp-stable weight={int((1-new_weight)*10)};
             server myapp-canary weight={int(new_weight*10)};
-        }}
+        \}\}
         """
         # ... 設定適用
         

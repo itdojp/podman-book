@@ -703,10 +703,7 @@ describe('E2E Tests', () => {
 
 **Blue-Greenの価値**
 - ゼロダウンタイムデプロイ
-- 即座のロールバック可能
-- 本番環境での検証
-
-```bash
+- 即座のロー\{\{.Labels.environment\}\}ash
 #!/bin/bash
 # blue-green-deploy.sh
 
@@ -720,7 +717,7 @@ NEW_VERSION=$1
 # - 視覚的な状態管理
 
 # 現在の環境を確認
-CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "\{\{.Labels.environment\}\}")
+CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "{{.Labels.environment}}")
 if [ "$CURRENT_ENV" = "blue" ]; then
     NEW_ENV="green"
 else
@@ -746,8 +743,7 @@ for i in {1..30}; do
         break
     fi
     if [ $i -eq 30 ]; then
-        echo "Health check failed, aborting deployment"
-        podman stop ${APP_NAME}-${NEW_ENV}
+        echo "Health check fa\{\{.NetworkSettings.IPAddress\}\}     podman stop ${APP_NAME}-${NEW_ENV}
         podman rm ${APP_NAME}-${NEW_ENV}
         exit 1
     fi
@@ -756,7 +752,7 @@ done
 
 # スモークテスト - 基本機能の確認
 echo "Running smoke tests..."
-CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '\{\{.NetworkSettings.IPAddress\}\}')
+CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '{{.NetworkSettings.IPAddress}}')
 ./smoke-tests.sh $CONTAINER_IP || {
     echo "Smoke tests failed"
     podman stop ${APP_NAME}-${NEW_ENV}
@@ -881,13 +877,13 @@ class CanaryController:
         - ユーザー影響の定量化
         - 自動判断の基準
         """
-        query = f'rate(http_requests_total\{\{app="{self.app_name}",version="{version}",status=~"5.."\}\}[5m])'
+        query = f'rate(http_requests_total{{app="{self.app_name}",version="{version}",status=~"5.."}}[5m])'
         response = requests.get(f'{self.prometheus_url}/api/v1/query', params={'query': query})
         # ... パース処理
         
     def get_latency(self, version):
         """レイテンシを取得"""
-        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket\{\{app="{self.app_name}",version="{version}"\}\}[5m]))'
+        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{{app="{self.app_name}",version="{version}"}}[5m]))'
         # ... 
         
     def adjust_traffic(self, new_weight):
@@ -900,10 +896,10 @@ class CanaryController:
         """
         # Nginxの設定を更新
         config = f"""
-        upstream myapp \{\{
+        upstream myapp {{
             server myapp-stable weight={int((1-new_weight)*10)};
             server myapp-canary weight={int(new_weight*10)};
-        \}\}
+        }}
         """
         # ... 設定適用
         

@@ -703,10 +703,7 @@ describe('E2E Tests', () => {
 
 **Blue-Greenの価値**
 - ゼロダウンタイムデプロイ
-- 即座のロールバック可能
-- 本番環境での検証
-
-```bash
+- 即座のロー\{\{.Labels.environment\}\}ash
 #!/bin/bash
 # blue-green-deploy.sh
 
@@ -746,8 +743,7 @@ for i in {1..30}; do
         break
     fi
     if [ $i -eq 30 ]; then
-        echo "Health check failed, aborting deployment"
-        podman stop ${APP_NAME}-${NEW_ENV}
+        echo "Health check fa\{\{.NetworkSettings.IPAddress\}\}     podman stop ${APP_NAME}-${NEW_ENV}
         podman rm ${APP_NAME}-${NEW_ENV}
         exit 1
     fi

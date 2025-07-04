@@ -881,13 +881,13 @@ class CanaryController:
         - ユーザー影響の定量化
         - 自動判断の基準
         """
-        query = f'rate(http_requests_total\{\{app="{self.app_name}",version="{version}",status=~"5.."\}\}[5m])'
+        query = f'rate(http_requests_total{{app="{self.app_name}",version="{version}",status=~"5.."}}[5m])'
         response = requests.get(f'{self.prometheus_url}/api/v1/query', params={'query': query})
         # ... パース処理
         
     def get_latency(self, version):
         """レイテンシを取得"""
-        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket\{\{app="{self.app_name}",version="{version}"\}\}[5m]))'
+        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{{app="{self.app_name}",version="{version}"}}[5m]))'
         # ... 
         
     def adjust_traffic(self, new_weight):
@@ -900,10 +900,10 @@ class CanaryController:
         """
         # Nginxの設定を更新
         config = f"""
-        upstream myapp \{\{
+        upstream myapp {{
             server myapp-stable weight={int((1-new_weight)*10)};
             server myapp-canary weight={int(new_weight*10)};
-        \}\}
+        }}
         """
         # ... 設定適用
         

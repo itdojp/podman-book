@@ -63,7 +63,9 @@ jobs:
     - name: Build Jekyll site
       run: |
         cd docs
-        bundle install --path vendor/bundle
+        # Install gems outside the source directory to avoid Jekyll processing them
+        bundle config set --local path '../vendor/bundle'
+        bundle install
         JEKYLL_ENV=production bundle exec jekyll build --verbose
         
     - name: Upload Pages artifact from _site

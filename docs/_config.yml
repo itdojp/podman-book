@@ -36,6 +36,9 @@ exclude:
   - LICENSE
   - CONTRIBUTING.md
   - src/
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
 
 # v3.0 Design System Configuration
 markdown: kramdown

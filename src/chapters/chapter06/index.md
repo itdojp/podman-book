@@ -56,6 +56,58 @@ podman network ls
 - **利点**: 独自のMACアドレス、VLANサポート
 - **適用場面**: レガシーアプリケーション、ネットワーク機器との直接通信
 
+## Podmanネットワーク構成図
+
+各ネットワークドライバーの動作を視覚的に理解しましょう：
+
+```mermaid
+graph TB
+    subgraph "Host Network"
+        H1[Host OS]
+        H2[Host Network Interface<br/>eth0]
+        H3[Container Process]
+        H1 --> H2
+        H2 --> H3
+        H3 -.->|共有| H2
+    end
+    
+    subgraph "Bridge Network"
+        B1[Host OS]
+        B2[Host eth0]
+        B3[Bridge Interface<br/>podman0]
+        B4[veth Pair]
+        B5[Container eth0]
+        B6[Container Process]
+        
+        B1 --> B2
+        B1 --> B3
+        B3 --> B4
+        B4 --> B5
+        B5 --> B6
+        B3 -.->|NAT/iptables| B2
+    end
+    
+    subgraph "Macvlan Network"
+        M1[Physical Switch]
+        M2[Host eth0]
+        M3[Virtual eth0<br/>MAC: aa:bb:cc]
+        M4[Container Process]
+        
+        M1 --> M2
+        M1 --> M3
+        M3 --> M4
+    end
+```
+
+**ネットワークドライバー比較表：**
+
+| ドライバー | パフォーマンス | 分離性 | 設定複雑度 | 用途 |
+|-----------|---------------|--------|------------|------|
+| Bridge | 中 | 高 | 低 | 開発・一般用途 |
+| Host | 最高 | なし | 最低 | 高性能要求 |
+| None | - | 最高 | 最低 | セキュア処理 |
+| Macvlan | 高 | 中 | 高 | レガシー統合 |
+
 **Bridgeネットワーク詳細設定の実務的価値**
 
 ```bash

@@ -8,6 +8,39 @@ title: "第1章：コンテナ技術の基礎"
 
 コンテナは仮想化技術ではなく、Linuxカーネルが提供するプロセス分離機能の組み合わせです。本章では、その実装メカニズムを解説します。
 
+## Podmanアーキテクチャ概要
+
+Podmanは従来のDockerとは大きく異なるアーキテクチャを採用しています：
+
+```mermaid
+graph TB
+    subgraph "従来のDocker"
+        D1[Docker CLI] --> D2[Docker Daemon<br/>dockerd]
+        D2 --> D3[containerd]
+        D3 --> D4[runc]
+        D4 --> D5[Container Process]
+        D2 -.->|root権限| D6[System Resource]
+    end
+    
+    subgraph "Podman"
+        P1[Podman CLI] --> P2[libpod<br/>Library]
+        P2 --> P3[conmon<br/>Monitoring]
+        P2 --> P4[crun/runc<br/>OCI Runtime]
+        P4 --> P5[Container Process]
+        P3 -.->|ユーザー権限| P6[User Resource]
+    end
+    
+    style D2 fill:#ffcccc
+    style P2 fill:#ccffcc
+    style D6 fill:#ffcccc
+    style P6 fill:#ccffcc
+```
+
+**主な差異点：**
+- **デーモンレス実行**: Podmanは常駐プロセスを持たない
+- **ユーザー権限実行**: rootless containerが標準
+- **プロセス分離**: 各コンテナが独立したプロセス
+
 ### パフォーマンス特性の実測値
 
 **起動時間の比較（Alpine Linux）**

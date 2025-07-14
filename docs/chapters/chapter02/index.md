@@ -15,8 +15,13 @@ sudo dnf install -y podman
 # 関連ツールのインストール
 sudo dnf install -y buildah skopeo
 
-# バージョン確認
+# バージョン確認と動作テスト
 podman --version
+# 期待される出力: podman version 4.9.4 以上
+
+# 基本的な動作確認
+podman run --rm hello-world
+# コンテナが正常に実行され、メッセージが表示されることを確認
 ```
 
 ### Ubuntu/Debian
@@ -26,12 +31,15 @@ podman --version
 sudo apt update
 sudo apt install -y podman
 
-# Ubuntu 20.04の場合（Kubicリポジトリを使用）
-source /etc/os-release
-echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
+# Ubuntu 22.04/24.04でのインストール
 sudo apt update
-sudo apt -y install podman
+sudo apt install -y podman
+
+# Ubuntu 20.04の場合（公式リポジトリを使用）
+sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
+wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key -O- | sudo apt-key add -
+sudo apt update
+sudo apt install -y podman
 ```
 
 ### macOS

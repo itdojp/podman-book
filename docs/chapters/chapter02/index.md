@@ -4,125 +4,20 @@ title: "第2章：Podmanのインストールと初期設定"
 
 # 第2章：Podmanのインストールと初期設定
 
-## 対象バージョン
-- **Podman**: 5.0.x（2024年3月リリース）
-- **動作確認OS**: RHEL 9.3、Ubuntu 22.04 LTS、CentOS Stream 9、Fedora 39
-- **前提条件**: Linux Kernel 4.18+、cgroup v2対応、systemd 239+（rootless時）
-
-## 2.1 自動インストールスクリプト
-
-手動でのインストールはエラーが発生しやすく、環境によって手順が異なります。以下の自動化スクリプトを使用することで、確実にインストールと設定を完了できます。
-
-```bash
-#!/bin/bash
-# install-podman.sh - Podman自動インストール・設定スクリプト
-# 使用方法: curl -L https://example.com/install-podman.sh | bash
-
-set -e  # エラー時に終了
-
-echo "============================================"
-echo "Podman 自動インストールスクリプト v1.0"
-echo "============================================"
-
-# OS検出
-detect_os() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        OS=$ID
-        VER=$VERSION_ID
-    elif [ -f /etc/redhat-release ]; then
-        OS="rhel"
-        VER=$(rpm -q --queryformat '%{VERSION}' redhat-release)
-    else
-        echo "エラー: サポートされていないOSです"
-        exit 1
-    fi
-}
-
-# インストール関数
-install_podman() {
-    case $OS in
-        rhel|centos|fedora)
-            echo "Red Hat系ディストリビューションを検出しました"
-            sudo dnf install -y podman buildah skopeo
-            ;;
-        ubuntu|debian)
-            echo "Debian系ディストリビューションを検出しました"
-            sudo apt update
-            sudo apt install -y podman buildah skopeo
-            ;;
-        *)
-            echo "エラー: 未サポートのOS: $OS"
-            exit 1
-            ;;
-    esac
-}
-
-# 基本設定
-setup_podman() {
-    echo "基本設定を適用中..."
-    
-    # システム設定ディレクトリ作成
-    sudo mkdir -p /etc/containers
-    
-    # cgroup v2 最適化
-    if [ ! -f /etc/default/grub.bak ]; then
-        sudo cp /etc/default/grub /etc/default/grub.bak
-        echo 'systemd.unified_cgroup_hierarchy=1' | sudo tee -a /etc/default/grub
-        sudo grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true
-    fi
-    
-    # システム移行
-    podman system migrate || true
-    
-    # rootless用設定
-    systemctl --user enable --now podman.socket || true
-}
-
-# 検証テスト
-verify_installation() {
-    echo "インストールの検証中..."
-    
-    # バージョン確認
-    podman --version
-    
-    # hello-worldテスト
-    podman run --rm hello-world
-    
-    if [ $? -eq 0 ]; then
-        echo "✅ Podmanが正常にインストールされました！"
-    else
-        echo "❌ インストールに問題があります"
-        exit 1
-    fi
-}
-
-# メイン処理
-detect_os
-install_podman
-setup_podman
-verify_installation
-
-echo ""
-echo "インストールが完了しました！"
-echo "次のコマンドでPodmanを使い始められます:"
-echo "  podman run -it alpine sh"
-```
-
-## 2.2 各OSへのインストール方法（手動）
+## 2.1 各OSへのインストール方法
 
 ### RHEL/CentOS/Fedora
 
 ```bash
-# DNFを使用したインストール（Podman 5.0.x）
+# DNFを使用したインストール
 sudo dnf install -y podman
 
 # 関連ツールのインストール
-sudo dnf install -y buildah skopeo podman-compose
+sudo dnf install -y buildah skopeo
 
 # バージョン確認と動作テスト
 podman --version
-# 期待される出力: podman version 5.0.x
+# 期待される出力: podman version 4.9.4 以上
 
 # 基本的な動作確認
 podman run --rm hello-world
@@ -346,49 +241,8 @@ podman container prune
 podman system prune -a
 ```
 
-## インストール後の検証チェックリスト
-
-インストール完了後、以下の項目を確認してください：
-
-```bash
-#!/bin/bash
-# インストール検証スクリプト
-
-echo "✓ Podmanバージョン確認"
-podman --version
-
-echo "✓ システム情報"
-podman info --format json | jq '.version, .kernel, .os'
-
-echo "✓ cgroupバージョン"
-podman info | grep -i cgroup
-
-echo "✓ rootless動作確認"
-if podman info | grep -q "rootless: true"; then
-    echo "  Rootlessモードで動作中"
-else
-    echo "  Rootモードで動作中"
-fi
-
-echo "✓ ネットワーク接続"
-podman run --rm alpine ping -c 1 google.com
-
-echo "✓ ストレージ状態"
-podman system df
-
-echo "✓ Docker互換ソケット"
-if systemctl --user is-active podman.socket >/dev/null 2>&1; then
-    echo "  Podmanソケットが有効"
-fi
-```
-
 ## まとめ
 
-本章では、Podman 5.0.xのインストールから初期設定、基本的な動作確認までを解説しました。特に以下のポイントが重要です：
-
-- **自動化スクリプトの活用**: 環境構築の再現性を確保
-- **Rootlessモードの設定**: セキュリティを強化
-- **Docker互換性の確保**: 既存資産の活用
-- **検証テストの実施**: 正常動作の確認
+本章では、Podmanのインストールから初期設定、基本的な動作確認までを解説しました。特にRootlessモードの設定とDocker互換性の確保は、Podmanを効果的に活用する上で重要なポイントです。
 
 次章では、Podmanを使った基本的なコンテナ操作について詳しく解説していきます。

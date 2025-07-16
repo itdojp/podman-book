@@ -27,17 +27,24 @@
       "title": "章"
     },
     {
+      "name": "additional",
+      "directory": "additional",
+      "enabled": true,
+      "order": 3,
+      "title": "追加資料"
+    },
+    {
       "name": "appendices",
       "directory": "appendices",
       "enabled": true,
-      "order": 3,
+      "order": 4,
       "title": "付録"
     },
     {
       "name": "afterword",
       "directory": "afterword",
       "enabled": true,
-      "order": 4,
+      "order": 5,
       "title": "あとがき"
     }
   ],

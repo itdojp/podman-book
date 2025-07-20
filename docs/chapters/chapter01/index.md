@@ -35,6 +35,132 @@ a3f4   alpine_ctr   0.00%  1.2MiB / 16GiB     0.01%
 
 ## 1.1 名前空間によるリソース分離の実装
 
+### 🏗️ コンテナアーキテクチャ全体図
+
+```mermaid
+graph TB
+    subgraph "ホストシステム"
+        HOST_KERNEL[Linux カーネル]
+        HOST_NS[ホスト名前空間]
+        HOST_CGROUP[ホストcgroups]
+    end
+    
+    subgraph "Container Runtime (Podman)"
+        PODMAN[Podman Engine]
+        CONMON[conmon]
+        OCI_RUNTIME[OCI Runtime<br/>(runc/crun)]
+    end
+    
+    subgraph "Container 1"
+        C1_NS[独立名前空間]
+        C1_PROC[プロセス群]
+        C1_FS[独立ファイルシステム]
+        C1_NET[独立ネットワーク]
+    end
+    
+    subgraph "Container 2"
+        C2_NS[独立名前空間]
+        C2_PROC[プロセス群]
+        C2_FS[独立ファイルシステム]
+        C2_NET[独立ネットワーク]
+    end
+    
+    HOST_KERNEL --> HOST_NS
+    HOST_KERNEL --> HOST_CGROUP
+    
+    PODMAN --> CONMON
+    CONMON --> OCI_RUNTIME
+    OCI_RUNTIME --> HOST_KERNEL
+    
+    HOST_KERNEL --> C1_NS
+    HOST_KERNEL --> C2_NS
+    
+    C1_NS --> C1_PROC
+    C1_NS --> C1_FS
+    C1_NS --> C1_NET
+    
+    C2_NS --> C2_PROC
+    C2_NS --> C2_FS
+    C2_NS --> C2_NET
+    
+    style HOST_KERNEL fill:#e3f2fd
+    style C1_NS fill:#e8f5e8
+    style C2_NS fill:#fff3e0
+    style PODMAN fill:#f3e5f5
+```
+
+### 🔗 Linux名前空間の分離メカニズム
+
+```mermaid
+graph TD
+    subgraph "7つの名前空間"
+        PID_NS[PID namespace<br/>プロセスID分離]
+        NET_NS[Network namespace<br/>ネットワーク分離]
+        MNT_NS[Mount namespace<br/>ファイルシステム分離]
+        UTS_NS[UTS namespace<br/>ホスト名分離]
+        IPC_NS[IPC namespace<br/>プロセス間通信分離]
+        USER_NS[User namespace<br/>ユーザーID分離]
+        CGROUP_NS[Cgroup namespace<br/>リソース管理分離]
+    end
+    
+    subgraph "分離される要素"
+        PROC_TREE[プロセスツリー]
+        NET_STACK[ネットワークスタック]
+        MOUNT_POINTS[マウントポイント]
+        HOSTNAME[ホスト名・ドメイン名]
+        SHM[共有メモリ・セマフォ]
+        UID_GID[ユーザー・グループID]
+        RESOURCE_LIMITS[リソース制限]
+    end
+    
+    PID_NS --> PROC_TREE
+    NET_NS --> NET_STACK
+    MNT_NS --> MOUNT_POINTS
+    UTS_NS --> HOSTNAME
+    IPC_NS --> SHM
+    USER_NS --> UID_GID
+    CGROUP_NS --> RESOURCE_LIMITS
+    
+    style PID_NS fill:#ffebee
+    style NET_NS fill:#e8f5e8
+    style MNT_NS fill:#fff3e0
+    style UTS_NS fill:#e3f2fd
+    style IPC_NS fill:#f3e5f5
+    style USER_NS fill:#fce4ec
+    style CGROUP_NS fill:#e0f2f1
+```
+
+### 📊 名前空間作成とプロセス分離フロー
+
+```mermaid
+sequenceDiagram
+    participant U as ユーザー
+    participant P as Podman
+    participant K as カーネル
+    participant C as コンテナプロセス
+    participant N as 新名前空間
+    
+    Note over U,N: コンテナ起動プロセス
+    U->>P: podman run alpine
+    P->>K: clone()システムコール<br/>CLONE_NEW* フラグ指定
+    K->>N: 新しい名前空間作成
+    K->>C: 新プロセス作成
+    K->>N: プロセスを名前空間に配置
+    
+    Note over U,N: 名前空間分離の確立
+    C->>N: PID 1として起動
+    N->>C: 分離されたリソースビュー提供
+    C->>K: execve()でコンテナイメージ実行
+    K->>P: プロセス作成完了通知
+    P->>U: コンテナ起動完了
+    
+    Note over U,N: 実行時の分離
+    loop 実行中
+        C->>N: システムリソースアクセス
+        N->>C: 分離されたビュー返却
+    end
+```
+
 ### システムコールレベルでの動作
 
 ```c
@@ -101,6 +227,107 @@ $ strace -c podman run --rm alpine true
 ```
 
 ## 1.2 cgroupsによるリソース制限の実装
+
+### 🏗️ cgroupsリソース管理アーキテクチャ
+
+```mermaid
+graph TB
+    subgraph "cgroups v2 統一階層"
+        ROOT[/sys/fs/cgroup<br/>ルートcgroup]
+        
+        subgraph "システムスライス"
+            SYSTEM[system.slice]
+            SYSTEMD[systemd-<br/>journald.service]
+            NETWORKD[systemd-<br/>networkd.service]
+        end
+        
+        subgraph "ユーザースライス"
+            USER[user.slice]
+            USER1000[user-1000.slice]
+            
+            subgraph "Podmanコンテナ"
+                POD_SCOPE[podman-12345.scope]
+                CONTAINER1[コンテナA<br/>メモリ: 512MB<br/>CPU: 0.5コア]
+                CONTAINER2[コンテナB<br/>メモリ: 1GB<br/>CPU: 1.0コア]
+            end
+        end
+        
+        subgraph "制御可能リソース"
+            CPU_CTRL[CPU Controller<br/>・時間配分<br/>・優先度制御]
+            MEM_CTRL[Memory Controller<br/>・使用量制限<br/>・OOM制御]
+            IO_CTRL[IO Controller<br/>・帯域制限<br/>・優先度制御]
+            PID_CTRL[PID Controller<br/>・プロセス数制限]
+        end
+    end
+    
+    ROOT --> SYSTEM
+    ROOT --> USER
+    SYSTEM --> SYSTEMD
+    SYSTEM --> NETWORKD
+    USER --> USER1000
+    USER1000 --> POD_SCOPE
+    POD_SCOPE --> CONTAINER1
+    POD_SCOPE --> CONTAINER2
+    
+    POD_SCOPE -.-> CPU_CTRL
+    POD_SCOPE -.-> MEM_CTRL
+    POD_SCOPE -.-> IO_CTRL
+    POD_SCOPE -.-> PID_CTRL
+    
+    style ROOT fill:#e3f2fd
+    style POD_SCOPE fill:#e8f5e8
+    style CONTAINER1 fill:#fff3e0
+    style CONTAINER2 fill:#fff3e0
+    style CPU_CTRL fill:#ffebee
+    style MEM_CTRL fill:#f3e5f5
+    style IO_CTRL fill:#e0f2f1
+    style PID_CTRL fill:#fce4ec
+```
+
+### 📊 cgroupsリソース制限フロー
+
+```mermaid
+sequenceDiagram
+    participant P as Podman
+    participant K as Kernel
+    participant CG as cgroups Controller
+    participant OOM as OOM Killer
+    participant PROC as Container Process
+    
+    Note over P,PROC: コンテナ起動とリソース制限設定
+    P->>K: clone() + cgroup設定
+    K->>CG: cgroup作成・設定
+    CG->>CG: memory.max = 512MB<br/>cpu.max = 50000 100000
+    K->>PROC: プロセス開始
+    
+    Note over P,PROC: 実行時リソース監視
+    loop 実行中
+        PROC->>K: メモリ要求
+        K->>CG: 使用量チェック
+        
+        alt メモリ制限内
+            CG->>K: 許可
+            K->>PROC: メモリ割り当て
+        else メモリ制限超過
+            CG->>OOM: OOM通知
+            OOM->>PROC: プロセス終了
+            PROC->>P: 終了シグナル
+        end
+    end
+    
+    Note over P,PROC: CPU制限の動作
+    loop CPU時間管理
+        PROC->>K: CPU時間要求
+        K->>CG: CPU quota確認
+        alt quota範囲内
+            CG->>K: 実行許可
+            K->>PROC: CPU時間割り当て
+        else quota超過
+            CG->>K: 一時停止
+            K->>PROC: スケジューリング停止
+        end
+    end
+```
 
 ### cgroups v2の統一API
 
@@ -172,6 +399,122 @@ CPU speed:
 ```
 
 ## 1.3 コンテナランタイムの実装
+
+### 🔧 OCIランタイム実装アーキテクチャ
+
+```mermaid
+graph TB
+    subgraph "ユーザーインターフェース"
+        CLI[podman run alpine]
+        API[REST API]
+    end
+    
+    subgraph "Podman Core Engine"
+        LIBPOD[libpod<br/>コンテナ管理]
+        IMAGE_STORE[Image Store<br/>イメージ管理]
+        CONTAINER_STORE[Container Store<br/>コンテナ状態]
+    end
+    
+    subgraph "OCI Runtime Interface"
+        RUNTIME_CONFIG[OCI Runtime<br/>config.json生成]
+        BUNDLE[OCI Bundle<br/>・config.json<br/>・rootfs/]
+    end
+    
+    subgraph "Low-level Runtime"
+        CRUN[crun<br/>・C言語実装<br/>・高速<br/>・低メモリ]
+        RUNC[runc<br/>・Go言語実装<br/>・リファレンス<br/>・広く使用]
+    end
+    
+    subgraph "Linux Kernel Interfaces"
+        NAMESPACES[Namespaces<br/>PID, NET, MNT, etc]
+        CGROUPS[cgroups v2<br/>リソース制限]
+        SECCOMP[seccomp<br/>システムコール制限]
+        APPARMOR[AppArmor/SELinux<br/>セキュリティ]
+    end
+    
+    subgraph "Storage Backend"
+        OVERLAY[overlay2<br/>ファイルシステム]
+        FUSE[fuse-overlayfs<br/>rootless対応]
+        VFS[VFS<br/>シンプルストレージ]
+    end
+    
+    CLI --> LIBPOD
+    API --> LIBPOD
+    LIBPOD --> IMAGE_STORE
+    LIBPOD --> CONTAINER_STORE
+    LIBPOD --> RUNTIME_CONFIG
+    
+    RUNTIME_CONFIG --> BUNDLE
+    BUNDLE --> CRUN
+    BUNDLE --> RUNC
+    
+    CRUN --> NAMESPACES
+    CRUN --> CGROUPS
+    CRUN --> SECCOMP
+    CRUN --> APPARMOR
+    
+    RUNC --> NAMESPACES
+    RUNC --> CGROUPS
+    RUNC --> SECCOMP
+    RUNC --> APPARMOR
+    
+    IMAGE_STORE --> OVERLAY
+    IMAGE_STORE --> FUSE
+    IMAGE_STORE --> VFS
+    
+    style CLI fill:#e1f5fe
+    style LIBPOD fill:#e8f5e8
+    style CRUN fill:#fff3e0
+    style RUNC fill:#fff3e0
+    style NAMESPACES fill:#f3e5f5
+    style CGROUPS fill:#fce4ec
+```
+
+### 📋 OCI仕様準拠のコンテナ作成フロー
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant P as Podman
+    participant I as Image Store
+    participant O as OCI Runtime
+    participant K as Kernel
+    
+    Note over U,K: コンテナ作成・実行プロセス
+    U->>P: podman run alpine sh
+    P->>I: イメージ検索・取得
+    I->>P: イメージレイヤー提供
+    
+    Note over U,K: OCI Bundle作成
+    P->>P: config.json生成
+    Note right of P: ・プロセス設定<br/>・マウント設定<br/>・セキュリティ設定<br/>・リソース制限
+    
+    P->>P: rootfs準備
+    Note right of P: ・レイヤーマージ<br/>・overlay2マウント<br/>・読み書き層作成
+    
+    Note over U,K: OCIランタイム実行
+    P->>O: OCI Bundle実行
+    O->>K: namespace作成
+    O->>K: cgroups設定
+    O->>K: seccomp適用
+    O->>K: プロセス起動
+    
+    Note over U,K: 実行時管理
+    K->>O: プロセス状態報告
+    O->>P: コンテナ状態更新
+    P->>U: 実行結果返却
+    
+    Note over U,K: 終了処理
+    alt 正常終了
+        O->>K: グレースフル終了
+    else 強制終了
+        O->>K: SIGKILL送信
+    end
+    
+    O->>P: 終了状態報告
+    P->>I: 読み書き層削除
+    P->>U: 終了確認
+```
 
 ### OCI Runtime Specification準拠
 

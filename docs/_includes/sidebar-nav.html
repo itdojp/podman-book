@@ -37,17 +37,51 @@
     </div>
     {% endif %}
 
-    <!-- Chapters -->
+    <!-- Part 0: Introduction Guide -->
+    {% if site.data.navigation.part0_intro %}
+    <div class="nav-section">
+        <h3 class="nav-section-title">第0部：入門編</h3>
+        <ul class="nav-list">
+            {% for chapter in site.data.navigation.part0_intro %}
+            <li class="nav-item">
+                <a href="{{ site.baseurl }}{{ chapter.path }}" 
+                   class="nav-link{% if page.url contains chapter.path %} active{% endif %}"
+                   aria-current="{% if page.url contains chapter.path %}page{% endif %}">
+                    <span class="nav-number">{{ forloop.index | minus: 1 }}</span>
+                    <span class="nav-title">{{ chapter.title }}</span>
+                </a>
+                
+                <!-- Sub-sections if available -->
+                {% if chapter.sections %}
+                <ul class="nav-subsections">
+                    {% for section in chapter.sections %}
+                    <li class="nav-subsection">
+                        <a href="{{ site.baseurl }}{{ section.path }}" 
+                           class="nav-sublink{% if page.url == section.path %} active{% endif %}"
+                           aria-current="{% if page.url == section.path %}page{% endif %}">
+                            {{ section.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Chapters (Part 1-3) -->
     {% if site.data.navigation.chapters %}
     <div class="nav-section">
-        <h3 class="nav-section-title">章</h3>
+        <h3 class="nav-section-title">第1部〜第3部</h3>
         <ul class="nav-list">
             {% for chapter in site.data.navigation.chapters %}
             <li class="nav-item">
                 <a href="{{ site.baseurl }}{{ chapter.path }}" 
                    class="nav-link{% if page.url contains chapter.path %} active{% endif %}"
                    aria-current="{% if page.url contains chapter.path %}page{% endif %}">
-                    <span class="nav-number">{{ forloop.index }}</span>
+                    <span class="nav-number">{{ forloop.index | plus: 2 }}</span>
                     <span class="nav-title">{{ chapter.title }}</span>
                 </a>
                 

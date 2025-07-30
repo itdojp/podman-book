@@ -37,40 +37,6 @@
     </div>
     {% endif %}
 
-    <!-- Part 0: Introduction Guide -->
-    {% if site.data.navigation.part0_intro %}
-    <div class="nav-section">
-        <h3 class="nav-section-title">第0部：入門編</h3>
-        <ul class="nav-list">
-            {% for chapter in site.data.navigation.part0_intro %}
-            <li class="nav-item">
-                <a href="{{ site.baseurl }}{{ chapter.path }}" 
-                   class="nav-link{% if page.url contains chapter.path %} active{% endif %}"
-                   aria-current="{% if page.url contains chapter.path %}page{% endif %}">
-                    <span class="nav-number">{{ forloop.index0 }}</span>
-                    <span class="nav-title">{{ chapter.title }}</span>
-                </a>
-                
-                <!-- Sub-sections if available -->
-                {% if chapter.sections %}
-                <ul class="nav-subsections">
-                    {% for section in chapter.sections %}
-                    <li class="nav-subsection">
-                        <a href="{{ site.baseurl }}{{ section.path }}" 
-                           class="nav-sublink{% if page.url == section.path %} active{% endif %}"
-                           aria-current="{% if page.url == section.path %}page{% endif %}">
-                            {{ section.title }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-
     <!-- Chapters -->
     {% if site.data.navigation.chapters %}
     <div class="nav-section">
@@ -157,15 +123,12 @@
 
 <!-- Progress Indicator -->
 {% assign total_pages = site.data.navigation.chapters.size %}
-{% if site.data.navigation.part0_intro %}
-{% assign total_pages = total_pages | plus: site.data.navigation.part0_intro.size %}
-{% endif %}
 {% if site.data.navigation.appendices %}
 {% assign total_pages = total_pages | plus: site.data.navigation.appendices.size %}
 {% endif %}
 
 {% assign current_index = 0 %}
-{% for chapter in site.data.navigation.part0_intro %}
+{% for chapter in site.data.navigation.chapters %}
     {% if page.url contains chapter.path %}
         {% assign current_index = forloop.index %}
         {% break %}
@@ -173,26 +136,9 @@
 {% endfor %}
 
 {% if current_index == 0 %}
-{% for chapter in site.data.navigation.chapters %}
-    {% if page.url contains chapter.path %}
-        {% assign part0_size = 0 %}
-        {% if site.data.navigation.part0_intro %}
-            {% assign part0_size = site.data.navigation.part0_intro.size %}
-        {% endif %}
-        {% assign current_index = part0_size | plus: forloop.index %}
-        {% break %}
-    {% endif %}
-{% endfor %}
-{% endif %}
-
-{% if current_index == 0 %}
     {% for appendix in site.data.navigation.appendices %}
         {% if page.url contains appendix.path %}
-            {% assign part0_size = 0 %}
-            {% if site.data.navigation.part0_intro %}
-                {% assign part0_size = site.data.navigation.part0_intro.size %}
-            {% endif %}
-            {% assign current_index = part0_size | plus: site.data.navigation.chapters.size | plus: forloop.index %}
+            {% assign current_index = site.data.navigation.chapters.size | plus: forloop.index %}
             {% break %}
         {% endif %}
     {% endfor %}

@@ -3,14 +3,6 @@ introduction:
   - title: "はじめに"
     path: "/introduction/"
 
-part0_intro:
-  - title: "第0章：コンテナ技術基礎"
-    path: "/chapters/chapter00/"
-  - title: "第1章：Podman概要と環境構築"
-    path: "/chapters/chapter01-intro/"
-  - title: "第2章：基本操作と内部理解"
-    path: "/chapters/chapter02-intro/"
-
 chapters:
   - title: "第1章：コンテナ技術の基礎"
     path: "/chapters/chapter01/"

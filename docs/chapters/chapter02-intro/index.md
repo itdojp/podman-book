@@ -130,86 +130,7 @@ podman run -d -p 8080:80 --name webserver nginx:alpine
 
 #### 段階的実行プロセス
 
-```
-Container Creation & Execution Process
-
-1. Pre-flight Checks
-   ┌─────────────────────────────────────┐
-   │ Image Availability Check            │
-   │  ├─ Local storage search            │
-   │  └─ Registry pull if needed         │
-   ├─────────────────────────────────────┤
-   │ Resource Availability Check         │
-   │  ├─ Port 8080 availability          │
-   │  ├─ Memory availability             │
-   │  └─ Name conflict check             │
-   └─────────────────────────────────────┘
-
-2. Namespace Creation
-   ┌─────────────────────────────────────┐
-   │ Linux Kernel Namespaces            │
-   │  ┌─────────────────────────────────┐ │
-   │  │ PID Namespace                   │ │
-   │  │  └─ Container Process Tree      │ │
-   │  ├─────────────────────────────────┤ │
-   │  │ Network Namespace               │ │
-   │  │  └─ Virtual Network Interface   │ │
-   │  ├─────────────────────────────────┤ │
-   │  │ Mount Namespace                 │ │
-   │  │  └─ Container Filesystem        │ │
-   │  ├─────────────────────────────────┤ │
-   │  │ User Namespace (Rootless)       │ │
-   │  │  └─ UID/GID Mapping             │ │
-   │  └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
-
-3. cgroup Configuration
-   ┌─────────────────────────────────────┐
-   │ Resource Control Groups             │
-   │  ├─ CPU: 制限なし (default)          │
-   │  ├─ Memory: 制限なし (default)       │
-   │  ├─ Disk I/O: 制限なし (default)     │
-   │  └─ Network: Port 8080→80 mapping   │
-   └─────────────────────────────────────┘
-
-4. Filesystem Assembly
-   ┌─────────────────────────────────────┐
-   │ Container Filesystem Mount          │
-   │  ┌─────────────────────────────────┐ │
-   │  │ Read-Write Layer                │ │
-   │  │  └─ /var/log/nginx/             │ │
-   │  ├─────────────────────────────────┤ │
-   │  │ Image Layers (Read-Only)        │ │
-   │  │  ├─ nginx application layer     │ │
-   │  │  ├─ nginx dependencies          │ │
-   │  │  └─ alpine base layer           │ │
-   │  └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
-
-5. Network Configuration
-   ┌─────────────────────────────────────┐
-   │ Container Network Setup             │
-   │  ┌─────────────────────────────────┐ │
-   │  │ Host Network Bridge             │ │
-   │  │  └─ podman0: 10.88.0.1/16       │ │
-   │  ├─────────────────────────────────┤ │
-   │  │ Container Interface             │ │
-   │  │  └─ eth0: 10.88.0.2/16          │ │
-   │  ├─────────────────────────────────┤ │
-   │  │ Port Forwarding Rule            │ │
-   │  │  └─ Host:8080 → Container:80    │ │
-   │  └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
-
-6. Process Execution
-   ┌─────────────────────────────────────┐
-   │ Container Process Tree              │
-   │  ┌─────────────────────────────────┐ │
-   │  │ PID 1: nginx master process     │ │
-   │  │ PID 2: nginx worker process     │ │
-   │  └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
-```
+![コンテナ作成・実行プロセス詳細]({{ '/assets/images/diagrams/chapter02-container-execution-process.svg' | relative_url }})
 
 ### Rootless実行の仕組み
 
@@ -256,31 +177,7 @@ ps aux | grep nginx
 
 #### Infrastructure Container（Pause Container）
 
-```
-Pod Internal Architecture
-┌─────────────────────────────────────┐
-│ Pod: webapp                         │
-│  ┌─────────────────────────────────┐ │
-│  │ Infrastructure Container        │ │
-│  │ (Pause Container)               │ │
-│  │  ├─ Network Namespace Owner     │ │
-│  │  ├─ IPC Namespace Owner         │ │
-│  │  ├─ PID Namespace Owner         │ │
-│  │  └─ Volume Mount Points         │ │
-│  └─────────────────────────────────┘ │
-│  ┌─────────────────────────────────┐ │
-│  │ Application Container 1         │ │
-│  │  ├─ nginx (port 80)             │ │
-│  │  └─ Join pause namespaces       │ │
-│  └─────────────────────────────────┘ │
-│  ┌─────────────────────────────────┐ │
-│  │ Application Container 2         │ │
-│  │  ├─ redis (port 6379)           │ │
-│  │  └─ Join pause namespaces       │ │
-│  └─────────────────────────────────┘ │
-│  Shared: localhost communication    │
-└─────────────────────────────────────┘
-```
+![Pod内部アーキテクチャ]({{ '/assets/images/diagrams/chapter02-pod-internal-architecture.svg' | relative_url }})
 
 ### 実践的なPod活用例
 
@@ -424,7 +321,7 @@ ss -tlnp | grep 8080
 netstat -tlnp | grep 8080
 
 # 2. Podmanコンテナでの使用確認
-podman ps --format "table \{\{.Names\}\}\t\{\{.Ports\}\}"
+podman ps --format "table {{.Names}}\t{{.Ports}}"
 
 # 3. 代替ポート使用
 podman run -p 8081:80 nginx  # 8081を使用
@@ -482,7 +379,7 @@ podman login registry.example.com
 
 ```bash
 # リソース使用量のリアルタイム監視
-podman stats --format "table \{\{.Container\}\}\t\{\{.CPUPerc\}\}\t\{\{.MemUsage\}\}\t\{\{.NetIO\}\}\t\{\{.BlockIO\}\}"
+podman stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
 
 # 出力例:
 CONTAINER   CPU %   MEM USAGE / LIMIT   MEM %   NET I/O           BLOCK I/O
@@ -503,9 +400,9 @@ Containers     8       3       45MB        32MB (71%)
 Local Volumes  3       2       150MB       50MB (33%)
 
 # コンテナごとの詳細情報
-podman inspect --format '\{\{.State.Pid\}\}' nginx
+podman inspect --format '{{.State.Pid}}' nginx
 # PIDを使ってシステムレベルで監視
-htop -p $(podman inspect --format '\{\{.State.Pid\}\}' nginx)
+htop -p $(podman inspect --format '{{.State.Pid}}' nginx)
 ```
 
 #### ログ分析
@@ -516,7 +413,7 @@ podman logs --timestamps --follow nginx 2>&1 | jq '.'
 
 # ログローテーション設定
 podman run --log-driver journald \
-  --log-opt tag="\{\{.ImageName\}\}/\{\{.Name\}\}" \
+  --log-opt tag="{{.ImageName}}/{{.Name}}" \
   nginx
 
 # システムジャーナルでの確認

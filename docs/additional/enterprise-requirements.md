@@ -136,7 +136,7 @@ scan_image() {
 }
 
 # CI/CDパイプラインでの使用例
-for image in $(podman images --format "\{\{.Repository\}\}:\{\{.Tag\}\}" | grep -v "<none>"); do
+for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v "<none>"); do
     scan_image $image || exit 1
 done
 ```
@@ -348,7 +348,7 @@ backup_podman_environment() {
     
     # 2. イメージのエクスポート
     mkdir -p $backup_dir/images
-    for image in $(podman images --format "\{\{.Repository\}\}:\{\{.Tag\}\}" | grep -v "<none>"); do
+    for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v "<none>"); do
         safe_name=$(echo $image | tr '/:' '_')
         podman save -o $backup_dir/images/${safe_name}.tar $image
     done
@@ -356,7 +356,7 @@ backup_podman_environment() {
     # 3. ボリュームのバックアップ
     mkdir -p $backup_dir/volumes
     for volume in $(podman volume ls -q); do
-        volume_path=$(podman volume inspect $volume --format '\{\{.Mountpoint\}\}')
+        volume_path=$(podman volume inspect $volume --format '{{.Mountpoint}}')
         tar czf $backup_dir/volumes/${volume}.tar.gz -C $(dirname $volume_path) $(basename $volume_path)
     done
     
@@ -391,7 +391,7 @@ restore_podman_environment() {
     for volume_tar in $backup_dir/volumes/*.tar.gz; do
         volume_name=$(basename $volume_tar .tar.gz)
         podman volume create $volume_name
-        volume_path=$(podman volume inspect $volume_name --format '\{\{.Mountpoint\}\}')
+        volume_path=$(podman volume inspect $volume_name --format '{{.Mountpoint}}')
         tar xzf $volume_tar -C $(dirname $volume_path)
     done
     

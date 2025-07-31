@@ -1,8 +1,8 @@
 ---
-title: "第11章 Kubernetes連携"
+title: "第13章 Kubernetes連携"
 ---
 
-# 第11章 Kubernetes連携
+# 第13章 Kubernetes連携
 
 ### 本章の意義と学習目標
 

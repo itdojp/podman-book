@@ -1,0 +1,172 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 18px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .section-title { font: 600 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .layer-text { font: 500 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .component-text { font: 400 11px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      .small-text { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      
+      .host-network { fill: var(--color-blue-50, #ebf8ff); stroke: var(--color-blue-200, #90cdf4); }
+      .bridge-network { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-200, #68d391); }
+      .custom-network { fill: var(--color-orange-50, #fffaf0); stroke: var(--color-orange-200, #fbb962); }
+      .none-network { fill: var(--color-red-50, #fef5e7); stroke: var(--color-red-200, #fc8181); }
+      .container { fill: var(--color-purple-50, #faf5ff); stroke: var(--color-purple-200, #c084fc); }
+      .port-mapping { fill: var(--color-yellow-50, #fffff0); stroke: var(--color-yellow-200, #f6e05e); }
+      .network-interface { fill: var(--color-indigo-50, #f0f9ff); stroke: var(--color-indigo-200, #a5b4fc); }
+      .arrow { stroke: var(--color-gray-600, #718096); fill: var(--color-gray-600, #718096); }
+      .connection { stroke: var(--color-blue-400, #4299e1); stroke-width: 2; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" class="title">Podman ネットワーク設定オプション図</text>
+
+  <!-- Host Network Mode -->
+  <g id="host-network">
+    <text x="200" y="70" text-anchor="middle" class="section-title">1. Host Network Mode</text>
+    
+    <rect x="50" y="90" width="300" height="120" class="host-network" />
+    <text x="200" y="110" text-anchor="middle" class="layer-text">Host Network Stack</text>
+    
+    <!-- Host interfaces -->
+    <rect x="70" y="130" width="80" height="30" class="network-interface" />
+    <text x="110" y="150" text-anchor="middle" class="small-text">eth0</text>
+    
+    <rect x="160" y="130" width="80" height="30" class="network-interface" />
+    <text x="200" y="150" text-anchor="middle" class="small-text">lo</text>
+    
+    <rect x="250" y="130" width="80" height="30" class="network-interface" />
+    <text x="290" y="150" text-anchor="middle" class="small-text">docker0</text>
+    
+    <!-- Container using host network -->
+    <rect x="120" y="170" width="160" height="30" class="container" />
+    <text x="200" y="190" text-anchor="middle" class="component-text">Container (--network host)</text>
+    
+    <text x="200" y="230" text-anchor="middle" class="small-text">podman run --network host nginx</text>
+    <text x="200" y="245" text-anchor="middle" class="small-text">特徴: 最高性能、ポート競合注意</text>
+  </g>
+
+  <!-- Bridge Network Mode -->
+  <g id="bridge-network">
+    <text x="650" y="70" text-anchor="middle" class="section-title">2. Bridge Network Mode</text>
+    
+    <rect x="500" y="90" width="300" height="120" class="bridge-network" />
+    <text x="650" y="110" text-anchor="middle" class="layer-text">Bridge Network (Default)</text>
+    
+    <!-- Bridge -->
+    <rect x="520" y="130" width="100" height="30" class="network-interface" />
+    <text x="570" y="150" text-anchor="middle" class="small-text">podman0</text>
+    
+    <!-- Containers -->
+    <rect x="640" y="130" width="70" height="30" class="container" />
+    <text x="675" y="150" text-anchor="middle" class="small-text">App1</text>
+    
+    <rect x="720" y="130" width="70" height="30" class="container" />
+    <text x="755" y="150" text-anchor="middle" class="small-text">App2</text>
+    
+    <!-- Port mapping -->
+    <rect x="580" y="170" width="140" height="30" class="port-mapping" />
+    <text x="650" y="190" text-anchor="middle" class="component-text">Port Mapping 8080:80</text>
+    
+    <text x="650" y="230" text-anchor="middle" class="small-text">podman run -p 8080:80 nginx</text>
+    <text x="650" y="245" text-anchor="middle" class="small-text">特徴: 分離、ポートマッピング</text>
+  </g>
+
+  <!-- Custom Network -->
+  <g id="custom-network">
+    <text x="200" y="290" text-anchor="middle" class="section-title">3. Custom Network</text>
+    
+    <rect x="50" y="310" width="300" height="140" class="custom-network" />
+    <text x="200" y="330" text-anchor="middle" class="layer-text">Custom Network: mynet</text>
+    <text x="200" y="350" text-anchor="middle" class="small-text">Subnet: 192.168.100.0/24</text>
+    
+    <!-- Network components -->
+    <rect x="70" y="370" width="80" height="30" class="network-interface" />
+    <text x="110" y="390" text-anchor="middle" class="small-text">Gateway</text>
+    
+    <rect x="160" y="370" width="60" height="30" class="container" />
+    <text x="190" y="390" text-anchor="middle" class="small-text">Web</text>
+    
+    <rect x="230" y="370" width="60" height="30" class="container" />
+    <text x="260" y="390" text-anchor="middle" class="small-text">DB</text>
+    
+    <rect x="300" y="370" width="40" height="30" class="network-interface" />
+    <text x="320" y="390" text-anchor="middle" class="small-text">CNI</text>
+    
+    <!-- DNS -->
+    <rect x="130" y="410" width="140" height="30" class="custom-network" />
+    <text x="200" y="430" text-anchor="middle" class="component-text">DNS Resolution</text>
+    
+    <text x="200" y="470" text-anchor="middle" class="small-text">podman network create mynet</text>
+    <text x="200" y="485" text-anchor="middle" class="small-text">podman run --network mynet nginx</text>
+    <text x="200" y="500" text-anchor="middle" class="small-text">特徴: カスタム設定、DNS、分離</text>
+  </g>
+
+  <!-- None Network Mode -->
+  <g id="none-network">
+    <text x="650" y="290" text-anchor="middle" class="section-title">4. None Network Mode</text>
+    
+    <rect x="500" y="310" width="300" height="140" class="none-network" />
+    <text x="650" y="330" text-anchor="middle" class="layer-text">No Network Access</text>
+    
+    <!-- Isolated container -->
+    <rect x="580" y="360" width="140" height="50" class="container" />
+    <text x="650" y="380" text-anchor="middle" class="component-text">Isolated Container</text>
+    <text x="650" y="395" text-anchor="middle" class="small-text">ループバックのみ</text>
+    
+    <text x="650" y="470" text-anchor="middle" class="small-text">podman run --network none alpine</text>
+    <text x="650" y="485" text-anchor="middle" class="small-text">特徴: 完全分離、セキュア</text>
+    <text x="650" y="500" text-anchor="middle" class="small-text">用途: バッチ処理、セキュリティ</text>
+  </g>
+
+  <!-- Network Commands -->
+  <g id="network-commands">
+    <text x="450" y="540" text-anchor="middle" class="section-title">ネットワーク管理コマンド</text>
+    
+    <!-- Create commands -->
+    <rect x="50" y="560" width="180" height="60" class="custom-network" />
+    <text x="140" y="580" text-anchor="middle" class="layer-text">作成・管理</text>
+    <text x="140" y="595" text-anchor="middle" class="small-text">podman network create mynet</text>
+    <text x="140" y="610" text-anchor="middle" class="small-text">podman network ls</text>
+    
+    <!-- Configuration commands -->
+    <rect x="250" y="560" width="180" height="60" class="custom-network" />
+    <text x="340" y="580" text-anchor="middle" class="layer-text">設定・確認</text>
+    <text x="340" y="595" text-anchor="middle" class="small-text">podman network inspect mynet</text>
+    <text x="340" y="610" text-anchor="middle" class="small-text">podman network connect</text>
+    
+    <!-- Connection commands -->
+    <rect x="450" y="560" width="180" height="60" class="custom-network" />
+    <text x="540" y="580" text-anchor="middle" class="layer-text">接続・切断</text>
+    <text x="540" y="595" text-anchor="middle" class="small-text">podman network disconnect</text>
+    <text x="540" y="610" text-anchor="middle" class="small-text">podman network prune</text>
+    
+    <!-- Cleanup commands -->
+    <rect x="650" y="560" width="180" height="60" class="custom-network" />
+    <text x="740" y="580" text-anchor="middle" class="layer-text">削除・清理</text>
+    <text x="740" y="595" text-anchor="middle" class="small-text">podman network rm mynet</text>
+    <text x="740" y="610" text-anchor="middle" class="small-text">podman network reload</text>
+  </g>
+
+  <!-- Advanced Features -->
+  <g id="advanced-features" transform="translate(50, 640)">
+    <text x="0" y="0" class="component-text">高度な機能: MACVLAN/IPVLAN、CNI プラグイン、ファイアウォール統合、IPv6 サポート、ネットワーク暗号化</text>
+    <text x="0" y="20" class="small-text">セキュリティ: ネットワーク分離、ポート制限、トラフィック制御、VPN 統合対応</text>
+  </g>
+
+  <!-- Arrows showing connections -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow" />
+    </marker>
+  </defs>
+
+  <!-- Bridge network connections -->
+  <line x1="620" y1="145" x2="640" y2="145" class="connection" />
+  <line x1="620" y1="145" x2="720" y2="145" class="connection" />
+  
+  <!-- Custom network connections -->
+  <line x1="150" y1="385" x2="160" y2="385" class="connection" />
+  <line x1="220" y1="385" x2="230" y2="385" class="connection" />
+</svg>

@@ -127,6 +127,10 @@ ps aux | grep nginx
 
 ![Pod内部アーキテクチャ]({{ '/assets/images/diagrams/chapter02-pod-internal-architecture.svg' | relative_url }})
 
+### Podライフサイクル管理
+
+![Pod ライフサイクル管理図]({{ '/assets/images/diagrams/chapter02-pod-lifecycle-management.svg' | relative_url }})
+
 ### 実践的なPod活用例
 
 #### マイクロサービス開発環境
@@ -168,6 +172,10 @@ podman run -d --pod microservices \
   -v /var/log/containers:/var/log/containers:Z,ro \
   fluent/fluent-bit
 ```
+
+#### ネットワーク設定オプション
+
+![ネットワーク設定オプション図]({{ '/assets/images/diagrams/chapter02-network-configuration-options.svg' | relative_url }})
 
 #### サービス間通信の確認
 
@@ -249,12 +257,20 @@ podman run -p 8081:80 nginx  # 8081を使用
 podman stop $(podman ps -q --filter "publish=8080")
 ```
 
+#### ボリュームマウント種別
+
+![ボリュームマウント種別図]({{ '/assets/images/diagrams/chapter02-volume-mount-types.svg' | relative_url }})
+
 #### 2. **ボリュームマウント問題**
 
 **症状**:
 ```bash
 Error: statfs /host/path: permission denied
 ```
+
+#### セキュリティコンテキストフロー
+
+![セキュリティコンテキストフロー図]({{ '/assets/images/diagrams/chapter02-security-context-flow.svg' | relative_url }})
 
 #### コンテナセキュリティ多層防御
 

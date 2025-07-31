@@ -11,6 +11,13 @@
     {% endfor %}
 {% endif %}
 
+<!-- Add Part 0 chapters -->
+{% if navigation.part0_intro %}
+    {% for item in navigation.part0_intro %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
 <!-- Add chapters -->
 {% if navigation.chapters %}
     {% for item in navigation.chapters %}

@@ -424,7 +424,7 @@ ss -tlnp | grep 8080
 netstat -tlnp | grep 8080
 
 # 2. Podmanコンテナでの使用確認
-podman ps --format "table \{\{.Names\}\}\t\{\{.Ports\}\}"
+podman ps --format "table {{.Names}}\t{{.Ports}}"
 
 # 3. 代替ポート使用
 podman run -p 8081:80 nginx  # 8081を使用
@@ -482,7 +482,7 @@ podman login registry.example.com
 
 ```bash
 # リソース使用量のリアルタイム監視
-podman stats --format "table \{\{.Container\}\}\t\{\{.CPUPerc\}\}\t\{\{.MemUsage\}\}\t\{\{.NetIO\}\}\t\{\{.BlockIO\}\}"
+podman stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
 
 # 出力例:
 CONTAINER   CPU %   MEM USAGE / LIMIT   MEM %   NET I/O           BLOCK I/O
@@ -503,9 +503,9 @@ Containers     8       3       45MB        32MB (71%)
 Local Volumes  3       2       150MB       50MB (33%)
 
 # コンテナごとの詳細情報
-podman inspect --format '\{\{.State.Pid\}\}' nginx
+podman inspect --format '{{.State.Pid}}' nginx
 # PIDを使ってシステムレベルで監視
-htop -p $(podman inspect --format '\{\{.State.Pid\}\}' nginx)
+htop -p $(podman inspect --format '{{.State.Pid}}' nginx)
 ```
 
 #### ログ分析
@@ -516,7 +516,7 @@ podman logs --timestamps --follow nginx 2>&1 | jq '.'
 
 # ログローテーション設定
 podman run --log-driver journald \
-  --log-opt tag="\{\{.ImageName\}\}/\{\{.Name\}\}" \
+  --log-opt tag="{{.ImageName}}/{{.Name}}" \
   nginx
 
 # システムジャーナルでの確認

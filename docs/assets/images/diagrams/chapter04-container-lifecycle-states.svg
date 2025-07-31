@@ -1,0 +1,245 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --error-color: #ef4444;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --error-color: #f87171;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .state {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+      }
+      
+      .created-state {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.8;
+      }
+      
+      .running-state {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.8;
+      }
+      
+      .paused-state {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.8;
+      }
+      
+      .stopped-state {
+        fill: var(--error-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.6;
+      }
+      
+      .removed-state {
+        fill: var(--border-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.4;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .state-text {
+        fill: var(--bg-color);
+        font-size: 14px;
+        font-weight: 600;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .arrow {
+        stroke: var(--text-color);
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      .cycle-arrow {
+        stroke: var(--secondary-color);
+        stroke-width: 2;
+        fill: none;
+        stroke-dasharray: 4,4;
+        marker-end: url(#cyclearrow);
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .state-text { font-size: 12px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-color)" />
+    </marker>
+    
+    <marker id="cyclearrow" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--secondary-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Container Lifecycle States</text>
+  
+  <!-- State Flow -->
+  
+  <!-- Created State -->
+  <rect class="created-state" x="40" y="80" width="100" height="50" />
+  <text x="90" y="105" class="state-text">Created</text>
+  
+  <!-- Running State -->
+  <rect class="running-state" x="180" y="80" width="100" height="50" />
+  <text x="230" y="105" class="state-text">Running</text>
+  
+  <!-- Paused State -->
+  <rect class="paused-state" x="320" y="80" width="100" height="50" />
+  <text x="370" y="105" class="state-text">Paused</text>
+  
+  <!-- Stopped State -->
+  <rect class="stopped-state" x="460" y="80" width="100" height="50" />
+  <text x="510" y="105" class="state-text">Stopped</text>
+  
+  <!-- Removed State -->
+  <rect class="removed-state" x="600" y="80" width="100" height="50" />
+  <text x="650" y="105" class="state-text">Removed</text>
+  
+  <!-- Main Flow Arrows -->
+  <line class="arrow" x1="140" y1="105" x2="180" y2="105" />
+  <line class="arrow" x1="280" y1="105" x2="320" y2="105" />
+  <line class="arrow" x1="420" y1="105" x2="460" y2="105" />
+  <line class="arrow" x1="560" y1="105" x2="600" y2="105" />
+  
+  <!-- Cycle Arrows -->
+  <path class="cycle-arrow" d="M 230 130 Q 300 170 370 130" />
+  <path class="cycle-arrow" d="M 370 80 Q 300 40 230 80" />
+  
+  <!-- State Descriptions -->
+  <text x="90" y="155" class="text">作成済み</text>
+  <text x="90" y="170" class="small-text">• 設定済み</text>
+  <text x="90" y="185" class="small-text">• 未実行</text>
+  
+  <text x="230" y="155" class="text">実行中</text>
+  <text x="230" y="170" class="small-text">• プロセス動作</text>
+  <text x="230" y="185" class="small-text">• リソース使用</text>
+  
+  <text x="370" y="155" class="text">一時停止</text>
+  <text x="370" y="170" class="small-text">• メモリ保持</text>
+  <text x="370" y="185" class="small-text">• CPU停止</text>
+  
+  <text x="510" y="155" class="text">停止済み</text>
+  <text x="510" y="170" class="small-text">• プロセス終了</text>
+  <text x="510" y="185" class="small-text">• 設定保持</text>
+  
+  <text x="650" y="155" class="text">削除済み</text>
+  <text x="650" y="170" class="small-text">• 完全削除</text>
+  <text x="650" y="185" class="small-text">• 復元不可</text>
+  
+  <!-- Commands Section -->
+  <text x="400" y="230" class="text">主要コマンド</text>
+  
+  <rect class="state" x="60" y="250" width="680" height="80" />
+  
+  <text x="120" y="270" class="label">podman create</text>
+  <text x="120" y="285" class="small-text">→ Created</text>
+  
+  <text x="240" y="270" class="label">podman start</text>
+  <text x="240" y="285" class="small-text">→ Running</text>
+  
+  <text x="360" y="270" class="label">podman pause</text>
+  <text x="360" y="285" class="small-text">→ Paused</text>
+  
+  <text x="480" y="270" class="label">podman stop</text>
+  <text x="480" y="285" class="small-text">→ Stopped</text>
+  
+  <text x="600" y="270" class="label">podman rm</text>
+  <text x="600" y="285" class="small-text">→ Removed</text>
+  
+  <text x="120" y="305" class="small-text">podman unpause</text>
+  <text x="120" y="315" class="small-text">Paused → Running</text>
+  
+  <text x="280" y="305" class="small-text">podman restart</text>
+  <text x="280" y="315" class="small-text">Stopped → Running</text>
+  
+  <text x="480" y="305" class="small-text">podman kill</text>
+  <text x="480" y="315" class="small-text">強制停止</text>
+  
+  <text x="620" y="305" class="small-text">podman rm -f</text>
+  <text x="620" y="315" class="small-text">強制削除</text>
+  
+  <!-- Best Practices -->
+  <text x="400" y="360" class="label">運用上の重要ポイント: Running ⇄ Paused の切り替えでリソース効率を最適化</text>
+  <text x="400" y="380" class="small-text">Created状態での設定確認、Stopped状態でのログ確認、適切なタイミングでのRemoved実行が重要</text>
+</svg>

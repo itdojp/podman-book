@@ -25,15 +25,7 @@ title: "第10章 セキュリティとRootlessコンテナ"
 
 コンテナセキュリティは、単一の技術ではなく、複数のレイヤーで実現されます：
 
-```
-アプリケーション層  ← セキュアコーディング、依存関係管理
-    ↓
-コンテナランタイム層  ← Capabilities、Seccomp、SELinux
-    ↓
-ホストOS層  ← カーネル強化、パッチ管理
-    ↓
-ハードウェア層  ← セキュアブート、TPM
-```
+![Container Security Layer Architecture](../../assets/images/diagrams/chapter08-security-layer-architecture.svg)
 
 各層での防御が、全体のセキュリティを構成します。
 

@@ -28,11 +28,7 @@ title: "第6章 コンテナの基本操作"
 
 #### 4.1.1 基本的なライフサイクル
 
-```
-Created → Running → Paused → Stopped → Removed
-         ↓         ↑
-         └─────────┘
-```
+![Container Lifecycle States](../../assets/images/diagrams/chapter04-container-lifecycle-states.svg)
 
 **各状態の意味と実務での使い分け**
 

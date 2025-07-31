@@ -25,43 +25,7 @@ podman pull nginx:alpine
 
 #### 内部処理の段階的解説
 
-```
-podman pull nginx:alpine の内部処理
-
-1. Registry接続
-   ┌─────────────┐    HTTPS    ┌─────────────┐
-   │ Podman CLI  │──────────▶ │ Registry    │
-   └─────────────┘            │ (docker.io) │
-                              └─────────────┘
-
-2. Manifest取得
-   ┌─────────────┐             ┌─────────────┐
-   │ Local       │◀─ JSON ──── │ Registry    │
-   │ Storage     │             │ Manifest    │
-   └─────────────┘             └─────────────┘
-
-3. Layer Download & Verification
-   ┌─────────────┐             ┌─────────────────┐
-   │ ~/.local/   │◀─ Layers ── │ Registry Blobs  │
-   │ share/      │             │ + Checksums     │
-   │ containers/ │             └─────────────────┘
-   └─────────────┘
-
-4. Layer Assembly
-   ┌─────────────────────────────────────┐
-   │ Image Storage                       │
-   │ ┌─────────────────────────────────┐ │
-   │ │ Layer Cache                     │ │
-   │ │ ┌─────────┐                     │ │
-   │ │ │ Layer 3 │ nginx binary        │ │
-   │ │ ├─────────┤                     │ │
-   │ │ │ Layer 2 │ nginx dependencies  │ │
-   │ │ ├─────────┤                     │ │
-   │ │ │ Layer 1 │ alpine base         │ │
-   │ │ └─────────┘                     │ │
-   │ └─────────────────────────────────┘ │
-   └─────────────────────────────────────┘
-```
+![Pull操作内部処理図]({{ '/assets/images/diagrams/chapter02-pull-operation-internal.svg' | relative_url }})
 
 ### ストレージドライバーとレイヤー管理
 
@@ -136,23 +100,7 @@ podman run -d -p 8080:80 --name webserver nginx:alpine
 
 #### UID/GIDマッピング
 
-```
-Rootless Container UID/GID Mapping
-┌─────────────────────────────────────┐
-│ Host User Namespace                 │
-│  User: john (UID 1000)              │
-│  ┌─────────────────────────────────┐ │
-│  │ Container User Namespace        │ │
-│  │ ┌─────────────────────────────┐ │ │
-│  │ │ Container Process           │ │ │
-│  │ │  ├─ Container UID 0 (root)  │ │ │
-│  │ │  │  Mapped to Host UID 1000 │ │ │
-│  │ │  └─ Container UID 33 (www)  │ │ │
-│  │ │     Mapped to Host UID 1033 │ │ │
-│  │ └─────────────────────────────┘ │ │
-│  └─────────────────────────────────┘ │
-└─────────────────────────────────────┘
-```
+![Rootless UID/GIDマッピング図]({{ '/assets/images/diagrams/chapter02-rootless-uid-gid-mapping.svg' | relative_url }})
 
 **マッピング設定の確認**:
 ```bash
@@ -273,36 +221,7 @@ podman play kube pod-definition.yaml
 
 ### 診断フローチャート
 
-```
-Container Troubleshooting Flow
-┌─────────────────────────────────────┐
-│ Problem: Container won't start      │
-└─────────────────┬───────────────────┘
-                  │
-          ┌───────▼────────┐
-          │ Check Status   │
-          │ podman ps -a   │
-          └───────┬────────┘
-                  │
-    ┌─────────────▼─────────────┐
-    │ Container State Analysis  │
-    │  ├─ Created → Config Issue│
-    │  ├─ Exited → App Issue    │
-    │  └─ Restarting → Crash    │
-    └─────────────┬─────────────┘
-                  │
-          ┌───────▼────────┐
-          │ Check Logs     │
-          │ podman logs -f │
-          └───────┬────────┘
-                  │
-    ┌─────────────▼─────────────┐
-    │ Detailed Investigation    │
-    │  ├─ podman events         │
-    │  ├─ podman inspect        │
-    │  └─ podman exec debug     │
-    └───────────────────────────┘
-```
+![トラブルシューティング フローチャート]({{ '/assets/images/diagrams/chapter02-troubleshooting-flowchart.svg' | relative_url }})
 
 ### 具体的な問題と解決法
 

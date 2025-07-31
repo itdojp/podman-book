@@ -1,0 +1,120 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 18px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .section-title { font: 600 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .layer-text { font: 500 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .component-text { font: 400 11px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      .small-text { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      
+      .vm-bar { fill: var(--color-red-200, #fc8181); stroke: var(--color-red-400, #f56565); }
+      .container-bar { fill: var(--color-green-200, #68d391); stroke: var(--color-green-400, #48bb78); }
+      .background { fill: var(--color-gray-50, #f9fafb); stroke: var(--color-gray-200, #e2e8f0); }
+      .axis { stroke: var(--color-gray-400, #a0aec0); stroke-width: 2; }
+      .grid { stroke: var(--color-gray-300, #cbd5e0); stroke-width: 1; stroke-dasharray: 2,2; }
+      .legend-vm { fill: var(--color-red-200, #fc8181); stroke: var(--color-red-400, #f56565); }
+      .legend-container { fill: var(--color-green-200, #68d391); stroke: var(--color-green-400, #48bb78); }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="title">コンテナ vs VM リソース使用量比較</text>
+
+  <!-- Chart Area -->
+  <rect x="100" y="60" width="600" height="320" class="background" />
+
+  <!-- Y-axis (Resource Usage %) -->
+  <line x1="100" y1="60" x2="100" y2="380" class="axis" />
+  <text x="90" y="65" text-anchor="end" class="small-text">100%</text>
+  <text x="90" y="140" text-anchor="end" class="small-text">75%</text>
+  <text x="90" y="220" text-anchor="end" class="small-text">50%</text>
+  <text x="90" y="300" text-anchor="end" class="small-text">25%</text>
+  <text x="90" y="380" text-anchor="end" class="small-text">0%</text>
+
+  <!-- X-axis -->
+  <line x1="100" y1="380" x2="700" y2="380" class="axis" />
+
+  <!-- Grid lines -->
+  <line x1="100" y1="140" x2="700" y2="140" class="grid" />
+  <line x1="100" y1="220" x2="700" y2="220" class="grid" />
+  <line x1="100" y1="300" x2="700" y2="300" class="grid" />
+
+  <!-- Vertical separators -->
+  <line x1="250" y1="60" x2="250" y2="380" class="grid" />
+  <line x1="400" y1="60" x2="400" y2="380" class="grid" />
+  <line x1="550" y1="60" x2="550" y2="380" class="grid" />
+
+  <!-- CPU Usage -->
+  <g id="cpu-usage">
+    <text x="175" y="50" text-anchor="middle" class="section-title">CPU使用率</text>
+    
+    <!-- VM CPU bar (80%) -->
+    <rect x="140" y="124" width="30" height="256" class="vm-bar" />
+    <text x="155" y="400" text-anchor="middle" class="small-text">VM</text>
+    <text x="155" y="415" text-anchor="middle" class="small-text">80%</text>
+    
+    <!-- Container CPU bar (15%) -->
+    <rect x="180" y="332" width="30" height="48" class="container-bar" />
+    <text x="195" y="400" text-anchor="middle" class="small-text">Container</text>
+    <text x="195" y="415" text-anchor="middle" class="small-text">15%</text>
+  </g>
+
+  <!-- Memory Usage -->
+  <g id="memory-usage">
+    <text x="325" y="50" text-anchor="middle" class="section-title">メモリ使用量</text>
+    
+    <!-- VM Memory bar (85%) -->
+    <rect x="290" y="108" width="30" height="272" class="vm-bar" />
+    <text x="305" y="400" text-anchor="middle" class="small-text">VM</text>
+    <text x="305" y="415" text-anchor="middle" class="small-text">2.1GB</text>
+    
+    <!-- Container Memory bar (25%) -->
+    <rect x="330" y="300" width="30" height="80" class="container-bar" />
+    <text x="345" y="400" text-anchor="middle" class="small-text">Container</text>
+    <text x="345" y="415" text-anchor="middle" class="small-text">0.5GB</text>
+  </g>
+
+  <!-- Disk Usage -->
+  <g id="disk-usage">
+    <text x="475" y="50" text-anchor="middle" class="section-title">ディスク使用量</text>
+    
+    <!-- VM Disk bar (90%) -->
+    <rect x="440" y="92" width="30" height="288" class="vm-bar" />
+    <text x="455" y="400" text-anchor="middle" class="small-text">VM</text>
+    <text x="455" y="415" text-anchor="middle" class="small-text">8GB</text>
+    
+    <!-- Container Disk bar (20%) -->
+    <rect x="480" y="316" width="30" height="64" class="container-bar" />
+    <text x="495" y="400" text-anchor="middle" class="small-text">Container</text>
+    <text x="495" y="415" text-anchor="middle" class="small-text">150MB</text>
+  </g>
+
+  <!-- Startup Time -->
+  <g id="startup-time">
+    <text x="625" y="50" text-anchor="middle" class="section-title">起動時間</text>
+    
+    <!-- VM Startup bar (95%) -->
+    <rect x="590" y="76" width="30" height="304" class="vm-bar" />
+    <text x="605" y="400" text-anchor="middle" class="small-text">VM</text>
+    <text x="605" y="415" text-anchor="middle" class="small-text">2-5分</text>
+    
+    <!-- Container Startup bar (5%) -->
+    <rect x="630" y="364" width="30" height="16" class="container-bar" />
+    <text x="645" y="400" text-anchor="middle" class="small-text">Container</text>
+    <text x="645" y="415" text-anchor="middle" class="small-text">1-3秒</text>
+  </g>
+
+  <!-- Legend -->
+  <g id="legend" transform="translate(100, 450)">
+    <rect x="0" y="0" width="20" height="15" class="legend-vm" />
+    <text x="25" y="12" class="component-text">仮想マシン (完全なOS)</text>
+    
+    <rect x="200" y="0" width="20" height="15" class="legend-container" />
+    <text x="225" y="12" class="component-text">コンテナ (共有OS)</text>
+  </g>
+
+  <!-- Summary -->
+  <g id="summary" transform="translate(400, 450)">
+    <text x="0" y="12" class="component-text">効率性: コンテナは平均70-80%のリソース削減を実現</text>
+  </g>
+</svg>

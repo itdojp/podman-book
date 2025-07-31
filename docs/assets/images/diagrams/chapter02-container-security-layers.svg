@@ -1,0 +1,231 @@
+<svg width="900" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 18px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .section-title { font: 600 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .layer-text { font: 500 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .component-text { font: 400 11px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      .small-text { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      
+      .application-layer { fill: var(--color-red-100, #fee2e2); stroke: var(--color-red-400, #f56565); stroke-width: 2; }
+      .container-layer { fill: var(--color-orange-100, #fed7aa); stroke: var(--color-orange-400, #fbb962); stroke-width: 2; }
+      .runtime-layer { fill: var(--color-yellow-100, #fef3c7); stroke: var(--color-yellow-400, #f6e05e); stroke-width: 2; }
+      .os-layer { fill: var(--color-green-100, #dcfce7); stroke: var(--color-green-400, #48bb78); stroke-width: 2; }
+      .kernel-layer { fill: var(--color-blue-100, #dbeafe); stroke: var(--color-blue-400, #4299e1); stroke-width: 2; }
+      .hardware-layer { fill: var(--color-purple-100, #e9d5ff); stroke: var(--color-purple-400, #c084fc); stroke-width: 2; }
+      .security-control { fill: var(--color-indigo-50, #f0f9ff); stroke: var(--color-indigo-300, #a5b4fc); }
+      .attack-vector { fill: var(--color-red-50, #fef5e7); stroke: var(--color-red-300, #fc8181); stroke-dasharray: 3,3; }
+      .defense-mechanism { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-300, #68d391); }
+      .arrow { stroke: var(--color-gray-600, #718096); fill: var(--color-gray-600, #718096); }
+      .threat-arrow { stroke: var(--color-red-500, #ef4444); fill: var(--color-red-500, #ef4444); }
+      .defense-arrow { stroke: var(--color-green-500, #10b981); fill: var(--color-green-500, #10b981); }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" class="title">コンテナセキュリティ多層防御図</text>
+
+  <!-- Layer 1: Application Layer -->
+  <g id="application-layer">
+    <rect x="100" y="80" width="700" height="80" class="application-layer" />
+    <text x="120" y="105" class="section-title">アプリケーション層 (Layer 1)</text>
+    
+    <!-- Application Security -->
+    <rect x="120" y="120" width="140" height="30" class="security-control" />
+    <text x="190" y="140" text-anchor="middle" class="component-text">Secure Coding</text>
+    
+    <rect x="280" y="120" width="140" height="30" class="security-control" />
+    <text x="350" y="140" text-anchor="middle" class="component-text">Input Validation</text>
+    
+    <rect x="440" y="120" width="140" height="30" class="security-control" />
+    <text x="510" y="140" text-anchor="middle" class="component-text">Dependency Scanning</text>
+    
+    <rect x="600" y="120" width="140" height="30" class="security-control" />
+    <text x="670" y="140" text-anchor="middle" class="component-text">SAST/DAST</text>
+    
+    <!-- Threats -->
+    <text x="820" y="105" class="small-text">脅威:</text>
+    <text x="820" y="120" class="small-text">• Code Injection</text>
+    <text x="820" y="135" class="small-text">• Vulnerabilities</text>
+    <text x="820" y="150" class="small-text">• Supply Chain</text>
+  </g>
+
+  <!-- Layer 2: Container Layer -->
+  <g id="container-layer">
+    <rect x="100" y="180" width="700" height="80" class="container-layer" />
+    <text x="120" y="205" class="section-title">コンテナ層 (Layer 2)</text>
+    
+    <!-- Container Security -->
+    <rect x="120" y="220" width="130" height="30" class="security-control" />
+    <text x="185" y="240" text-anchor="middle" class="component-text">Image Scanning</text>
+    
+    <rect x="270" y="220" width="130" height="30" class="security-control" />
+    <text x="335" y="240" text-anchor="middle" class="component-text">Distroless Images</text>
+    
+    <rect x="420" y="220" width="130" height="30" class="security-control" />
+    <text x="485" y="240" text-anchor="middle" class="component-text">Non-root User</text>
+    
+    <rect x="570" y="220" width="130" height="30" class="security-control" />
+    <text x="635" y="240" text-anchor="middle" class="component-text">Read-only FS</text>
+    
+    <!-- Threats -->
+    <text x="820" y="205" class="small-text">脅威:</text>
+    <text x="820" y="220" class="small-text">• Malicious Images</text>
+    <text x="820" y="235" class="small-text">• Privilege Escalation</text>
+    <text x="820" y="250" class="small-text">• Container Escape</text>
+  </g>
+
+  <!-- Layer 3: Container Runtime Layer -->
+  <g id="runtime-layer">
+    <rect x="100" y="280" width="700" height="80" class="runtime-layer" />
+    <text x="120" y="305" class="section-title">ランタイム層 (Layer 3)</text>
+    
+    <!-- Runtime Security -->
+    <rect x="120" y="320" width="120" height="30" class="security-control" />
+    <text x="180" y="340" text-anchor="middle" class="component-text">Capabilities Drop</text>
+    
+    <rect x="260" y="320" width="120" height="30" class="security-control" />
+    <text x="320" y="340" text-anchor="middle" class="component-text">Seccomp Profile</text>
+    
+    <rect x="400" y="320" width="120" height="30" class="security-control" />
+    <text x="460" y="340" text-anchor="middle" class="component-text">AppArmor/SELinux</text>
+    
+    <rect x="540" y="320" width="120" height="30" class="security-control" />
+    <text x="600" y="340" text-anchor="middle" class="component-text">Resource Limits</text>
+    
+    <!-- Threats -->
+    <text x="820" y="305" class="small-text">脅威:</text>
+    <text x="820" y="320" class="small-text">• System Call Abuse</text>
+    <text x="820" y="335" class="small-text">• Resource Exhaustion</text>
+    <text x="820" y="350" class="small-text">• Privilege Abuse</text>
+  </g>
+
+  <!-- Layer 4: Operating System Layer -->
+  <g id="os-layer">
+    <rect x="100" y="380" width="700" height="80" class="os-layer" />
+    <text x="120" y="405" class="section-title">オペレーティングシステム層 (Layer 4)</text>
+    
+    <!-- OS Security -->
+    <rect x="120" y="420" width="140" height="30" class="security-control" />
+    <text x="190" y="440" text-anchor="middle" class="component-text">User Namespaces</text>
+    
+    <rect x="280" y="420" width="140" height="30" class="security-control" />
+    <text x="350" y="440" text-anchor="middle" class="component-text">Network Isolation</text>
+    
+    <rect x="440" y="420" width="140" height="30" class="security-control" />
+    <text x="510" y="440" text-anchor="middle" class="component-text">Filesystem Isolation</text>
+    
+    <rect x="600" y="420" width="100" height="30" class="security-control" />
+    <text x="650" y="440" text-anchor="middle" class="component-text">OS Hardening</text>
+    
+    <!-- Threats -->
+    <text x="820" y="405" class="small-text">脅威:</text>
+    <text x="820" y="420" class="small-text">• Lateral Movement</text>
+    <text x="820" y="435" class="small-text">• Host Compromise</text>
+    <text x="820" y="450" class="small-text">• Data Leakage</text>
+  </g>
+
+  <!-- Layer 5: Kernel Layer -->
+  <g id="kernel-layer">
+    <rect x="100" y="480" width="700" height="80" class="kernel-layer" />
+    <text x="120" y="505" class="section-title">カーネル層 (Layer 5)</text>
+    
+    <!-- Kernel Security -->
+    <rect x="120" y="520" width="120" height="30" class="security-control" />
+    <text x="180" y="540" text-anchor="middle" class="component-text">Kernel Modules</text>
+    
+    <rect x="260" y="520" width="120" height="30" class="security-control" />
+    <text x="320" y="540" text-anchor="middle" class="component-text">KASLR/SMEP</text>
+    
+    <rect x="400" y="520" width="120" height="30" class="security-control" />
+    <text x="460" y="540" text-anchor="middle" class="component-text">Control Groups</text>
+    
+    <rect x="540" y="520" width="120" height="30" class="security-control" />
+    <text x="600" y="540" text-anchor="middle" class="component-text">Kernel Updates</text>
+    
+    <!-- Threats -->
+    <text x="820" y="505" class="small-text">脅威:</text>
+    <text x="820" y="520" class="small-text">• Kernel Exploits</text>
+    <text x="820" y="535" class="small-text">• Root Privilege</text>
+    <text x="820" y="550" class="small-text">• System Takeover</text>
+  </g>
+
+  <!-- Layer 6: Hardware Layer -->
+  <g id="hardware-layer">
+    <rect x="100" y="580" width="700" height="80" class="hardware-layer" />
+    <text x="120" y="605" class="section-title">ハードウェア層 (Layer 6)</text>
+    
+    <!-- Hardware Security -->
+    <rect x="120" y="620" width="140" height="30" class="security-control" />
+    <text x="190" y="640" text-anchor="middle" class="component-text">TPM/HSM</text>
+    
+    <rect x="280" y="620" width="140" height="30" class="security-control" />
+    <text x="350" y="640" text-anchor="middle" class="component-text">Secure Boot</text>
+    
+    <rect x="440" y="620" width="140" height="30" class="security-control" />
+    <text x="510" y="640" text-anchor="middle" class="component-text">Hardware Isolation</text>
+    
+    <rect x="600" y="620" width="100" height="30" class="security-control" />
+    <text x="650" y="640" text-anchor="middle" class="component-text">Encryption</text>
+    
+    <!-- Threats -->
+    <text x="820" y="605" class="small-text">脅威:</text>
+    <text x="820" y="620" class="small-text">• Physical Access</text>
+    <text x="820" y="635" class="small-text">• Side Channel</text>
+    <text x="820" y="650" class="small-text">• Hardware Trojans</text>
+  </g>
+
+  <!-- Defense in Depth Arrows -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow" />
+    </marker>
+    <marker id="threat-arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="threat-arrow" />
+    </marker>
+    <marker id="defense-arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="defense-arrow" />
+    </marker>
+  </defs>
+
+  <!-- Threat Flow (Red arrows from outside) -->
+  <line x1="30" y1="120" x2="80" y2="120" stroke-width="3" class="threat-arrow" marker-end="url(#threat-arrowhead)" />
+  <text x="20" y="110" class="small-text" fill="var(--color-red-600, #dc2626)">外部脅威</text>
+
+  <!-- Defense Flow (Green arrows showing protection) -->
+  <line x1="80" y1="120" x2="80" y2="640" stroke-width="3" class="defense-arrow" />
+  <text x="20" y="380" class="small-text" fill="var(--color-green-600, #059669)" transform="rotate(-90 20 380)">多層防御</text>
+
+  <!-- Inter-layer Dependencies -->
+  <line x1="450" y1="170" x2="450" y2="180" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+  <line x1="450" y1="270" x2="450" y2="280" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+  <line x1="450" y1="370" x2="450" y2="380" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+  <line x1="450" y1="470" x2="450" y2="480" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+  <line x1="450" y1="570" x2="450" y2="580" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+
+  <!-- Security Controls Matrix -->
+  <g id="security-matrix" transform="translate(50, 680)">
+    <text x="0" y="0" class="section-title">Podman セキュリティ実装</text>
+    
+    <rect x="0" y="15" width="200" height="40" class="defense-mechanism" />
+    <text x="100" y="30" text-anchor="middle" class="component-text">Rootless Architecture</text>
+    <text x="100" y="45" text-anchor="middle" class="small-text">Layer 2-5 横断的防御</text>
+    
+    <rect x="220" y="15" width="200" height="40" class="defense-mechanism" />
+    <text x="320" y="30" text-anchor="middle" class="component-text">Pod-based Isolation</text>
+    <text x="320" y="45" text-anchor="middle" class="small-text">Layer 3-4 ネットワーク分離</text>
+    
+    <rect x="440" y="15" width="200" height="40" class="defense-mechanism" />
+    <text x="540" y="30" text-anchor="middle" class="component-text">SELinux Integration</text>
+    <text x="540" y="45" text-anchor="middle" class="small-text">Layer 3 強制アクセス制御</text>
+    
+    <rect x="660" y="15" width="180" height="40" class="defense-mechanism" />
+    <text x="750" y="30" text-anchor="middle" class="component-text">Daemonless</text>
+    <text x="750" y="45" text-anchor="middle" class="small-text">Layer 3 攻撃面削減</text>
+  </g>
+
+  <!-- Benefits -->
+  <g id="benefits" transform="translate(50, 770)">
+    <text x="0" y="0" class="component-text">効果: 単一の脆弱性では突破困難、攻撃者は複数の防御層を突破する必要、インシデント早期検知・封じ込め</text>
+  </g>
+</svg>

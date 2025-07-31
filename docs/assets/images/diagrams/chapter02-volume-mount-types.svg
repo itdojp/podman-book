@@ -1,0 +1,224 @@
+<svg width="900" height="650" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 18px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .section-title { font: 600 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .layer-text { font: 500 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .component-text { font: 400 11px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      .small-text { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      
+      .host-fs { fill: var(--color-blue-50, #ebf8ff); stroke: var(--color-blue-200, #90cdf4); }
+      .named-volume { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-200, #68d391); }
+      .bind-mount { fill: var(--color-orange-50, #fffaf0); stroke: var(--color-orange-200, #fbb962); }
+      .tmpfs-mount { fill: var(--color-purple-50, #faf5ff); stroke: var(--color-purple-200, #c084fc); }
+      .container { fill: var(--color-yellow-50, #fffff0); stroke: var(--color-yellow-200, #f6e05e); }
+      .mount-point { fill: var(--color-red-50, #fef5e7); stroke: var(--color-red-200, #fc8181); }
+      .arrow { stroke: var(--color-gray-600, #718096); fill: var(--color-gray-600, #718096); }
+      .connection { stroke: var(--color-blue-400, #4299e1); stroke-width: 2; stroke-dasharray: 5,5; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" class="title">Podman ボリュームマウント種別図</text>
+
+  <!-- Named Volume -->
+  <g id="named-volume">
+    <text x="150" y="70" text-anchor="middle" class="section-title">1. Named Volume</text>
+    
+    <!-- Host system -->
+    <rect x="50" y="90" width="200" height="120" class="host-fs" />
+    <text x="150" y="110" text-anchor="middle" class="layer-text">Host File System</text>
+    <text x="150" y="130" text-anchor="middle" class="small-text">/var/lib/containers/storage/</text>
+    <text x="150" y="145" text-anchor="middle" class="small-text">volumes/mydata/_data/</text>
+    
+    <!-- Named volume -->
+    <rect x="80" y="160" width="140" height="40" class="named-volume" />
+    <text x="150" y="175" text-anchor="middle" class="component-text">Named Volume: mydata</text>
+    <text x="150" y="190" text-anchor="middle" class="small-text">Podman管理下</text>
+    
+    <!-- Container -->
+    <rect x="300" y="90" width="140" height="120" class="container" />
+    <text x="370" y="110" text-anchor="middle" class="layer-text">Container</text>
+    <text x="370" y="130" text-anchor="middle" class="small-text">myapp:latest</text>
+    
+    <!-- Mount point -->
+    <rect x="320" y="160" width="100" height="40" class="mount-point" />
+    <text x="370" y="175" text-anchor="middle" class="component-text">/app/data</text>
+    <text x="370" y="190" text-anchor="middle" class="small-text">mount point</text>
+    
+    <!-- Connection -->
+    <line x1="220" y1="180" x2="320" y2="180" class="connection" />
+    
+    <!-- Command -->
+    <text x="150" y="240" text-anchor="middle" class="small-text">podman run -v mydata:/app/data myapp</text>
+    <text x="150" y="255" text-anchor="middle" class="small-text">特徴: 自動管理、永続化、移植性</text>
+  </g>
+
+  <!-- Bind Mount -->
+  <g id="bind-mount">
+    <text x="600" y="70" text-anchor="middle" class="section-title">2. Bind Mount</text>
+    
+    <!-- Host directory -->
+    <rect x="500" y="90" width="200" height="120" class="host-fs" />
+    <text x="600" y="110" text-anchor="middle" class="layer-text">Host Directory</text>
+    <text x="600" y="130" text-anchor="middle" class="small-text">/home/user/project/</text>
+    <text x="600" y="145" text-anchor="middle" class="small-text">config/</text>
+    
+    <!-- Bind mount area -->
+    <rect x="530" y="160" width="140" height="40" class="bind-mount" />
+    <text x="600" y="175" text-anchor="middle" class="component-text">Direct Bind Mount</text>
+    <text x="600" y="190" text-anchor="middle" class="small-text">直接マウント</text>
+    
+    <!-- Container -->
+    <rect x="750" y="90" width="140" height="120" class="container" />
+    <text x="820" y="110" text-anchor="middle" class="layer-text">Container</text>
+    <text x="820" y="130" text-anchor="middle" class="small-text">myapp:latest</text>
+    
+    <!-- Mount point -->
+    <rect x="770" y="160" width="100" height="40" class="mount-point" />
+    <text x="820" y="175" text-anchor="middle" class="component-text">/etc/config</text>
+    <text x="820" y="190" text-anchor="middle" class="small-text">mount point</text>
+    
+    <!-- Connection -->
+    <line x1="670" y1="180" x2="770" y2="180" class="connection" />
+    
+    <!-- Command -->
+    <text x="600" y="240" text-anchor="middle" class="small-text">podman run -v /home/user/config:/etc/config myapp</text>
+    <text x="600" y="255" text-anchor="middle" class="small-text">特徴: 直接アクセス、開発時利便性</text>
+  </g>
+
+  <!-- tmpfs Mount -->
+  <g id="tmpfs-mount">
+    <text x="150" y="320" text-anchor="middle" class="section-title">3. tmpfs Mount</text>
+    
+    <!-- Memory -->
+    <rect x="50" y="340" width="200" height="120" class="host-fs" />
+    <text x="150" y="360" text-anchor="middle" class="layer-text">Host Memory (RAM)</text>
+    <text x="150" y="380" text-anchor="middle" class="small-text">一時的メモリ領域</text>
+    <text x="150" y="395" text-anchor="middle" class="small-text">揮発性ストレージ</text>
+    
+    <!-- tmpfs volume -->
+    <rect x="80" y="410" width="140" height="40" class="tmpfs-mount" />
+    <text x="150" y="425" text-anchor="middle" class="component-text">tmpfs Volume</text>
+    <text x="150" y="440" text-anchor="middle" class="small-text">メモリベース</text>
+    
+    <!-- Container -->
+    <rect x="300" y="340" width="140" height="120" class="container" />
+    <text x="370" y="360" text-anchor="middle" class="layer-text">Container</text>
+    <text x="370" y="380" text-anchor="middle" class="small-text">myapp:latest</text>
+    
+    <!-- Mount point -->
+    <rect x="320" y="410" width="100" height="40" class="mount-point" />
+    <text x="370" y="425" text-anchor="middle" class="component-text">/tmp/cache</text>
+    <text x="370" y="440" text-anchor="middle" class="small-text">mount point</text>
+    
+    <!-- Connection -->
+    <line x1="220" y1="430" x2="320" y2="430" class="connection" />
+    
+    <!-- Command -->
+    <text x="150" y="490" text-anchor="middle" class="small-text">podman run --tmpfs /tmp/cache myapp</text>
+    <text x="150" y="505" text-anchor="middle" class="small-text">特徴: 高速、一時的、セキュア</text>
+  </g>
+
+  <!-- Anonymous Volume -->
+  <g id="anonymous-volume">
+    <text x="600" y="320" text-anchor="middle" class="section-title">4. Anonymous Volume</text>
+    
+    <!-- Host system -->
+    <rect x="500" y="340" width="200" height="120" class="host-fs" />
+    <text x="600" y="360" text-anchor="middle" class="layer-text">Host File System</text>
+    <text x="600" y="380" text-anchor="middle" class="small-text">/var/lib/containers/storage/</text>
+    <text x="600" y="395" text-anchor="middle" class="small-text">volumes/[random-id]/</text>
+    
+    <!-- Anonymous volume -->
+    <rect x="530" y="410" width="140" height="40" class="named-volume" />
+    <text x="600" y="425" text-anchor="middle" class="component-text">Anonymous Volume</text>
+    <text x="600" y="440" text-anchor="middle" class="small-text">自動生成ID</text>
+    
+    <!-- Container -->
+    <rect x="750" y="340" width="140" height="120" class="container" />
+    <text x="820" y="360" text-anchor="middle" class="layer-text">Container</text>
+    <text x="820" y="380" text-anchor="middle" class="small-text">myapp:latest</text>
+    
+    <!-- Mount point -->
+    <rect x="770" y="410" width="100" height="40" class="mount-point" />
+    <text x="820" y="425" text-anchor="middle" class="component-text">/app/logs</text>
+    <text x="820" y="440" text-anchor="middle" class="small-text">mount point</text>
+    
+    <!-- Connection -->
+    <line x1="670" y1="430" x2="770" y2="430" class="connection" />
+    
+    <!-- Command -->
+    <text x="600" y="490" text-anchor="middle" class="small-text">podman run -v /app/logs myapp</text>
+    <text x="600" y="505" text-anchor="middle" class="small-text">特徴: 自動作成、一時的使用</text>
+  </g>
+
+  <!-- Comparison Table -->
+  <g id="comparison" transform="translate(50, 540)">
+    <text x="400" y="20" text-anchor="middle" class="section-title">マウント種別比較</text>
+    
+    <!-- Table headers -->
+    <rect x="0" y="30" width="100" height="25" class="host-fs" />
+    <text x="50" y="47" text-anchor="middle" class="component-text">種別</text>
+    
+    <rect x="100" y="30" width="150" height="25" class="host-fs" />
+    <text x="175" y="47" text-anchor="middle" class="component-text">用途</text>
+    
+    <rect x="250" y="30" width="150" height="25" class="host-fs" />
+    <text x="325" y="47" text-anchor="middle" class="component-text">永続性</text>
+    
+    <rect x="400" y="30" width="150" height="25" class="host-fs" />
+    <text x="475" y="47" text-anchor="middle" class="component-text">性能</text>
+    
+    <rect x="550" y="30" width="200" height="25" class="host-fs" />
+    <text x="650" y="47" text-anchor="middle" class="component-text">セキュリティ</text>
+    
+    <!-- Named Volume row -->
+    <rect x="0" y="55" width="100" height="20" class="named-volume" />
+    <text x="50" y="68" text-anchor="middle" class="small-text">Named</text>
+    
+    <rect x="100" y="55" width="150" height="20" class="named-volume" />
+    <text x="175" y="68" text-anchor="middle" class="small-text">データベース、設定</text>
+    
+    <rect x="250" y="55" width="150" height="20" class="named-volume" />
+    <text x="325" y="68" text-anchor="middle" class="small-text">高（永続）</text>
+    
+    <rect x="400" y="55" width="150" height="20" class="named-volume" />
+    <text x="475" y="68" text-anchor="middle" class="small-text">中</text>
+    
+    <rect x="550" y="55" width="200" height="20" class="named-volume" />
+    <text x="650" y="68" text-anchor="middle" class="small-text">高（分離）</text>
+    
+    <!-- Bind Mount row -->
+    <rect x="0" y="75" width="100" height="20" class="bind-mount" />
+    <text x="50" y="88" text-anchor="middle" class="small-text">Bind</text>
+    
+    <rect x="100" y="75" width="150" height="20" class="bind-mount" />
+    <text x="175" y="88" text-anchor="middle" class="small-text">開発、設定</text>
+    
+    <rect x="250" y="75" width="150" height="20" class="bind-mount" />
+    <text x="325" y="88" text-anchor="middle" class="small-text">高（永続）</text>
+    
+    <rect x="400" y="75" width="150" height="20" class="bind-mount" />
+    <text x="475" y="88" text-anchor="middle" class="small-text">高</text>
+    
+    <rect x="550" y="75" width="200" height="20" class="bind-mount" />
+    <text x="650" y="88" text-anchor="middle" class="small-text">中（ホスト依存）</text>
+    
+    <!-- tmpfs row -->
+    <rect x="0" y="95" width="100" height="20" class="tmpfs-mount" />
+    <text x="50" y="108" text-anchor="middle" class="small-text">tmpfs</text>
+    
+    <rect x="100" y="95" width="150" height="20" class="tmpfs-mount" />
+    <text x="175" y="108" text-anchor="middle" class="small-text">キャッシュ、一時</text>
+    
+    <rect x="250" y="95" width="150" height="20" class="tmpfs-mount" />
+    <text x="325" y="108" text-anchor="middle" class="small-text">なし（揮発）</text>
+    
+    <rect x="400" y="95" width="150" height="20" class="tmpfs-mount" />
+    <text x="475" y="108" text-anchor="middle" class="small-text">最高</text>
+    
+    <rect x="550" y="95" width="200" height="20" class="tmpfs-mount" />
+    <text x="650" y="108" text-anchor="middle" class="small-text">最高（メモリ内）</text>
+  </g>
+</svg>

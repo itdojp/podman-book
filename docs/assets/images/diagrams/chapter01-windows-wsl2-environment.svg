@@ -1,0 +1,227 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .windows-layer {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .wsl-layer {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .component {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+      }
+      
+      .windows-app {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .linux-app {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .vm {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.2;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .section-title {
+        fill: var(--text-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .arrow {
+        stroke: var(--text-color);
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .section-title { font-size: 14px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Windows WSL2 Environment</text>
+  
+  <!-- Windows Layer -->
+  <rect class="windows-layer" x="40" y="60" width="720" height="140" />
+  <text x="400" y="85" class="section-title">Windows 10/11</text>
+  
+  <!-- Windows Applications -->
+  <rect class="windows-app" x="60" y="110" width="120" height="60" />
+  <text x="120" y="135" class="text">VS Code</text>
+  <text x="120" y="150" class="small-text">Remote-WSL</text>
+  
+  <rect class="windows-app" x="200" y="110" width="120" height="60" />
+  <text x="260" y="135" class="text">Windows</text>
+  <text x="260" y="150" class="small-text">Terminal</text>
+  
+  <rect class="windows-app" x="340" y="110" width="120" height="60" />
+  <text x="400" y="135" class="text">PowerShell</text>
+  <text x="400" y="150" class="small-text">Core</text>
+  
+  <rect class="windows-app" x="480" y="110" width="120" height="60" />
+  <text x="540" y="135" class="text">Docker</text>
+  <text x="540" y="150" class="small-text">Desktop</text>
+  
+  <rect class="windows-app" x="620" y="110" width="120" height="60" />
+  <text x="680" y="135" class="text">Podman</text>
+  <text x="680" y="150" class="small-text">Desktop</text>
+  
+  <!-- WSL2 VM Layer -->
+  <rect class="vm" x="80" y="220" width="640" height="300" />
+  <text x="400" y="245" class="section-title">WSL2 Virtual Machine</text>
+  
+  <!-- Linux Kernel -->
+  <rect class="component" x="100" y="260" width="600" height="40" />
+  <text x="400" y="280" class="text">Linux Kernel (Microsoft Custom)</text>
+  
+  <!-- WSL Distributions -->
+  <rect class="wsl-layer" x="120" y="320" width="160" height="180" />
+  <text x="200" y="340" class="text">Ubuntu 20.04</text>
+  
+  <rect class="linux-app" x="140" y="360" width="120" height="40" />
+  <text x="200" y="380" class="label">podman</text>
+  
+  <rect class="linux-app" x="140" y="410" width="120" height="40" />
+  <text x="200" y="430" class="label">buildah</text>
+  
+  <rect class="linux-app" x="140" y="460" width="120" height="40" />
+  <text x="200" y="480" class="label">skopeo</text>
+  
+  <rect class="wsl-layer" x="300" y="320" width="160" height="180" />
+  <text x="380" y="340" class="text">Fedora 36</text>
+  
+  <rect class="linux-app" x="320" y="360" width="120" height="40" />
+  <text x="380" y="380" class="label">podman</text>
+  
+  <rect class="linux-app" x="320" y="410" width="120" height="40" />
+  <text x="380" y="430" class="label">systemd</text>
+  
+  <rect class="linux-app" x="320" y="460" width="120" height="40" />
+  <text x="380" y="480" class="label">containers</text>
+  
+  <rect class="wsl-layer" x="480" y="320" width="160" height="180" />
+  <text x="560" y="340" class="text">openSUSE</text>
+  
+  <rect class="linux-app" x="500" y="360" width="120" height="40" />
+  <text x="560" y="380" class="label">zypper</text>
+  
+  <rect class="linux-app" x="500" y="410" width="120" height="40" />
+  <text x="560" y="430" class="label">podman</text>
+  
+  <rect class="linux-app" x="500" y="460" width="120" height="40" />
+  <text x="560" y="480" class="label">crun</text>
+  
+  <!-- Arrows showing integration -->
+  <line class="arrow" x1="120" y1="170" x2="200" y2="320" />
+  <line class="arrow" x1="260" y1="170" x2="380" y2="320" />
+  <line class="arrow" x1="400" y1="170" x2="560" y2="320" />
+  
+  <!-- File System Integration -->
+  <text x="400" y="540" class="text">File System Integration</text>
+  <text x="200" y="560" class="small-text">/mnt/c → C:\ drive</text>
+  <text x="400" y="560" class="small-text">\\wsl$\Ubuntu → Linux files</text>
+  <text x="600" y="560" class="small-text">Network sharing</text>
+  
+  <!-- Features -->
+  <text x="100" y="585" class="small-text">• Native Linux kernel</text>
+  <text x="250" y="585" class="small-text">• Fast I/O performance</text>
+  <text x="400" y="585" class="small-text">• GPU acceleration</text>
+  <text x="550" y="585" class="small-text">• systemd support</text>
+</svg>

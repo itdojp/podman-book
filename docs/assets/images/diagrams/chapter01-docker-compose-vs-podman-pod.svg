@@ -1,0 +1,223 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .docker-section {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .podman-section {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .container {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+      }
+      
+      .docker-container {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .podman-container {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .pod {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.2;
+      }
+      
+      .network {
+        fill: none;
+        stroke: var(--accent-color);
+        stroke-width: 2;
+        stroke-dasharray: 5,5;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .section-title {
+        fill: var(--text-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .section-title { font-size: 14px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+      }
+    </style>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Docker Compose vs Podman Pod</text>
+  
+  <!-- Docker Compose Section -->
+  <rect class="docker-section" x="40" y="60" width="320" height="480" />
+  <text x="200" y="85" class="section-title">Docker Compose</text>
+  
+  <!-- Docker Network -->
+  <rect class="network" x="60" y="100" width="280" height="200" />
+  <text x="200" y="120" class="label">Custom Network Bridge</text>
+  
+  <!-- Docker Containers -->
+  <rect class="docker-container" x="80" y="140" width="100" height="60" />
+  <text x="130" y="165" class="text">web</text>
+  <text x="130" y="180" class="small-text">nginx:1.21</text>
+  
+  <rect class="docker-container" x="220" y="140" width="100" height="60" />
+  <text x="270" y="165" class="text">app</text>
+  <text x="270" y="180" class="small-text">node:16</text>
+  
+  <rect class="docker-container" x="80" y="220" width="100" height="60" />
+  <text x="130" y="245" class="text">db</text>
+  <text x="130" y="260" class="small-text">postgres:13</text>
+  
+  <rect class="docker-container" x="220" y="220" width="100" height="60" />
+  <text x="270" y="245" class="text">cache</text>
+  <text x="270" y="260" class="small-text">redis:6</text>
+  
+  <!-- Docker Features -->
+  <text x="200" y="330" class="text">Features:</text>
+  <text x="80" y="350" class="label">• Declarative YAML</text>
+  <text x="80" y="370" class="label">• Multi-container apps</text>
+  <text x="80" y="390" class="label">• Volume management</text>
+  <text x="80" y="410" class="label">• Environment variables</text>
+  <text x="80" y="430" class="label">• Service dependencies</text>
+  <text x="80" y="450" class="label">• Port mapping</text>
+  <text x="80" y="470" class="label">• Health checks</text>
+  
+  <!-- Commands -->
+  <text x="200" y="500" class="text">Commands:</text>
+  <text x="80" y="520" class="small-text">docker-compose up -d</text>
+  
+  <!-- Podman Pod Section -->
+  <rect class="podman-section" x="440" y="60" width="320" height="480" />
+  <text x="600" y="85" class="section-title">Podman Pod</text>
+  
+  <!-- Pod Container -->
+  <rect class="pod" x="460" y="100" width="280" height="200" />
+  <text x="600" y="120" class="label">Pod (Shared Namespace)</text>
+  
+  <!-- Infra Container -->
+  <rect class="container" x="480" y="140" width="80" height="40" />
+  <text x="520" y="160" class="small-text">pause</text>
+  
+  <!-- Podman Containers -->
+  <rect class="podman-container" x="580" y="140" width="100" height="60" />
+  <text x="630" y="165" class="text">web</text>
+  <text x="630" y="180" class="small-text">nginx:1.21</text>
+  
+  <rect class="podman-container" x="480" y="200" width="100" height="60" />
+  <text x="530" y="225" class="text">app</text>
+  <text x="530" y="240" class="small-text">node:16</text>
+  
+  <rect class="podman-container" x="600" y="200" width="100" height="60" />
+  <text x="650" y="225" class="text">db</text>
+  <text x="650" y="240" class="small-text">postgres:13</text>
+  
+  <!-- Podman Features -->
+  <text x="600" y="330" class="text">Features:</text>
+  <text x="480" y="350" class="label">• Shared network namespace</text>
+  <text x="480" y="370" class="label">• Shared storage</text>
+  <text x="480" y="390" class="label">• Localhost communication</text>
+  <text x="480" y="410" class="label">• Atomic operations</text>
+  <text x="480" y="430" class="label">• Kubernetes-like pods</text>
+  <text x="480" y="450" class="label">• systemd integration</text>
+  <text x="480" y="470" class="label">• Rootless support</text>
+  
+  <!-- Commands -->
+  <text x="600" y="500" class="text">Commands:</text>
+  <text x="480" y="520" class="small-text">podman pod create</text>
+  <text x="480" y="535" class="small-text">podman run --pod</text>
+  
+  <!-- Comparison arrows and notes -->
+  <line stroke="var(--text-color)" stroke-width="2" x1="360" y1="200" x2="440" y2="200" />
+  <text x="400" y="190" class="small-text">vs</text>
+  
+  <!-- Key differences -->
+  <text x="400" y="570" class="text">Key Differences</text>
+  <text x="200" y="585" class="small-text">Compose: Network isolation</text>
+  <text x="600" y="585" class="small-text">Pod: Shared namespaces</text>
+</svg>

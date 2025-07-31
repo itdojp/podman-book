@@ -1,0 +1,196 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .layer {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+      }
+      
+      .component {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.9;
+      }
+      
+      .runtime {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.9;
+      }
+      
+      .kernel {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.9;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .arrow {
+        stroke: var(--text-color);
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .label { font-size: 10px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Container Runtime Structure</text>
+  
+  <!-- User Space Layer -->
+  <rect class="layer" x="40" y="60" width="720" height="120" />
+  <text x="400" y="85" class="text">User Space</text>
+  
+  <!-- CLI Tools -->
+  <rect class="component" x="60" y="100" width="120" height="60" />
+  <text x="120" y="130" class="text">podman</text>
+  
+  <rect class="component" x="200" y="100" width="120" height="60" />
+  <text x="260" y="130" class="text">buildah</text>
+  
+  <rect class="component" x="340" y="100" width="120" height="60" />
+  <text x="400" y="130" class="text">skopeo</text>
+  
+  <!-- API Layer -->
+  <rect class="component" x="480" y="100" width="120" height="60" />
+  <text x="540" y="125" class="text">REST API</text>
+  <text x="540" y="140" class="label">Socket</text>
+  
+  <!-- Docker Compatible -->
+  <rect class="component" x="620" y="100" width="120" height="60" />
+  <text x="680" y="125" class="text">Docker</text>
+  <text x="680" y="140" class="label">Compatible</text>
+  
+  <!-- Runtime Layer -->
+  <rect class="layer" x="40" y="200" width="720" height="120" />
+  <text x="400" y="225" class="text">Container Runtime Layer</text>
+  
+  <!-- High-level Runtime -->
+  <rect class="runtime" x="60" y="240" width="180" height="60" />
+  <text x="150" y="265" class="text">conmon</text>
+  <text x="150" y="280" class="label">Process Monitor</text>
+  
+  <!-- Low-level Runtime -->
+  <rect class="runtime" x="280" y="240" width="180" height="60" />
+  <text x="370" y="265" class="text">crun/runc</text>
+  <text x="370" y="280" class="label">OCI Runtime</text>
+  
+  <!-- Container Storage -->
+  <rect class="runtime" x="500" y="240" width="180" height="60" />
+  <text x="590" y="265" class="text">containers/storage</text>
+  <text x="590" y="280" class="label">Image & Container</text>
+  
+  <!-- Kernel Layer -->
+  <rect class="layer" x="40" y="340" width="720" height="200" />
+  <text x="400" y="365" class="text">Linux Kernel</text>
+  
+  <!-- Kernel Features -->
+  <rect class="kernel" x="60" y="380" width="140" height="50" />
+  <text x="130" y="405" class="text">Namespaces</text>
+  
+  <rect class="kernel" x="220" y="380" width="140" height="50" />
+  <text x="290" y="405" class="text">Cgroups</text>
+  
+  <rect class="kernel" x="380" y="380" width="140" height="50" />
+  <text x="450" y="405" class="text">Capabilities</text>
+  
+  <rect class="kernel" x="540" y="380" width="140" height="50" />
+  <text x="610" y="405" class="text">SELinux</text>
+  
+  <!-- File Systems -->
+  <rect class="kernel" x="60" y="450" width="140" height="50" />
+  <text x="130" y="475" class="text">OverlayFS</text>
+  
+  <rect class="kernel" x="220" y="450" width="140" height="50" />
+  <text x="290" y="475" class="text">Device Mapper</text>
+  
+  <rect class="kernel" x="380" y="450" width="140" height="50" />
+  <text x="450" y="475" class="text">VFS</text>
+  
+  <rect class="kernel" x="540" y="450" width="140" height="50" />
+  <text x="610" y="475" class="text">Network Stack</text>
+  
+  <!-- Arrows -->
+  <line class="arrow" x1="120" y1="160" x2="150" y2="240" />
+  <line class="arrow" x1="260" y1="160" x2="280" y2="240" />
+  <line class="arrow" x1="400" y1="160" x2="370" y2="240" />
+  <line class="arrow" x1="540" y1="160" x2="590" y2="240" />
+  
+  <line class="arrow" x1="150" y1="300" x2="130" y2="380" />
+  <line class="arrow" x1="370" y1="300" x2="290" y2="380" />
+  <line class="arrow" x1="590" y1="300" x2="450" y2="380" />
+  
+  <!-- Legend -->
+  <text x="60" y="570" class="label">Blue: User Tools</text>
+  <text x="200" y="570" class="label">Green: Runtime</text>
+  <text x="340" y="570" class="label">Orange: Kernel</text>
+</svg>

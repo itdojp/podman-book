@@ -215,15 +215,26 @@ title: "${title}"
   }
 
   async copyAssets(srcDir, publicDir) {
-    const assetsPath = path.join(srcDir, '..', 'assets');
+    const rootAssetsPath = path.join(srcDir, '..', 'assets');
+    const srcAssetsPath = path.join(srcDir, 'assets');
     const publicAssetsPath = path.join(publicDir, 'assets');
     
+    // Copy from root assets directory if it exists
     try {
-      await fs.access(assetsPath);
-      await this.copyDirectory(assetsPath, publicAssetsPath);
-      this.log('アセットをコピーしました');
+      await fs.access(rootAssetsPath);
+      await this.copyDirectory(rootAssetsPath, publicAssetsPath);
+      this.log('ルートアセットをコピーしました');
     } catch {
-      this.log('アセットディレクトリが見つかりません', 'warning');
+      // Root assets doesn't exist, which is fine
+    }
+    
+    // Copy from src/assets directory if it exists
+    try {
+      await fs.access(srcAssetsPath);
+      await this.copyDirectory(srcAssetsPath, publicAssetsPath);
+      this.log('srcアセットをコピーしました');
+    } catch {
+      this.log('src/assetsディレクトリが見つかりません', 'warning');
     }
   }
 

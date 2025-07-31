@@ -1,0 +1,238 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .host-section {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .container-section {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .user-box {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+      }
+      
+      .host-user {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .container-user {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .mapping-line {
+        stroke: var(--accent-color);
+        stroke-width: 3;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .section-title {
+        fill: var(--text-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .uid-text {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .section-title { font-size: 14px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+        .uid-text { font-size: 10px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Rootless UID/GID Mapping</text>
+  
+  <!-- Host System Section -->
+  <rect class="host-section" x="40" y="60" width="300" height="480" />
+  <text x="190" y="85" class="section-title">Host System</text>
+  
+  <!-- Host Users -->
+  <rect class="host-user" x="60" y="110" width="120" height="40" />
+  <text x="120" y="125" class="label">root</text>
+  <text x="120" y="135" class="uid-text">UID: 0</text>
+  
+  <rect class="host-user" x="200" y="110" width="120" height="40" />
+  <text x="260" y="125" class="label">system users</text>
+  <text x="260" y="135" class="uid-text">UID: 1-999</text>
+  
+  <rect class="host-user" x="60" y="170" width="260" height="40" />
+  <text x="190" y="185" class="label">john (podman user)</text>
+  <text x="190" y="195" class="uid-text">UID: 1000, GID: 1000</text>
+  
+  <!-- Subordinate ID ranges -->
+  <text x="190" y="235" class="text">Subordinate ID Ranges</text>
+  
+  <rect class="user-box" x="60" y="250" width="260" height="40" />
+  <text x="190" y="265" class="label">/etc/subuid: john:100000:65536</text>
+  <text x="190" y="275" class="small-text">UID range: 100000-165535</text>
+  
+  <rect class="user-box" x="60" y="300" width="260" height="40" />
+  <text x="190" y="315" class="label">/etc/subgid: john:100000:65536</text>
+  <text x="190" y="325" class="small-text">GID range: 100000-165535</text>
+  
+  <!-- User namespace info -->
+  <text x="190" y="365" class="text">User Namespace</text>
+  <rect class="user-box" x="60" y="380" width="260" height="60" />
+  <text x="190" y="400" class="label">newuidmap / newgidmap</text>
+  <text x="190" y="415" class="small-text">Maps container UIDs to host range</text>
+  <text x="190" y="425" class="small-text">Provides isolation & security</text>
+  
+  <!-- Container files -->
+  <text x="190" y="465" class="text">Configuration Files</text>
+  <rect class="user-box" x="60" y="480" width="260" height="50" />
+  <text x="190" y="500" class="small-text">~/.config/containers/storage.conf</text>
+  <text x="190" y="515" class="small-text">~/.config/containers/containers.conf</text>
+  
+  <!-- Container Section -->
+  <rect class="container-section" x="460" y="60" width="300" height="480" />
+  <text x="610" y="85" class="section-title">Container Namespace</text>
+  
+  <!-- Container Users -->
+  <rect class="container-user" x="480" y="110" width="120" height="40" />
+  <text x="540" y="125" class="label">root</text>
+  <text x="540" y="135" class="uid-text">UID: 0</text>
+  
+  <rect class="container-user" x="620" y="110" width="120" height="40" />
+  <text x="680" y="125" class="label">www-data</text>
+  <text x="680" y="135" class="uid-text">UID: 33</text>
+  
+  <rect class="container-user" x="480" y="170" width="120" height="40" />
+  <text x="540" y="185" class="label">mysql</text>
+  <text x="540" y="195" class="uid-text">UID: 999</text>
+  
+  <rect class="container-user" x="620" y="170" width="120" height="40" />
+  <text x="680" y="185" class="label">app user</text>
+  <text x="680" y="195" class="uid-text">UID: 1000</text>
+  
+  <!-- Mapping visualization -->
+  <text x="610" y="235" class="text">Actual Host Mapping</text>
+  
+  <rect class="user-box" x="480" y="250" width="260" height="40" />
+  <text x="610" y="265" class="label">Container UID 0 → Host UID 100000</text>
+  <text x="610" y="275" class="small-text">Container root = Host unprivileged</text>
+  
+  <rect class="user-box" x="480" y="300" width="260" height="40" />
+  <text x="610" y="315" class="label">Container UID 33 → Host UID 100033</text>
+  <text x="610" y="325" class="small-text">www-data mapped to subrange</text>
+  
+  <rect class="user-box" x="480" y="350" width="260" height="40" />
+  <text x="610" y="365" class="label">Container UID 999 → Host UID 100999</text>
+  <text x="610" y="375" class="small-text">mysql mapped to subrange</text>
+  
+  <rect class="user-box" x="480" y="400" width="260" height="40" />
+  <text x="610" y="415" class="label">Container UID 1000 → Host UID 101000</text>
+  <text x="610" y="425" class="small-text">App user mapped to subrange</text>
+  
+  <!-- Security benefits -->
+  <text x="610" y="465" class="text">Security Benefits</text>
+  <rect class="user-box" x="480" y="480" width="260" height="50" />
+  <text x="610" y="500" class="small-text">• Container root ≠ Host root</text>
+  <text x="610" y="515" class="small-text">• Privilege escalation prevented</text>
+  
+  <!-- Mapping arrows -->
+  <line class="mapping-line" x1="340" y1="130" x2="480" y2="130" />
+  <line class="mapping-line" x1="340" y1="190" x2="620" y2="190" />
+  <line class="mapping-line" x1="340" y1="270" x2="480" y2="270" />
+  <line class="mapping-line" x1="340" y1="270" x2="480" y2="320" />
+  <line class="mapping-line" x1="340" y1="270" x2="480" y2="370" />
+  <line class="mapping-line" x1="340" y1="270" x2="480" y2="420" />
+  
+  <!-- Legend -->
+  <text x="400" y="570" class="small-text">Formula: Container UID + 100000 = Host UID (in subordinate range)</text>
+</svg>

@@ -1,0 +1,124 @@
+<svg width="900" height="800" viewBox="0 0 900 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 600 16px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
+      .section-title { font: 500 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: start; }
+      .label { font: 400 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: start; }
+      .note { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #718096); text-anchor: start; }
+      .step-box { fill: var(--color-bg-secondary, #f7fafc); stroke: var(--color-border, #e2e8f0); stroke-width: 2; rx: 8; }
+      .check-box { fill: var(--color-blue-50, #ebf8ff); stroke: var(--color-blue-200, #90cdf4); stroke-width: 2; rx: 6; }
+      .namespace-box { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-200, #9ae6b4); stroke-width: 2; rx: 6; }
+      .cgroup-box { fill: var(--color-amber-50, #fffbeb); stroke: var(--color-amber-200, #fbbf24); stroke-width: 2; rx: 6; }
+      .fs-box { fill: var(--color-purple-50, #faf5ff); stroke: var(--color-purple-200, #c4b5fd); stroke-width: 2; rx: 6; }
+      .network-box { fill: var(--color-cyan-50, #ecfeff); stroke: var(--color-cyan-200, #67e8f9); stroke-width: 2; rx: 6; }
+      .process-box { fill: var(--color-red-50, #fef2f2); stroke: var(--color-red-200, #fca5a5); stroke-width: 2; rx: 6; }
+      .arrow { stroke: var(--color-gray-600, #718096); stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .step-number { font: 600 14px Inter, sans-serif; fill: var(--color-primary, #3182ce); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-gray-600, #718096)" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" class="title">コンテナ作成・実行プロセス詳細</text>
+  <text x="450" y="50" class="note">podman run -d -p 8080:80 --name webserver nginx:alpine</text>
+
+  <!-- Step 1: Pre-flight Checks -->
+  <text x="50" y="90" class="step-number">1.</text>
+  <text x="80" y="90" class="section-title">Pre-flight Checks</text>
+  <rect x="80" y="100" width="350" height="120" class="step-box"/>
+  
+  <!-- Image Check -->
+  <rect x="100" y="120" width="150" height="40" class="check-box"/>
+  <text x="110" y="135" class="label">Image Availability Check</text>
+  <text x="110" y="148" class="note">├─ Local storage search</text>
+  <text x="110" y="158" class="note">└─ Registry pull if needed</text>
+  
+  <!-- Resource Check -->
+  <rect x="260" y="120" width="150" height="40" class="check-box"/>
+  <text x="270" y="135" class="label">Resource Availability Check</text>
+  <text x="270" y="148" class="note">├─ Port 8080 availability</text>
+  <text x="270" y="158" class="note">└─ Name conflict check</text>
+
+  <!-- Arrow to Step 2 -->
+  <line x1="450" y1="220" x2="450" y2="250" class="arrow"/>
+
+  <!-- Step 2: Namespace Creation -->
+  <text x="50" y="270" class="step-number">2.</text>
+  <text x="80" y="270" class="section-title">Namespace Creation</text>
+  <rect x="80" y="280" width="760" height="160" class="step-box"/>
+  
+  <!-- Linux Kernel Namespaces box -->
+  <rect x="100" y="300" width="720" height="120" class="namespace-box"/>
+  <text x="110" y="320" class="label">Linux Kernel Namespaces</text>
+  
+  <!-- Individual namespaces -->
+  <rect x="120" y="330" width="140" height="35" class="namespace-box"/>
+  <text x="130" y="345" class="note">PID Namespace</text>
+  <text x="130" y="358" class="note">└─ Container Process Tree</text>
+  
+  <rect x="280" y="330" width="140" height="35" class="namespace-box"/>
+  <text x="290" y="345" class="note">Network Namespace</text>
+  <text x="290" y="358" class="note">└─ Virtual Network Interface</text>
+  
+  <rect x="440" y="330" width="140" height="35" class="namespace-box"/>
+  <text x="450" y="345" class="note">Mount Namespace</text>
+  <text x="450" y="358" class="note">└─ Container Filesystem</text>
+  
+  <rect x="600" y="330" width="140" height="35" class="namespace-box"/>
+  <text x="610" y="345" class="note">User Namespace (Rootless)</text>
+  <text x="610" y="358" class="note">└─ UID/GID Mapping</text>
+
+  <!-- Arrow to Step 3 -->
+  <line x1="450" y1="440" x2="450" y2="470" class="arrow"/>
+
+  <!-- Step 3: cgroup Configuration -->
+  <text x="50" y="490" class="step-number">3.</text>
+  <text x="80" y="490" class="section-title">cgroup Configuration</text>
+  <rect x="80" y="500" width="350" height="80" class="step-box"/>
+  
+  <rect x="100" y="520" width="310" height="50" class="cgroup-box"/>
+  <text x="110" y="535" class="label">Resource Control Groups</text>
+  <text x="110" y="548" class="note">├─ CPU: 制限なし (default)</text>
+  <text x="110" y="558" class="note">├─ Memory: 制限なし (default)</text>
+  <text x="110" y="568" class="note">└─ Network: Port 8080→80 mapping</text>
+
+  <!-- Step 4: Filesystem Assembly -->
+  <text x="470" y="490" class="step-number">4.</text>
+  <text x="500" y="490" class="section-title">Filesystem Assembly</text>
+  <rect x="500" y="500" width="320" height="80" class="step-box"/>
+  
+  <rect x="520" y="520" width="280" height="50" class="fs-box"/>
+  <text x="530" y="535" class="label">Container Filesystem Mount</text>
+  <text x="530" y="548" class="note">├─ Read-Write Layer: /var/log/nginx/</text>
+  <text x="530" y="558" class="note">└─ Image Layers (Read-Only)</text>
+
+  <!-- Arrow to Step 5 -->
+  <line x1="450" y1="580" x2="450" y2="610" class="arrow"/>
+
+  <!-- Step 5: Network Configuration -->
+  <text x="50" y="630" class="step-number">5.</text>
+  <text x="80" y="630" class="section-title">Network Configuration</text>
+  <rect x="80" y="640" width="350" height="80" class="step-box"/>
+  
+  <rect x="100" y="660" width="310" height="50" class="network-box"/>
+  <text x="110" y="675" class="label">Container Network Setup</text>
+  <text x="110" y="688" class="note">├─ Host Network Bridge: podman0</text>
+  <text x="110" y="698" class="note">├─ Container Interface: eth0</text>
+  <text x="110" y="708" class="note">└─ Port Forwarding: Host:8080→Container:80</text>
+
+  <!-- Step 6: Process Execution -->
+  <text x="470" y="630" class="step-number">6.</text>
+  <text x="500" y="630" class="section-title">Process Execution</text>
+  <rect x="500" y="640" width="320" height="80" class="step-box"/>
+  
+  <rect x="520" y="660" width="280" height="50" class="process-box"/>
+  <text x="530" y="675" class="label">Container Process Tree</text>
+  <text x="530" y="688" class="note">├─ PID 1: nginx master process</text>
+  <text x="530" y="698" class="note">└─ PID 2: nginx worker process</text>
+
+  <!-- Result indicator -->
+  <rect x="300" y="750" width="300" height="30" class="check-box"/>
+  <text x="450" y="770" class="label">✓ Container webserver running on port 8080</text>
+</svg>

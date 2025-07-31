@@ -1,0 +1,187 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 18px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .section-title { font: 600 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .layer-text { font: 500 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .app-text { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      .legend-text { font: 400 11px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      
+      .bare-metal { fill: var(--color-gray-100, #f7fafc); stroke: var(--color-gray-300, #cbd5e0); }
+      .vm-layer { fill: var(--color-blue-50, #ebf8ff); stroke: var(--color-blue-200, #90cdf4); }
+      .hypervisor { fill: var(--color-purple-50, #faf5ff); stroke: var(--color-purple-200, #c084fc); }
+      .container-engine { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-200, #68d391); }
+      .container { fill: var(--color-orange-50, #fffaf0); stroke: var(--color-orange-200, #fbb962); }
+      .app-runtime { fill: var(--color-red-50, #fef5e7); stroke: var(--color-red-200, #fc8181); }
+      .host-os { fill: var(--color-indigo-50, #f0f9ff); stroke: var(--color-indigo-200, #a5b4fc); }
+      .guest-os { fill: var(--color-yellow-50, #fffff0); stroke: var(--color-yellow-200, #f6e05e); }
+      .arrow { stroke: var(--color-gray-600, #718096); fill: var(--color-gray-600, #718096); }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="title">仮想化アーキテクチャ比較図</text>
+
+  <!-- Physical Machine -->
+  <g id="physical">
+    <text x="130" y="60" text-anchor="middle" class="section-title">物理マシン</text>
+    
+    <!-- Applications -->
+    <rect x="50" y="80" width="160" height="40" class="app-runtime" />
+    <text x="130" y="95" text-anchor="middle" class="layer-text">アプリケーション</text>
+    <text x="130" y="110" text-anchor="middle" class="app-text">直接実行</text>
+    
+    <!-- Host OS -->
+    <rect x="50" y="130" width="160" height="40" class="host-os" />
+    <text x="130" y="155" text-anchor="middle" class="layer-text">ホストOS</text>
+    
+    <!-- Hardware -->
+    <rect x="50" y="180" width="160" height="40" class="bare-metal" />
+    <text x="130" y="200" text-anchor="middle" class="layer-text">物理サーバー</text>
+  </g>
+
+  <!-- Virtual Machine -->
+  <g id="virtual-machine">
+    <text x="400" y="60" text-anchor="middle" class="section-title">仮想マシン</text>
+    
+    <!-- Applications in VM -->
+    <rect x="320" y="80" width="160" height="30" class="app-runtime" />
+    <text x="400" y="100" text-anchor="middle" class="layer-text">アプリケーション</text>
+    
+    <!-- Guest OS -->
+    <rect x="320" y="120" width="160" height="30" class="guest-os" />
+    <text x="400" y="140" text-anchor="middle" class="layer-text">ゲストOS</text>
+    
+    <!-- Hypervisor -->
+    <rect x="320" y="160" width="160" height="30" class="hypervisor" />
+    <text x="400" y="180" text-anchor="middle" class="layer-text">ハイパーバイザー</text>
+    
+    <!-- Host OS -->
+    <rect x="320" y="200" width="160" height="30" class="host-os" />
+    <text x="400" y="220" text-anchor="middle" class="layer-text">ホストOS</text>
+    
+    <!-- Hardware -->
+    <rect x="320" y="240" width="160" height="30" class="bare-metal" />
+    <text x="400" y="260" text-anchor="middle" class="layer-text">物理サーバー</text>
+  </g>
+
+  <!-- Container -->
+  <g id="container">
+    <text x="650" y="60" text-anchor="middle" class="section-title">コンテナ</text>
+    
+    <!-- Multiple Applications/Containers -->
+    <rect x="570" y="80" width="75" height="25" class="container" />
+    <text x="607" y="97" text-anchor="middle" class="app-text">App A</text>
+    
+    <rect x="655" y="80" width="75" height="25" class="container" />
+    <text x="692" y="97" text-anchor="middle" class="app-text">App B</text>
+    
+    <!-- Container Runtime -->
+    <rect x="570" y="115" width="160" height="30" class="container-engine" />
+    <text x="650" y="135" text-anchor="middle" class="layer-text">コンテナランタイム</text>
+    
+    <!-- Host OS -->
+    <rect x="570" y="155" width="160" height="30" class="host-os" />
+    <text x="650" y="175" text-anchor="middle" class="layer-text">ホストOS</text>
+    
+    <!-- Hardware -->
+    <rect x="570" y="195" width="160" height="30" class="bare-metal" />
+    <text x="650" y="215" text-anchor="middle" class="layer-text">物理サーバー</text>
+  </g>
+
+  <!-- Comparison Table -->
+  <g id="comparison-table" transform="translate(50, 300)">
+    <text x="350" y="20" text-anchor="middle" class="section-title">特性比較</text>
+    
+    <!-- Table Headers -->
+    <rect x="0" y="40" width="150" height="30" class="bare-metal" />
+    <text x="75" y="60" text-anchor="middle" class="layer-text">項目</text>
+    
+    <rect x="150" y="40" width="150" height="30" class="bare-metal" />
+    <text x="225" y="60" text-anchor="middle" class="layer-text">物理マシン</text>
+    
+    <rect x="300" y="40" width="150" height="30" class="bare-metal" />
+    <text x="375" y="60" text-anchor="middle" class="layer-text">仮想マシン</text>
+    
+    <rect x="450" y="40" width="150" height="30" class="bare-metal" />
+    <text x="525" y="60" text-anchor="middle" class="layer-text">コンテナ</text>
+    
+    <!-- Performance Row -->
+    <rect x="0" y="70" width="150" height="25" class="vm-layer" />
+    <text x="75" y="87" text-anchor="middle" class="app-text">パフォーマンス</text>
+    
+    <rect x="150" y="70" width="150" height="25" class="bare-metal" />
+    <text x="225" y="87" text-anchor="middle" class="app-text">最高</text>
+    
+    <rect x="300" y="70" width="150" height="25" class="bare-metal" />
+    <text x="375" y="87" text-anchor="middle" class="app-text">オーバーヘッド有</text>
+    
+    <rect x="450" y="70" width="150" height="25" class="bare-metal" />
+    <text x="525" y="87" text-anchor="middle" class="app-text">高速</text>
+    
+    <!-- Resource Usage Row -->
+    <rect x="0" y="95" width="150" height="25" class="vm-layer" />
+    <text x="75" y="112" text-anchor="middle" class="app-text">リソース使用量</text>
+    
+    <rect x="150" y="95" width="150" height="25" class="bare-metal" />
+    <text x="225" y="112" text-anchor="middle" class="app-text">100%</text>
+    
+    <rect x="300" y="95" width="150" height="25" class="bare-metal" />
+    <text x="375" y="112" text-anchor="middle" class="app-text">高（OS重複）</text>
+    
+    <rect x="450" y="95" width="150" height="25" class="bare-metal" />
+    <text x="525" y="112" text-anchor="middle" class="app-text">低（共有OS）</text>
+    
+    <!-- Isolation Row -->
+    <rect x="0" y="120" width="150" height="25" class="vm-layer" />
+    <text x="75" y="137" text-anchor="middle" class="app-text">分離性</text>
+    
+    <rect x="150" y="120" width="150" height="25" class="bare-metal" />
+    <text x="225" y="137" text-anchor="middle" class="app-text">完全分離</text>
+    
+    <rect x="300" y="120" width="150" height="25" class="bare-metal" />
+    <text x="375" y="137" text-anchor="middle" class="app-text">完全分離</text>
+    
+    <rect x="450" y="120" width="150" height="25" class="bare-metal" />
+    <text x="525" y="137" text-anchor="middle" class="app-text">プロセス分離</text>
+    
+    <!-- Startup Time Row -->
+    <rect x="0" y="145" width="150" height="25" class="vm-layer" />
+    <text x="75" y="162" text-anchor="middle" class="app-text">起動時間</text>
+    
+    <rect x="150" y="145" width="150" height="25" class="bare-metal" />
+    <text x="225" y="162" text-anchor="middle" class="app-text">物理再起動</text>
+    
+    <rect x="300" y="145" width="150" height="25" class="bare-metal" />
+    <text x="375" y="162" text-anchor="middle" class="app-text">分単位</text>
+    
+    <rect x="450" y="145" width="150" height="25" class="bare-metal" />
+    <text x="525" y="162" text-anchor="middle" class="app-text">秒単位</text>
+    
+    <!-- Portability Row -->
+    <rect x="0" y="170" width="150" height="25" class="vm-layer" />
+    <text x="75" y="187" text-anchor="middle" class="app-text">可搬性</text>
+    
+    <rect x="150" y="170" width="150" height="25" class="bare-metal" />
+    <text x="225" y="187" text-anchor="middle" class="app-text">ハードウェア依存</text>
+    
+    <rect x="300" y="170" width="150" height="25" class="bare-metal" />
+    <text x="375" y="187" text-anchor="middle" class="app-text">中程度</text>
+    
+    <rect x="450" y="170" width="150" height="25" class="bare-metal" />
+    <text x="525" y="187" text-anchor="middle" class="app-text">高（どこでも実行）</text>
+  </g>
+
+  <!-- Arrows showing evolution -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow" />
+    </marker>
+  </defs>
+
+  <line x1="230" y1="150" x2="300" y2="150" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+  <text x="265" y="145" text-anchor="middle" class="legend-text">進化</text>
+
+  <line x1="500" y1="150" x2="570" y2="150" stroke-width="2" class="arrow" marker-end="url(#arrowhead)" />
+  <text x="535" y="145" text-anchor="middle" class="legend-text">軽量化</text>
+</svg>

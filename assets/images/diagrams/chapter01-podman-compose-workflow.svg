@@ -1,0 +1,219 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .step {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+      }
+      
+      .compose-file {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .podman-action {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .pod {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.2;
+      }
+      
+      .container {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .white-text {
+        fill: var(--bg-color);
+        font-size: 12px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .step-number {
+        fill: var(--bg-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .arrow {
+        stroke: var(--text-color);
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+        .white-text { font-size: 10px; }
+        .step-number { font-size: 14px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Podman Compose Workflow</text>
+  
+  <!-- Step 1: Create docker-compose.yml -->
+  <rect class="step" x="50" y="70" width="300" height="80" />
+  <circle cx="80" cy="100" r="15" fill="var(--accent-color)" />
+  <text x="80" y="100" class="step-number">1</text>
+  <text x="200" y="95" class="text">Create docker-compose.yml</text>
+  <text x="200" y="115" class="small-text">Define services, networks, volumes</text>
+  <text x="200" y="130" class="small-text">Use Docker Compose format</text>
+  
+  <!-- Compose file example -->
+  <rect class="compose-file" x="400" y="70" width="320" height="80" />
+  <text x="560" y="90" class="white-text">docker-compose.yml</text>
+  <text x="420" y="110" class="small-text">services:</text>
+  <text x="430" y="125" class="small-text">  web: { image: nginx }</text>
+  <text x="430" y="140" class="small-text">  db: { image: postgres }</text>
+  
+  <!-- Step 2: Parse Compose File -->
+  <rect class="step" x="50" y="180" width="300" height="60" />
+  <circle cx="80" cy="205" r="15" fill="var(--primary-color)" />
+  <text x="80" y="205" class="step-number">2</text>
+  <text x="200" y="205" class="text">Parse Compose File</text>
+  <text x="200" y="220" class="small-text">podman-compose reads YAML configuration</text>
+  
+  <!-- Step 3: Create Pod -->
+  <rect class="step" x="50" y="270" width="300" height="60" />
+  <circle cx="80" cy="295" r="15" fill="var(--secondary-color)" />
+  <text x="80" y="295" class="step-number">3</text>
+  <text x="200" y="295" class="text">Create Pod (if needed)</text>
+  <text x="200" y="310" class="small-text">podman pod create --name project_default</text>
+  
+  <!-- Step 4: Pull Images -->
+  <rect class="step" x="50" y="360" width="300" height="60" />
+  <circle cx="80" cy="385" r="15" fill="var(--primary-color)" />
+  <text x="80" y="385" class="step-number">4</text>
+  <text x="200" y="385" class="text">Pull Required Images</text>
+  <text x="200" y="400" class="small-text">podman pull nginx, postgres</text>
+  
+  <!-- Step 5: Create Containers -->
+  <rect class="step" x="50" y="450" width="300" height="60" />
+  <circle cx="80" cy="475" r="15" fill="var(--secondary-color)" />
+  <text x="80" y="475" class="step-number">5</text>
+  <text x="200" y="475" class="text">Create & Start Containers</text>
+  <text x="200" y="490" class="small-text">podman run --pod for each service</text>
+  
+  <!-- Running State -->
+  <rect class="pod" x="450" y="200" width="280" height="300" />
+  <text x="590" y="225" class="text">Running Pod: project_default</text>
+  
+  <!-- Infra Container -->
+  <rect class="container" x="470" y="250" width="80" height="40" />
+  <text x="510" y="270" class="white-text">pause</text>
+  
+  <!-- App Containers -->
+  <rect class="container" x="470" y="310" width="240" height="50" />
+  <text x="590" y="330" class="white-text">web (nginx:latest)</text>
+  <text x="590" y="345" class="small-text">Port: 8080:80</text>
+  
+  <rect class="container" x="470" y="380" width="240" height="50" />
+  <text x="590" y="400" class="white-text">db (postgres:13)</text>
+  <text x="590" y="415" class="small-text">Volume: db_data</text>
+  
+  <!-- Network info -->
+  <text x="590" y="460" class="label">Shared Network Namespace</text>
+  <text x="590" y="475" class="small-text">Containers communicate via localhost</text>
+  
+  <!-- Arrows -->
+  <line class="arrow" x1="350" y1="110" x2="400" y2="110" />
+  <line class="arrow" x1="200" y1="150" x2="200" y2="180" />
+  <line class="arrow" x1="200" y1="240" x2="200" y2="270" />
+  <line class="arrow" x1="200" y1="330" x2="200" y2="360" />
+  <line class="arrow" x1="200" y1="420" x2="200" y2="450" />
+  <line class="arrow" x1="350" y1="300" x2="450" y2="300" />
+  
+  <!-- Commands -->
+  <text x="400" y="540" class="text">Common Commands</text>
+  <text x="200" y="560" class="small-text">podman-compose up -d</text>
+  <text x="400" y="560" class="small-text">podman-compose down</text>
+  <text x="600" y="560" class="small-text">podman-compose logs</text>
+</svg>

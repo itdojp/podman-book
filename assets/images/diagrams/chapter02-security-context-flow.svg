@@ -1,0 +1,255 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .step {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+      }
+      
+      .security-layer {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .selinux {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .apparmor {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .seccomp {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .capabilities {
+        fill: #8b5cf6;
+        stroke: var(--border-color);
+        stroke-width: 1.5;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .section-title {
+        fill: var(--text-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .white-text {
+        fill: var(--bg-color);
+        font-size: 12px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .step-number {
+        fill: var(--bg-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .arrow {
+        stroke: var(--text-color);
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .section-title { font-size: 14px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+        .white-text { font-size: 10px; }
+        .step-number { font-size: 14px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Security Context Flow</text>
+  
+  <!-- Step 1: Container Start -->
+  <rect class="step" x="320" y="60" width="160" height="50" />
+  <circle cx="345" cy="80" r="15" fill="var(--primary-color)" />
+  <text x="345" y="80" class="step-number">1</text>
+  <text x="400" y="85" class="text">Container Start</text>
+  
+  <!-- Security Layers -->
+  <rect class="security-layer" x="40" y="140" width="720" height="400" />
+  <text x="400" y="160" class="section-title">Security Context Evaluation</text>
+  
+  <!-- Step 2: User Namespace -->
+  <rect class="step" x="60" y="180" width="160" height="80" />
+  <circle cx="85" cy="205" r="15" fill="var(--secondary-color)" />
+  <text x="85" y="205" class="step-number">2</text>
+  <text x="140" y="195" class="text">User Namespace</text>
+  <text x="140" y="215" class="small-text">UID/GID Mapping</text>
+  <text x="140" y="230" class="small-text">Root → Unprivileged</text>
+  <text x="140" y="245" class="small-text">1000 → 100000</text>
+  
+  <!-- Step 3: SELinux -->
+  <rect class="selinux" x="260" y="180" width="160" height="80" />
+  <circle cx="285" cy="205" r="15" fill="var(--primary-color)" />
+  <text x="285" y="205" class="step-number">3</text>
+  <text x="340" y="195" class="white-text">SELinux Context</text>
+  <text x="340" y="215" class="small-text">container_t</text>
+  <text x="340" y="230" class="small-text">MCS labels</text>
+  <text x="340" y="245" class="small-text">File access control</text>
+  
+  <!-- Step 4: AppArmor (Alternative) -->
+  <rect class="apparmor" x="460" y="180" width="160" height="80" />
+  <circle cx="485" cy="205" r="15" fill="var(--secondary-color)" />
+  <text x="485" y="205" class="step-number">4</text>
+  <text x="540" y="195" class="white-text">AppArmor Profile</text>
+  <text x="540" y="215" class="small-text">cri-containerd.apparmor.d</text>
+  <text x="540" y="230" class="small-text">System call filtering</text>
+  <text x="540" y="245" class="small-text">Resource access</text>
+  
+  <!-- Step 5: Capabilities -->
+  <rect class="capabilities" x="60" y="290" width="160" height="80" />
+  <circle cx="85" cy="315" r="15" fill="var(--bg-color)" />
+  <text x="85" y="315" class="step-number">5</text>
+  <text x="140" y="305" class="white-text">Capabilities</text>
+  <text x="140" y="325" class="small-text">CAP_NET_BIND_SERVICE</text>
+  <text x="140" y="340" class="small-text">CAP_SETUID</text>
+  <text x="140" y="355" class="small-text">Dropped by default</text>
+  
+  <!-- Step 6: Seccomp -->
+  <rect class="seccomp" x="260" y="290" width="160" height="80" />
+  <circle cx="285" cy="315" r="15" fill="var(--bg-color)" />
+  <text x="285" y="315" class="step-number">6</text>
+  <text x="340" y="305" class="white-text">Seccomp Filter</text>
+  <text x="340" y="325" class="small-text">System call whitelist</text>
+  <text x="340" y="340" class="small-text">Blocks dangerous calls</text>
+  <text x="340" y="355" class="small-text">JSON profile</text>
+  
+  <!-- Step 7: cgroups -->
+  <rect class="step" x="460" y="290" width="160" height="80" />
+  <circle cx="485" cy="315" r="15" fill="var(--primary-color)" />
+  <text x="485" y="315" class="step-number">7</text>
+  <text x="540" y="305" class="text">cgroups v2</text>
+  <text x="540" y="325" class="small-text">Resource limits</text>
+  <text x="540" y="340" class="small-text">CPU, Memory, I/O</text>
+  <text x="540" y="355" class="small-text">Process isolation</text>
+  
+  <!-- Final Result -->
+  <rect class="step" x="280" y="400" width="240" height="80" />
+  <text x="400" y="425" class="text">Secure Container Runtime</text>
+  <text x="400" y="445" class="small-text">Multiple security layers active</text>
+  <text x="400" y="460" class="small-text">Defense in depth approach</text>
+  <text x="400" y="475" class="small-text">Minimal attack surface</text>
+  
+  <!-- Configuration options -->
+  <rect class="step" x="580" y="400" width="160" height="120" />
+  <text x="660" y="420" class="text">Override Options</text>
+  <text x="660" y="440" class="small-text">--security-opt</text>
+  <text x="660" y="455" class="small-text">--cap-add</text>
+  <text x="660" y="470" class="small-text">--cap-drop</text>
+  <text x="660" y="485" class="small-text">--user</text>
+  <text x="660" y="500" class="small-text">--privileged</text>
+  
+  <!-- Arrows showing flow -->
+  <line class="arrow" x1="400" y1="110" x2="400" y2="140" />
+  <line class="arrow" x1="350" y1="140" x2="140" y2="180" />
+  <line class="arrow" x1="400" y1="140" x2="340" y2="180" />
+  <line class="arrow" x1="450" y1="140" x2="540" y2="180" />
+  
+  <line class="arrow" x1="140" y1="260" x2="140" y2="290" />
+  <line class="arrow" x1="340" y1="260" x2="340" y2="290" />
+  <line class="arrow" x1="540" y1="260" x2="540" y2="290" />
+  
+  <line class="arrow" x1="200" y1="370" x2="320" y2="400" />
+  <line class="arrow" x1="400" y1="370" x2="400" y2="400" />
+  <line class="arrow" x1="500" y1="370" x2="450" y2="400" />
+  
+  <!-- Warning note -->
+  <text x="400" y="560" class="small-text">Warning: --privileged disables most security features</text>
+  <text x="400" y="575" class="small-text">Use with caution and only when absolutely necessary</text>
+</svg>

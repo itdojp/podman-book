@@ -1,0 +1,251 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --border-color: #d1d5db;
+        --surface-color: #f9fafb;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary-color: #3b82f6;
+          --secondary-color: #34d399;
+          --accent-color: #fbbf24;
+          --text-color: #f9fafb;
+          --bg-color: #111827;
+          --border-color: #374151;
+          --surface-color: #1f2937;
+        }
+      }
+      
+      .diagram {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-color);
+      }
+      
+      .host-system {
+        fill: var(--surface-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+      }
+      
+      .container {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 8;
+        opacity: 0.1;
+      }
+      
+      .bind-mount {
+        fill: var(--accent-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .volume {
+        fill: var(--secondary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .tmpfs {
+        fill: var(--primary-color);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        rx: 6;
+        opacity: 0.8;
+      }
+      
+      .text {
+        fill: var(--text-color);
+        font-size: 14px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .title {
+        fill: var(--text-color);
+        font-size: 18px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .section-title {
+        fill: var(--text-color);
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+      
+      .label {
+        fill: var(--text-color);
+        font-size: 12px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .small-text {
+        fill: var(--text-color);
+        font-size: 10px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      
+      .white-text {
+        fill: var(--bg-color);
+        font-size: 12px;
+        font-weight: 500;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      
+      .command {
+        fill: var(--text-color);
+        font-size: 9px;
+        font-weight: 400;
+        font-family: 'Monaco', 'Menlo', monospace;
+        text-anchor: middle;
+      }
+      
+      .arrow {
+        stroke: var(--text-color);
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+      
+      .connection {
+        stroke: var(--accent-color);
+        stroke-width: 3;
+        fill: none;
+        stroke-dasharray: 5,5;
+      }
+      
+      @media (max-width: 480px) {
+        .text { font-size: 12px; }
+        .title { font-size: 16px; }
+        .section-title { font-size: 14px; }
+        .label { font-size: 10px; }
+        .small-text { font-size: 8px; }
+        .white-text { font-size: 10px; }
+        .command { font-size: 7px; }
+      }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-color)" />
+    </marker>
+  </defs>
+  
+  <rect class="diagram" width="100%" height="100%" />
+  
+  <!-- Title -->
+  <text x="400" y="30" class="title">Volume Mount Types</text>
+  
+  <!-- Host System -->
+  <rect class="host-system" x="40" y="60" width="320" height="480" />
+  <text x="200" y="85" class="section-title">Host System</text>
+  
+  <!-- Host Directories -->
+  <rect class="bind-mount" x="60" y="110" width="120" height="40" />
+  <text x="120" y="130" class="white-text">/home/user/data</text>
+  
+  <rect class="bind-mount" x="200" y="110" width="120" height="40" />
+  <text x="260" y="130" class="white-text">/var/log/app</text>
+  
+  <!-- Podman Volumes -->
+  <text x="200" y="180" class="text">Podman Managed Volumes</text>
+  <rect class="volume" x="60" y="200" width="280" height="40" />
+  <text x="200" y="220" class="white-text">~/.local/share/containers/storage/volumes/</text>
+  
+  <rect class="volume" x="80" y="260" width="100" height="40" />
+  <text x="130" y="280" class="white-text">db_data</text>
+  
+  <rect class="volume" x="200" y="260" width="100" height="40" />
+  <text x="250" y="280" class="white-text">app_config</text>
+  
+  <!-- tmpfs in memory -->
+  <text x="200" y="330" class="text">Memory (tmpfs)</text>
+  <rect class="tmpfs" x="60" y="350" width="280" height="40" />
+  <text x="200" y="370" class="white-text">RAM-based temporary storage</text>
+  
+  <!-- Container -->
+  <rect class="container" x="440" y="60" width="320" height="480" />
+  <text x="600" y="85" class="section-title">Container</text>
+  
+  <!-- Container mount points -->
+  
+  <!-- Bind Mounts -->
+  <text x="600" y="115" class="text">Bind Mounts</text>
+  <rect class="bind-mount" x="460" y="130" width="120" height="40" />
+  <text x="520" y="150" class="white-text">/data</text>
+  
+  <rect class="bind-mount" x="600" y="130" width="120" height="40" />
+  <text x="660" y="150" class="white-text">/logs</text>
+  
+  <!-- Volume Mounts -->
+  <text x="600" y="195" class="text">Volume Mounts</text>
+  <rect class="volume" x="460" y="210" width="120" height="40" />
+  <text x="520" y="230" class="white-text">/var/lib/mysql</text>
+  
+  <rect class="volume" x="600" y="210" width="120" height="40" />
+  <text x="660" y="230" class="white-text">/etc/app</text>
+  
+  <!-- tmpfs Mount -->
+  <text x="600" y="275" class="text">tmpfs Mount</text>
+  <rect class="tmpfs" x="460" y="290" width="260" height="40" />
+  <text x="590" y="310" class="white-text">/tmp (in-memory)</text>
+  
+  <!-- Connection lines -->
+  <line class="connection" x1="180" y1="130" x2="460" y2="150" />
+  <line class="connection" x1="260" y1="130" x2="600" y2="150" />
+  <line class="connection" x1="130" y1="260" x2="460" y2="230" />
+  <line class="connection" x1="250" y1="260" x2="600" y2="230" />
+  <line class="connection" x1="200" y1="350" x2="460" y2="310" />
+  
+  <!-- Command Examples -->
+  <text x="600" y="360" class="text">Command Examples</text>
+  
+  <rect class="host-system" x="460" y="380" width="280" height="30" />
+  <text x="600" y="395" class="command">-v /host/path:/container/path</text>
+  
+  <rect class="host-system" x="460" y="420" width="280" height="30" />
+  <text x="600" y="435" class="command">-v volume_name:/container/path</text>
+  
+  <rect class="host-system" x="460" y="460" width="280" height="30" />
+  <text x="600" y="475" class="command">--tmpfs /tmp:rw,size=100m</text>
+  
+  <!-- Characteristics -->
+  <text x="200" y="420" class="text">Characteristics</text>
+  
+  <text x="80" y="445" class="small-text">Bind Mounts:</text>
+  <text x="80" y="460" class="small-text">• Direct host path access</text>
+  <text x="80" y="475" class="small-text">• Fast performance</text>
+  <text x="80" y="490" class="small-text">• Host dependency</text>
+  
+  <text x="200" y="445" class="small-text">Volumes:</text>
+  <text x="200" y="460" class="small-text">• Podman managed</text>
+  <text x="200" y="475" class="small-text">• Portable</text>
+  <text x="200" y="490" class="small-text">• Backup friendly</text>
+  
+  <text x="290" y="445" class="small-text">tmpfs:</text>
+  <text x="290" y="460" class="small-text">• Memory only</text>
+  <text x="290" y="475" class="small-text">• Very fast</text>
+  <text x="290" y="490" class="small-text">• Temporary</text>
+  
+  <!-- Legend -->
+  <text x="400" y="550" class="small-text">Orange: Bind Mounts • Green: Volumes • Blue: tmpfs</text>
+</svg>

@@ -437,7 +437,7 @@ Error: cannot listen on the TCP port: listen tcp :8080: bind: address already in
 
 # 対処: 使用中ポートを確認
 ss -tlnp | grep 8080
-podman ps --format "table {{.Names}}{{.Ports}}"
+podman ps --format "table \{\{.Names\}\}\{\{.Ports\}\}"
 ```
 
 #### 3. **イメージ取得失敗**

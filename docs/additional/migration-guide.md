@@ -28,11 +28,11 @@ docker --version
 
 echo ""
 echo "2. 実行中のコンテナ:"
-docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+docker ps --format "table \{\{.Names\}\}\t\{\{.Image\}\}\t\{\{.Status\}\}\t\{\{.Ports\}\}"
 
 echo ""
 echo "3. イメージ一覧:"
-docker images --format "table {{.Repository}}:{{.Tag}}\t{{.Size}}"
+docker images --format "table \{\{.Repository\}\}:\{\{.Tag\}\}\t\{\{.Size\}\}"
 
 echo ""
 echo "4. ボリューム一覧:"
@@ -67,10 +67,10 @@ echo -n "[ ] Docker Compose v1の使用: "
 docker-compose version 2>&1 | grep -q "version 1" && echo "v1使用中 ⚠️" || echo "v2以降 ✓"
 
 echo -n "[ ] 特権コンテナの使用: "
-docker ps --format '{{.Names}}' | xargs -I {} docker inspect {} | grep -q '"Privileged": true' && echo "使用中 ⚠️" || echo "未使用 ✓"
+docker ps --format '\{\{.Names\}\}' | xargs -I {} docker inspect {} | grep -q '"Privileged": true' && echo "使用中 ⚠️" || echo "未使用 ✓"
 
 echo -n "[ ] カスタムDockerネットワーク: "
-docker network ls --format '{{.Name}}' | grep -v -E 'bridge|host|none' | wc -l | xargs -I {} test {} -gt 0 && echo "使用中 (要確認)" || echo "標準のみ ✓"
+docker network ls --format '\{\{.Name\}\}' | grep -v -E 'bridge|host|none' | wc -l | xargs -I {} test {} -gt 0 && echo "使用中 (要確認)" || echo "標準のみ ✓"
 ```
 
 ## 🔄 Phase 1: 互換性確認と準備（1-2週間）
@@ -163,7 +163,7 @@ migrate_image() {
 }
 
 # 全イメージの移行
-docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>' | while read image; do
+docker images --format '\{\{.Repository\}\}:\{\{.Tag\}\}' | grep -v '<none>' | while read image; do
     migrate_image $image
 done
 ```
@@ -177,13 +177,13 @@ migrate_volume() {
     local vol_name=$1
     
     # Dockerボリュームのパスを取得
-    docker_path=$(docker volume inspect $vol_name --format '{{.Mountpoint}}')
+    docker_path=$(docker volume inspect $vol_name --format '\{\{.Mountpoint\}\}')
     
     # Podmanボリューム作成
     podman volume create $vol_name
     
     # Podmanボリュームのパスを取得
-    podman_path=$(podman volume inspect $vol_name --format '{{.Mountpoint}}')
+    podman_path=$(podman volume inspect $vol_name --format '\{\{.Mountpoint\}\}')
     
     # データコピー（root権限が必要な場合あり）
     echo "コピー中: $vol_name"

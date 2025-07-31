@@ -272,6 +272,10 @@ Error: statfs /host/path: permission denied
 
 ![セキュリティコンテキストフロー図]({{ '/assets/images/diagrams/chapter02-security-context-flow.svg' | relative_url }})
 
+#### コンテナセキュリティ多層防御
+
+![コンテナセキュリティ多層防御図]({{ '/assets/images/diagrams/chapter02-container-security-layers.svg' | relative_url }})
+
 **SELinux関連の解決**:
 ```bash
 # 1. SELinuxコンテキスト確認

@@ -3,6 +3,9 @@ introduction:
   - title: "はじめに"
     path: "/introduction/"
 
+part0_intro:
+
+
 chapters:
   - title: "第1章：コンテナ技術の基礎"
     path: "/chapters/chapter01/"

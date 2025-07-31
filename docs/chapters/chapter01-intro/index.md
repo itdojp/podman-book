@@ -320,7 +320,14 @@ podman inspect nginx:alpine
 
 # イメージ削除
 podman rmi nginx:alpine
+
+# マルチアーキテクチャビルド
+podman buildx build --platform linux/amd64,linux/arm64 -t myapp:latest .
 ```
+
+#### マルチアーキテクチャビルドプロセス
+
+![マルチアーキテクチャビルドプロセス図]({{ '/assets/images/diagrams/chapter01-multi-arch-build-process.svg' | relative_url }})
 
 #### コンテナ管理
 ```bash
@@ -368,6 +375,10 @@ podman pod stop myapp
 # Pod削除
 podman pod rm myapp
 ```
+
+### Podman Composeワークフロー
+
+![Podman Compose ワークフロー図]({{ '/assets/images/diagrams/chapter01-podman-compose-workflow.svg' | relative_url }})
 
 ### 実践的なワークフロー例
 

@@ -1,8 +1,8 @@
 ---
-title: "第12章 systemd統合と本番運用"
+title: "第11章 systemd統合と本番運用"
 ---
 
-# 第12章 systemd統合と本番運用
+# 第11章 systemd統合と本番運用
 
 ### 本章の意義と学習目標
 

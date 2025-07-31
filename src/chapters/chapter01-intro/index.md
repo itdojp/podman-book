@@ -19,29 +19,7 @@ title: "第1章：Podman概要と環境構築"
 
 PodmanとDockerの最も重要な違いは、そのアーキテクチャにあります：
 
-```
-Docker Architecture
-┌─────────────┐    ┌─────────────────┐
-│ Docker CLI  │───▶│ Docker Daemon   │
-└─────────────┘    │ (dockerd)       │
-                   │ - Root権限必須   │
-                   │ - Single Point  │
-                   │   of Failure    │
-                   └─────────────────┘
-                           │
-                   ┌─────────────────┐
-                   │ Container       │
-                   │ Runtime (runc)  │
-                   └─────────────────┘
-
-Podman Architecture
-┌─────────────┐    ┌─────────────────┐
-│ Podman CLI  │───▶│ Container       │
-└─────────────┘    │ Runtime (crun)  │
-                   │ - Rootless実行   │
-                   │ - Daemonless    │
-                   └─────────────────┘
-```
+![DockerとPodmanのアーキテクチャ比較]({{ '/assets/images/diagrams/chapter01-docker-podman-architecture.svg' | relative_url }})
 
 ### 主要な違いの詳細
 

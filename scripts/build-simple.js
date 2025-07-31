@@ -439,7 +439,9 @@ exclude:
     const navigationData = {
       introduction: [],
       part0_intro: [],
-      chapters: [],
+      part1_basic: [],
+      part2_practical: [],
+      part3_advanced: [],
       appendices: [],
       afterword: []
     };
@@ -482,14 +484,28 @@ exclude:
           const titleMatch = content.match(/^#\s+(.+)$/m);
           const title = titleMatch ? titleMatch[1] : `第${chapter.name.match(/\d+/)?.[0]}章`;
           
-          // Check if this is a Part 0 chapter (chapter00, chapter01-intro, chapter02-intro)
+          // Categorize chapters according to Issue #12 structure
           if (chapter.name === 'chapter00' || chapter.name === 'chapter01-intro' || chapter.name === 'chapter02-intro') {
+            // Part 0: Introduction (章番号 0-2)
             navigationData.part0_intro.push({
               title: title,
               path: `/chapters/${chapter.name}/`
             });
-          } else {
-            navigationData.chapters.push({
+          } else if (chapter.name.match(/^chapter0[1-5]$/)) {
+            // Part 1: Basic (chapter01-05 directories = 第3-7章)
+            navigationData.part1_basic.push({
+              title: title,
+              path: `/chapters/${chapter.name}/`
+            });
+          } else if (chapter.name.match(/^chapter(0[6-9]|10)$/)) {
+            // Part 2: Practical (chapter06-10 directories = 第8-12章)
+            navigationData.part2_practical.push({
+              title: title,
+              path: `/chapters/${chapter.name}/`
+            });
+          } else if (chapter.name.match(/^chapter1[1-5]$/)) {
+            // Part 3: Advanced (chapter11-15 directories = 第13-17章)
+            navigationData.part3_advanced.push({
               title: title,
               path: `/chapters/${chapter.name}/`
             });
@@ -565,8 +581,16 @@ part0_intro:
 ${navigationData.part0_intro.map(ch => `  - title: "${ch.title}"
     path: "${ch.path}"`).join('\n')}
 
-chapters:
-${navigationData.chapters.map(ch => `  - title: "${ch.title}"
+part1_basic:
+${navigationData.part1_basic.map(ch => `  - title: "${ch.title}"
+    path: "${ch.path}"`).join('\n')}
+
+part2_practical:
+${navigationData.part2_practical.map(ch => `  - title: "${ch.title}"
+    path: "${ch.path}"`).join('\n')}
+
+part3_advanced:
+${navigationData.part3_advanced.map(ch => `  - title: "${ch.title}"
     path: "${ch.path}"`).join('\n')}
 
 appendices:

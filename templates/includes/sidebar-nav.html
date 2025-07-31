@@ -71,17 +71,85 @@
     </div>
     {% endif %}
 
-    <!-- Chapters -->
-    {% if site.data.navigation.chapters %}
+    <!-- Part 1: Basic -->
+    {% if site.data.navigation.part1_basic %}
     <div class="nav-section">
         <h3 class="nav-section-title">第1部：基礎編</h3>
         <ul class="nav-list">
-            {% for chapter in site.data.navigation.chapters %}
+            {% for chapter in site.data.navigation.part1_basic %}
             <li class="nav-item">
                 <a href="{{ site.baseurl }}{{ chapter.path }}" 
                    class="nav-link{% if page.url contains chapter.path %} active{% endif %}"
                    aria-current="{% if page.url contains chapter.path %}page{% endif %}">
-                    <span class="nav-number">{{ forloop.index }}</span>
+                    <span class="nav-number">{{ forloop.index | plus: 2 }}</span>
+                    <span class="nav-title">{{ chapter.title }}</span>
+                </a>
+                
+                <!-- Sub-sections if available -->
+                {% if chapter.sections %}
+                <ul class="nav-subsections">
+                    {% for section in chapter.sections %}
+                    <li class="nav-subsection">
+                        <a href="{{ site.baseurl }}{{ section.path }}" 
+                           class="nav-sublink{% if page.url == section.path %} active{% endif %}"
+                           aria-current="{% if page.url == section.path %}page{% endif %}">
+                            {{ section.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Part 2: Practical -->
+    {% if site.data.navigation.part2_practical %}
+    <div class="nav-section">
+        <h3 class="nav-section-title">第2部：実践編</h3>
+        <ul class="nav-list">
+            {% for chapter in site.data.navigation.part2_practical %}
+            <li class="nav-item">
+                <a href="{{ site.baseurl }}{{ chapter.path }}" 
+                   class="nav-link{% if page.url contains chapter.path %} active{% endif %}"
+                   aria-current="{% if page.url contains chapter.path %}page{% endif %}">
+                    <span class="nav-number">{{ forloop.index | plus: 7 }}</span>
+                    <span class="nav-title">{{ chapter.title }}</span>
+                </a>
+                
+                <!-- Sub-sections if available -->
+                {% if chapter.sections %}
+                <ul class="nav-subsections">
+                    {% for section in chapter.sections %}
+                    <li class="nav-subsection">
+                        <a href="{{ site.baseurl }}{{ section.path }}" 
+                           class="nav-sublink{% if page.url == section.path %} active{% endif %}"
+                           aria-current="{% if page.url == section.path %}page{% endif %}">
+                            {{ section.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Part 3: Advanced -->
+    {% if site.data.navigation.part3_advanced %}
+    <div class="nav-section">
+        <h3 class="nav-section-title">第3部：応用編</h3>
+        <ul class="nav-list">
+            {% for chapter in site.data.navigation.part3_advanced %}
+            <li class="nav-item">
+                <a href="{{ site.baseurl }}{{ chapter.path }}" 
+                   class="nav-link{% if page.url contains chapter.path %} active{% endif %}"
+                   aria-current="{% if page.url contains chapter.path %}page{% endif %}">
+                    <span class="nav-number">{{ forloop.index | plus: 12 }}</span>
                     <span class="nav-title">{{ chapter.title }}</span>
                 </a>
                 
@@ -156,9 +224,18 @@
 </div>
 
 <!-- Progress Indicator -->
-{% assign total_pages = site.data.navigation.chapters.size %}
+{% assign total_pages = 0 %}
 {% if site.data.navigation.part0_intro %}
 {% assign total_pages = total_pages | plus: site.data.navigation.part0_intro.size %}
+{% endif %}
+{% if site.data.navigation.part1_basic %}
+{% assign total_pages = total_pages | plus: site.data.navigation.part1_basic.size %}
+{% endif %}
+{% if site.data.navigation.part2_practical %}
+{% assign total_pages = total_pages | plus: site.data.navigation.part2_practical.size %}
+{% endif %}
+{% if site.data.navigation.part3_advanced %}
+{% assign total_pages = total_pages | plus: site.data.navigation.part3_advanced.size %}
 {% endif %}
 {% if site.data.navigation.appendices %}
 {% assign total_pages = total_pages | plus: site.data.navigation.appendices.size %}
@@ -173,7 +250,7 @@
 {% endfor %}
 
 {% if current_index == 0 %}
-{% for chapter in site.data.navigation.chapters %}
+{% for chapter in site.data.navigation.part1_basic %}
     {% if page.url contains chapter.path %}
         {% assign part0_size = 0 %}
         {% if site.data.navigation.part0_intro %}
@@ -186,13 +263,63 @@
 {% endif %}
 
 {% if current_index == 0 %}
+{% for chapter in site.data.navigation.part2_practical %}
+    {% if page.url contains chapter.path %}
+        {% assign part0_size = 0 %}
+        {% assign part1_size = 0 %}
+        {% if site.data.navigation.part0_intro %}
+            {% assign part0_size = site.data.navigation.part0_intro.size %}
+        {% endif %}
+        {% if site.data.navigation.part1_basic %}
+            {% assign part1_size = site.data.navigation.part1_basic.size %}
+        {% endif %}
+        {% assign current_index = part0_size | plus: part1_size | plus: forloop.index %}
+        {% break %}
+    {% endif %}
+{% endfor %}
+{% endif %}
+
+{% if current_index == 0 %}
+{% for chapter in site.data.navigation.part3_advanced %}
+    {% if page.url contains chapter.path %}
+        {% assign part0_size = 0 %}
+        {% assign part1_size = 0 %}
+        {% assign part2_size = 0 %}
+        {% if site.data.navigation.part0_intro %}
+            {% assign part0_size = site.data.navigation.part0_intro.size %}
+        {% endif %}
+        {% if site.data.navigation.part1_basic %}
+            {% assign part1_size = site.data.navigation.part1_basic.size %}
+        {% endif %}
+        {% if site.data.navigation.part2_practical %}
+            {% assign part2_size = site.data.navigation.part2_practical.size %}
+        {% endif %}
+        {% assign current_index = part0_size | plus: part1_size | plus: part2_size | plus: forloop.index %}
+        {% break %}
+    {% endif %}
+{% endfor %}
+{% endif %}
+
+{% if current_index == 0 %}
     {% for appendix in site.data.navigation.appendices %}
         {% if page.url contains appendix.path %}
             {% assign part0_size = 0 %}
+            {% assign part1_size = 0 %}
+            {% assign part2_size = 0 %}
+            {% assign part3_size = 0 %}
             {% if site.data.navigation.part0_intro %}
                 {% assign part0_size = site.data.navigation.part0_intro.size %}
             {% endif %}
-            {% assign current_index = part0_size | plus: site.data.navigation.chapters.size | plus: forloop.index %}
+            {% if site.data.navigation.part1_basic %}
+                {% assign part1_size = site.data.navigation.part1_basic.size %}
+            {% endif %}
+            {% if site.data.navigation.part2_practical %}
+                {% assign part2_size = site.data.navigation.part2_practical.size %}
+            {% endif %}
+            {% if site.data.navigation.part3_advanced %}
+                {% assign part3_size = site.data.navigation.part3_advanced.size %}
+            {% endif %}
+            {% assign current_index = part0_size | plus: part1_size | plus: part2_size | plus: part3_size | plus: forloop.index %}
             {% break %}
         {% endif %}
     {% endfor %}

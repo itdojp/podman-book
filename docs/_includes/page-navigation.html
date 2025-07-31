@@ -18,9 +18,23 @@
     {% endfor %}
 {% endif %}
 
-<!-- Add chapters -->
-{% if navigation.chapters %}
-    {% for item in navigation.chapters %}
+<!-- Add Part 1: Basic -->
+{% if navigation.part1_basic %}
+    {% for item in navigation.part1_basic %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
+<!-- Add Part 2: Practical -->
+{% if navigation.part2_practical %}
+    {% for item in navigation.part2_practical %}
+        {% assign all_pages = all_pages | push: item %}
+    {% endfor %}
+{% endif %}
+
+<!-- Add Part 3: Advanced -->
+{% if navigation.part3_advanced %}
+    {% for item in navigation.part3_advanced %}
         {% assign all_pages = all_pages | push: item %}
     {% endfor %}
 {% endif %}

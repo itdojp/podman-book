@@ -4,7 +4,7 @@
     "subtitle": "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法",
     "description": "Podmanを使用したコンテナ技術の包括的なガイドブック",
     "author": {
-      "name": "太田和彦（株式会社アイティードゥ）",
+      "name": "株式会社アイティードゥ",
       "email": "knowledge@itdo.jp",
       "github": "itdojp"
     },

@@ -438,6 +438,7 @@ exclude:
   async generateNavigationData(srcDir, publicDir) {
     const navigationData = {
       introduction: [],
+      part0_intro: [],
       chapters: [],
       appendices: [],
       afterword: []
@@ -462,7 +463,7 @@ exclude:
       }
     }
 
-    // Process chapters
+    // Process Part 0 chapters (chapter00, chapter01-intro, chapter02-intro)
     const chaptersPath = path.join(srcDir, 'chapters');
     try {
       const chapters = await fs.readdir(chaptersPath, { withFileTypes: true });
@@ -481,10 +482,18 @@ exclude:
           const titleMatch = content.match(/^#\s+(.+)$/m);
           const title = titleMatch ? titleMatch[1] : `第${chapter.name.match(/\d+/)?.[0]}章`;
           
-          navigationData.chapters.push({
-            title: title,
-            path: `/chapters/${chapter.name}/`
-          });
+          // Check if this is a Part 0 chapter (chapter00, chapter01-intro, chapter02-intro)
+          if (chapter.name === 'chapter00' || chapter.name === 'chapter01-intro' || chapter.name === 'chapter02-intro') {
+            navigationData.part0_intro.push({
+              title: title,
+              path: `/chapters/${chapter.name}/`
+            });
+          } else {
+            navigationData.chapters.push({
+              title: title,
+              path: `/chapters/${chapter.name}/`
+            });
+          }
         } catch {
           // Skip if index.md doesn't exist
         }
@@ -551,6 +560,10 @@ exclude:
 introduction:
 ${navigationData.introduction.map(intro => `  - title: "${intro.title}"
     path: "${intro.path}"`).join('\n')}
+
+part0_intro:
+${navigationData.part0_intro.map(ch => `  - title: "${ch.title}"
+    path: "${ch.path}"`).join('\n')}
 
 chapters:
 ${navigationData.chapters.map(ch => `  - title: "${ch.title}"

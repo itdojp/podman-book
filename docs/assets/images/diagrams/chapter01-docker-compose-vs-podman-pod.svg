@@ -1,0 +1,201 @@
+<svg width="900" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 18px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .section-title { font: 600 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .layer-text { font: 500 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); }
+      .component-text { font: 400 11px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      .small-text { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #4a5568); }
+      
+      .docker-bg { fill: var(--color-blue-50, #ebf8ff); stroke: var(--color-blue-200, #90cdf4); }
+      .podman-bg { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-200, #68d391); }
+      .container { fill: var(--color-orange-50, #fffaf0); stroke: var(--color-orange-200, #fbb962); }
+      .network { fill: var(--color-purple-50, #faf5ff); stroke: var(--color-purple-200, #c084fc); }
+      .volume { fill: var(--color-yellow-50, #fffff0); stroke: var(--color-yellow-200, #f6e05e); }
+      .config { fill: var(--color-red-50, #fef5e7); stroke: var(--color-red-200, #fc8181); }
+      .comparison { fill: var(--color-indigo-50, #f0f9ff); stroke: var(--color-indigo-200, #a5b4fc); }
+      .arrow { stroke: var(--color-gray-600, #718096); fill: var(--color-gray-600, #718096); }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" class="title">Docker Compose vs Podman Pod 比較図</text>
+
+  <!-- Docker Compose Side -->
+  <g id="docker-compose">
+    <text x="225" y="60" text-anchor="middle" class="section-title">Docker Compose</text>
+    
+    <!-- Docker Compose Background -->
+    <rect x="50" y="80" width="350" height="220" class="docker-bg" />
+    
+    <!-- docker-compose.yml -->
+    <rect x="70" y="100" width="120" height="60" class="config" />
+    <text x="130" y="120" text-anchor="middle" class="layer-text">docker-compose.yml</text>
+    <text x="130" y="135" text-anchor="middle" class="small-text">マルチコンテナ</text>
+    <text x="130" y="150" text-anchor="middle" class="small-text">アプリケーション定義</text>
+
+    <!-- Docker Network -->
+    <rect x="210" y="100" width="100" height="30" class="network" />
+    <text x="260" y="120" text-anchor="middle" class="component-text">Docker Network</text>
+    
+    <!-- Docker Volumes -->
+    <rect x="320" y="100" width="70" height="30" class="volume" />
+    <text x="355" y="120" text-anchor="middle" class="component-text">Volumes</text>
+
+    <!-- Individual Containers -->
+    <rect x="70" y="170" width="80" height="50" class="container" />
+    <text x="110" y="190" text-anchor="middle" class="component-text">Web Container</text>
+    <text x="110" y="205" text-anchor="middle" class="small-text">nginx:latest</text>
+
+    <rect x="160" y="170" width="80" height="50" class="container" />
+    <text x="200" y="190" text-anchor="middle" class="component-text">App Container</text>
+    <text x="200" y="205" text-anchor="middle" class="small-text">node:16</text>
+
+    <rect x="250" y="170" width="80" height="50" class="container" />
+    <text x="290" y="190" text-anchor="middle" class="component-text">DB Container</text>
+    <text x="290" y="205" text-anchor="middle" class="small-text">postgres:13</text>
+
+    <!-- Docker Network Connection -->
+    <rect x="70" y="240" width="260" height="25" class="network" />
+    <text x="200" y="257" text-anchor="middle" class="component-text">共有ネットワーク bridge</text>
+    
+    <!-- Docker Characteristics -->
+    <rect x="70" y="270" width="260" height="20" class="docker-bg" />
+    <text x="200" y="285" text-anchor="middle" class="small-text">• 各コンテナは独立したプロセス  • Docker Daemon必須</text>
+  </g>
+
+  <!-- Podman Pod Side -->
+  <g id="podman-pod">
+    <text x="675" y="60" text-anchor="middle" class="section-title">Podman Pod</text>
+    
+    <!-- Pod Background -->
+    <rect x="500" y="80" width="350" height="220" class="podman-bg" />
+    
+    <!-- Pod Definition -->
+    <rect x="520" y="100" width="120" height="60" class="config" />
+    <text x="580" y="120" text-anchor="middle" class="layer-text">pod.yaml</text>
+    <text x="580" y="135" text-anchor="middle" class="small-text">または</text>
+    <text x="580" y="150" text-anchor="middle" class="small-text">podman pod create</text>
+
+    <!-- Shared Resources -->
+    <rect x="660" y="100" width="80" height="30" class="network" />
+    <text x="700" y="120" text-anchor="middle" class="component-text">共有Network</text>
+    
+    <rect x="750" y="100" width="70" height="30" class="volume" />
+    <text x="785" y="120" text-anchor="middle" class="component-text">共有Volume</text>
+
+    <!-- Pod Container (Infrastructure) -->
+    <rect x="520" y="140" width="310" height="25" class="container" />
+    <text x="675" y="157" text-anchor="middle" class="component-text">Infrastructure Container (Pause Container)</text>
+
+    <!-- Application Containers within Pod -->
+    <rect x="530" y="175" width="80" height="50" class="container" />
+    <text x="570" y="195" text-anchor="middle" class="component-text">Web Container</text>
+    <text x="570" y="210" text-anchor="middle" class="small-text">nginx:latest</text>
+
+    <rect x="620" y="175" width="80" height="50" class="container" />
+    <text x="660" y="195" text-anchor="middle" class="component-text">App Container</text>
+    <text x="660" y="210" text-anchor="middle" class="small-text">node:16</text>
+
+    <rect x="710" y="175" width="80" height="50" class="container" />
+    <text x="750" y="195" text-anchor="middle" class="component-text">DB Container</text>
+    <text x="750" y="210" text-anchor="middle" class="small-text">postgres:13</text>
+
+    <!-- Shared Namespace -->
+    <rect x="520" y="240" width="310" height="25" class="network" />
+    <text x="675" y="257" text-anchor="middle" class="component-text">共有 Network/IPC Namespace (localhost通信)</text>
+    
+    <!-- Podman Characteristics -->
+    <rect x="520" y="270" width="310" height="20" class="podman-bg" />
+    <text x="675" y="285" text-anchor="middle" class="small-text">• Pod内コンテナは同一ネットワーク  • Daemonless</text>
+  </g>
+
+  <!-- Comparison Table -->
+  <g id="comparison-table" transform="translate(50, 330)">
+    <text x="400" y="20" text-anchor="middle" class="section-title">機能比較</text>
+    
+    <!-- Table Headers -->
+    <rect x="0" y="40" width="150" height="30" class="comparison" />
+    <text x="75" y="60" text-anchor="middle" class="layer-text">特徴</text>
+    
+    <rect x="150" y="40" width="200" height="30" class="comparison" />
+    <text x="250" y="60" text-anchor="middle" class="layer-text">Docker Compose</text>
+    
+    <rect x="350" y="40" width="200" height="30" class="comparison" />
+    <text x="450" y="60" text-anchor="middle" class="layer-text">Podman Pod</text>
+    
+    <rect x="550" y="40" width="200" height="30" class="comparison" />
+    <text x="650" y="60" text-anchor="middle" class="layer-text">利点/特徴</text>
+    
+    <!-- Architecture Row -->
+    <rect x="0" y="70" width="150" height="25" class="docker-bg" />
+    <text x="75" y="87" text-anchor="middle" class="component-text">アーキテクチャ</text>
+    
+    <rect x="150" y="70" width="200" height="25" class="docker-bg" />
+    <text x="250" y="87" text-anchor="middle" class="small-text">複数の独立コンテナ</text>
+    
+    <rect x="350" y="70" width="200" height="25" class="podman-bg" />
+    <text x="450" y="87" text-anchor="middle" class="small-text">Pod内で統合されたコンテナ</text>
+    
+    <rect x="550" y="70" width="200" height="25" class="comparison" />
+    <text x="650" y="87" text-anchor="middle" class="small-text">K8s互換、密結合</text>
+    
+    <!-- Network Row -->
+    <rect x="0" y="95" width="150" height="25" class="docker-bg" />
+    <text x="75" y="112" text-anchor="middle" class="component-text">ネットワーク</text>
+    
+    <rect x="150" y="95" width="200" height="25" class="docker-bg" />
+    <text x="250" y="112" text-anchor="middle" class="small-text">Docker Network (bridge)</text>
+    
+    <rect x="350" y="95" width="200" height="25" class="podman-bg" />
+    <text x="450" y="112" text-anchor="middle" class="small-text">共有namespace (localhost)</text>
+    
+    <rect x="550" y="95" width="200" height="25" class="comparison" />
+    <text x="650" y="112" text-anchor="middle" class="small-text">高速内部通信</text>
+    
+    <!-- Scaling Row -->
+    <rect x="0" y="120" width="150" height="25" class="docker-bg" />
+    <text x="75" y="137" text-anchor="middle" class="component-text">スケーリング</text>
+    
+    <rect x="150" y="120" width="200" height="25" class="docker-bg" />
+    <text x="250" y="137" text-anchor="middle" class="small-text">個別コンテナごと</text>
+    
+    <rect x="350" y="120" width="200" height="25" class="podman-bg" />
+    <text x="450" y="137" text-anchor="middle" class="small-text">Pod単位でスケール</text>
+    
+    <rect x="550" y="120" width="200" height="25" class="comparison" />
+    <text x="650" y="137" text-anchor="middle" class="small-text">一体管理</text>
+    
+    <!-- Daemon Row -->
+    <rect x="0" y="145" width="150" height="25" class="docker-bg" />
+    <text x="75" y="162" text-anchor="middle" class="component-text">デーモン</text>
+    
+    <rect x="150" y="145" width="200" height="25" class="docker-bg" />
+    <text x="250" y="162" text-anchor="middle" class="small-text">Docker Daemon必須</text>
+    
+    <rect x="350" y="145" width="200" height="25" class="podman-bg" />
+    <text x="450" y="162" text-anchor="middle" class="small-text">Daemonless</text>
+    
+    <rect x="550" y="145" width="200" height="25" class="comparison" />
+    <text x="650" y="162" text-anchor="middle" class="small-text">軽量、セキュア</text>
+    
+    <!-- Use Case Row -->
+    <rect x="0" y="170" width="150" height="25" class="docker-bg" />
+    <text x="75" y="187" text-anchor="middle" class="component-text">適用場面</text>
+    
+    <rect x="150" y="170" width="200" height="25" class="docker-bg" />
+    <text x="250" y="187" text-anchor="middle" class="small-text">開発環境、疎結合</text>
+    
+    <rect x="350" y="170" width="200" height="25" class="podman-bg" />
+    <text x="450" y="187" text-anchor="middle" class="small-text">本番環境、密結合</text>
+    
+    <rect x="550" y="170" width="200" height="25" class="comparison" />
+    <text x="650" y="187" text-anchor="middle" class="small-text">K8s移行容易</text>
+  </g>
+
+  <!-- Command Examples -->
+  <g id="command-examples" transform="translate(50, 560)">
+    <text x="200" y="0" text-anchor="middle" class="component-text">Docker Compose: docker-compose up -d</text>
+    <text x="550" y="0" text-anchor="middle" class="component-text">Podman Pod: podman pod create --name mypod; podman run --pod mypod ...</text>
+  </g>
+</svg>

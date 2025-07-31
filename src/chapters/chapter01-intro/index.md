@@ -144,22 +144,7 @@ alias docker=podman
 
 Windows環境でPodmanを実行する場合、WSL2を活用します：
 
-```
-Windows環境でのPodman実行
-┌─────────────────────────────────────┐
-│            Windows Host             │
-│  ┌─────────────────────────────────┐ │
-│  │         WSL2 Instance           │ │
-│  │  ┌─────────────────────────────┐ │ │
-│  │  │    Linux Distribution       │ │ │
-│  │  │  ┌─────────┬─────────────┐  │ │ │
-│  │  │  │ Podman  │ Container   │  │ │ │
-│  │  │  │ CLI     │ Runtime     │  │ │ │
-│  │  │  └─────────┴─────────────┘  │ │ │
-│  │  └─────────────────────────────┘ │ │
-│  └─────────────────────────────────┘ │
-└─────────────────────────────────────┘
-```
+![Windows WSL2環境図]({{ '/assets/images/diagrams/chapter01-windows-wsl2-environment.svg' | relative_url }})
 
 ### 詳細セットアップ手順
 
@@ -384,6 +369,11 @@ podman logs web
 ```
 
 #### Pod管理（Podman独自）
+
+PodmanのPodは、Kubernetesと同様の概念で、複数のコンテナをグループ化して管理できます：
+
+![Docker Compose vs Podman Pod比較図]({{ '/assets/images/diagrams/chapter01-docker-compose-vs-podman-pod.svg' | relative_url }})
+
 ```bash
 # Pod作成
 podman pod create --name myapp -p 8080:80

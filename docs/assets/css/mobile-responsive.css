@@ -5,9 +5,17 @@
 
 /* Hidden checkbox for state management */
 .sidebar-toggle-checkbox {
+  /* Visually hidden but accessible */
   position: absolute;
-  left: -9999px;
-  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
 }
 
 /* Prevent page jumping and unwanted focus */
@@ -54,6 +62,12 @@ html {
   }
 
   /* Show sidebar when toggled */
+  /**
+   * WARNING: The following selector depends on the DOM structure:
+   * .sidebar-toggle-checkbox must be a sibling of .book-layout,
+   * which must contain .book-sidebar. If this structure changes,
+   * the sidebar toggle will break.
+   */
   .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
     transform: translateX(0) !important;
   }

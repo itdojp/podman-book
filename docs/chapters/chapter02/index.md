@@ -1,5 +1,6 @@
 ---
 title: "第4章：Podmanのインストールと初期設定"
+layout: book
 ---
 
 # 第4章：Podmanのインストールと初期設定

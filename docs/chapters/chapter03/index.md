@@ -1,5 +1,6 @@
 ---
 title: "第5章 Podman環境構築の最適化"
+layout: book
 ---
 
 # 第5章 Podman環境構築の最適化

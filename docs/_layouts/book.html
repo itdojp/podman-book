@@ -31,32 +31,28 @@
     <meta name="twitter:title" content="{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}">
     <meta name="twitter:description" content="{{ page.description | default: site.description | escape }}">
     
-    <!-- Optimized theme detection and sidebar reset - minimal inline script -->
+    <!-- Theme Detection Script -->
     <script>
-        const t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-        document.documentElement.setAttribute('data-theme',t);
-        // Reset sidebar checkbox on page load to prevent stuck open state
-        document.addEventListener('DOMContentLoaded',()=>{
-            const cb=document.getElementById('sidebar-toggle-checkbox');
-            if(cb)cb.checked=false;
-        });
+        // Detect system theme preference and apply immediately to prevent flash
+        (function() {
+            const theme = localStorage.getItem('theme') || 
+                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
     </script>
 </head>
 <body>
-    <!-- CSS-only sidebar toggle (hidden checkbox for state management) -->
-    <input type="checkbox" id="sidebar-toggle-checkbox" class="sidebar-toggle-checkbox" aria-hidden="true">
-    
     <div class="book-layout">
         <!-- Header -->
         <header class="book-header">
             <div class="header-left">
-                <label for="sidebar-toggle-checkbox" class="sidebar-toggle" aria-label="Toggle sidebar">
+                <button class="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="false">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
-                </label>
+                </button>
                 <a href="{{ '/' | relative_url }}" class="header-title">
                     <h1>{{ site.title | escape }}</h1>
                 </a>
@@ -109,6 +105,12 @@
         <!-- Main Content -->
         <main class="book-main" id="main">
             <div class="book-content">
+                <!-- Breadcrumb -->
+                {% if page.url != '/' %}
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    {% include breadcrumb.html %}
+                </nav>
+                {% endif %}
 
                 <!-- Page Content -->
                 <article class="page-content">
@@ -141,10 +143,14 @@
         </main>
     </div>
 
-    <!-- Overlay for mobile sidebar (CSS-only close trigger) -->
-    <label for="sidebar-toggle-checkbox" class="book-sidebar-overlay" id="sidebar-overlay" aria-label="Close sidebar"></label>
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <!-- Lightweight code copy - no MutationObserver to prevent freeze -->
-    <script async src="{{ '/assets/js/code-copy-lightweight.js' | relative_url }}"></script>
+    <!-- Scripts -->
+    <script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/sidebar.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/code-copy.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

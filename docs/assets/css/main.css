@@ -3,9 +3,6 @@
  * Based on MDN, GitBook, and GitHub Docs best practices
  */
 
-/* Import CSS-only responsive sidebar implementation */
-@import url('./mobile-responsive.css');
-
 /* CSS Variables for Theme System */
 :root {
   /* Colors - Light Theme */

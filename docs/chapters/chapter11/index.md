@@ -1,5 +1,6 @@
 ---
 title: "第13章 Kubernetes連携"
+layout: book
 ---
 
 # 第13章 Kubernetes連携

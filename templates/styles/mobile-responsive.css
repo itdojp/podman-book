@@ -73,18 +73,18 @@ html {
   }
   
   /* Ensure sidebar content is interactive */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .nav-link {
     color: var(--color-text-secondary) !important;
     pointer-events: auto !important;
     cursor: pointer !important;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .nav-link:hover {
     background: var(--color-bg-secondary) !important;
     color: var(--color-text-primary) !important;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .nav-link.active {
     background: var(--color-bg-tertiary) !important;
     color: var(--color-primary) !important;
   }

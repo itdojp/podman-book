@@ -3,9 +3,6 @@
  * Based on MDN, GitBook, and GitHub Docs best practices
  */
 
-/* Import CSS-only responsive sidebar implementation */
-@import url('./mobile-responsive.css');
-
 /* CSS Variables for Theme System */
 :root {
   /* Colors - Light Theme */
@@ -447,23 +444,4 @@ img {
   pre, blockquote {
     page-break-inside: avoid;
   }
-}
-
-/* Hamburger Menu Button - Default Hidden */
-.sidebar-toggle {
-  display: none; /* Hidden by default, shown on mobile/tablet via mobile-responsive.css */
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-primary);
 }

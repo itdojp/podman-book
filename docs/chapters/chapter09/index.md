@@ -1,6 +1,5 @@
 ---
 title: "第11章 systemd統合と本番運用"
-layout: book
 ---
 
 # 第11章 systemd統合と本番運用

@@ -1,6 +1,5 @@
 ---
 title: "第12章 CI/CDパイプライン構築"
-layout: book
 ---
 
 # 第12章 CI/CDパイプライン構築

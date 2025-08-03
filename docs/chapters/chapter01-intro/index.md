@@ -1,6 +1,5 @@
 ---
 title: "第1章：Podman概要と環境構築"
-layout: book
 ---
 
 # 第1章：Podman概要と環境構築

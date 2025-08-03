@@ -1,6 +1,5 @@
 ---
 title: "第10章 セキュリティとRootlessコンテナ"
-layout: book
 ---
 
 # 第10章 セキュリティとRootlessコンテナ

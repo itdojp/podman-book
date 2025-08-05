@@ -10,13 +10,36 @@
   opacity: 0;
 }
 
-/* Prevent page jumping and unwanted focus */
-.sidebar-toggle:focus {
-  outline: none;
+/* Hamburger menu button styling */
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: none;
 }
 
+.sidebar-toggle:hover {
+  background-color: var(--bg-secondary);
+  transform: scale(1.05);
+}
+
+.sidebar-toggle:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Base layout adjustments */
 html {
   scroll-behavior: auto;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 /* Mobile/Tablet Implementation (≤1024px) */
@@ -36,9 +59,11 @@ html {
   /* Show hamburger menu */
   .sidebar-toggle {
     display: flex !important;
+    align-items: center;
+    justify-content: center;
   }
   
-  /* Overlay sidebar */
+  /* Overlay sidebar - hidden by default */
   .book-sidebar {
     position: fixed;
     top: var(--header-height);
@@ -47,32 +72,68 @@ html {
     height: calc(100vh - var(--header-height));
     background: var(--bg-primary);
     border-right: 1px solid var(--border-color);
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
   }
 
   /* Show sidebar when toggled */
   .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
-    transform: translateX(0) !important;
+    transform: translateX(0);
   }
   
-  /* Ensure sidebar content is interactive */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
-    color: var(--text-secondary) !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
+  /* Sidebar content styling when open */
+  .book-sidebar .sidebar-nav {
+    padding: 1rem;
+    height: 100%;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover {
-    background: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
+  .book-sidebar .toc-section {
+    margin-bottom: 1.5rem;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
-    background: var(--bg-tertiary) !important;
-    color: var(--primary-color) !important;
+  .book-sidebar .toc-section-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .book-sidebar .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .book-sidebar .toc-item {
+    margin-bottom: 0.25rem;
+  }
+  
+  .book-sidebar .toc-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .book-sidebar .toc-link:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateX(4px);
+  }
+  
+  .book-sidebar .toc-link.active {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 500;
   }
   
   /* Background overlay */
@@ -83,14 +144,20 @@ html {
     z-index: 950;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
     pointer-events: none;
+    cursor: pointer;
   }
 
   .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+  }
+  
+  /* Prevent body scroll when sidebar is open */
+  .sidebar-toggle-checkbox:checked ~ body {
+    overflow: hidden;
   }
 }
 

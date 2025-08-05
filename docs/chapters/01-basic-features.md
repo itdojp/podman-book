@@ -5,8 +5,6 @@ title: "第1章: 基本機能"
 
 # 第1章: 基本機能
 
-{% include navigation.html %}
-
 
 この章では、v2.0テンプレートの基本機能について説明します。
 
@@ -50,5 +48,3 @@ def hello_world():
 ## まとめ
 
 v2.0テンプレートは従来版より大幅に使いやすくなりました。
-
-{% include navigation.html %}

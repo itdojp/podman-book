@@ -48,10 +48,6 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Auto-deploy: Update docs from Node.js build
-
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
+          git commit -m "Auto-deploy: Update docs from Node.js build"
           git push
         fi

@@ -1,0 +1,37 @@
+/* Responsive Images */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+}
+
+.responsive-image {
+  display: block;
+  margin: 1rem auto;
+}
+
+/* Image with caption */
+.image-with-caption {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.image-with-caption img {
+  margin-bottom: 0.5rem;
+}
+
+.image-caption {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Lazy loading optimization */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}

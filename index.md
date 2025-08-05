@@ -1,79 +1,65 @@
+---
+title: "Podman完全ガイド"
+description: "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法"
+author: "株式会社アイティードゥ"
+version: "1.0.0"
+---
+
 # Podman完全ガイド
 
 コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法
 
-## 本書について
-
-本書は、コンテナ技術の基礎から実践的な活用方法まで、Podmanを中心に体系的に解説する技術書です。初心者から上級者まで、段階的に学習できる構成となっています。
-
-## 対象読者
-
-- コンテナ技術を基礎から学びたいエンジニア
-- DockerからPodmanへの移行を検討している方
-- エンタープライズ環境でコンテナを活用したい方
-- セキュアなコンテナ環境を構築したい方
-
-## 本書の構成
-
-### 第1部: 基礎編（第1章〜第5章）
-コンテナ技術の基本概念からPodmanの基本操作まで
-
-### 第2部: 実践編（第6章〜第10章）
-実際の開発・運用で必要となる実践的な技術
-
-### 第3部: 応用編（第11章〜第15章）
-エンタープライズ環境での高度な活用方法
-
 ## 目次
 
-- [はじめに](introduction/)
 
-### 第1部: 基礎編
 
-- [第1章：コンテナ技術の基礎](chapters/chapter01/)
-- [第2章：Podmanのインストールと初期設定](chapters/chapter02/)
-- [第3章：基本的なコンテナ操作](chapters/chapter03/)
-- [第4章：イメージの管理と作成](chapters/chapter04/)
-- [第5章：ストレージとボリューム管理](chapters/chapter05/)
+- [はじめに](src/chapter-introduction/index.md)
 
-### 第2部: 実践編
+- [第1章：コンテナ技術の基礎](src/chapter-chapter01/index.md)
 
-- [第6章：ネットワーキングとポート管理](chapters/chapter06/)
-- [第7章：Pod機能と複数コンテナ管理](chapters/chapter07/)
-- [第8章：Dockerfileの作成と最適化](chapters/chapter08/)
-- [第9章：レジストリとイメージ配布](chapters/chapter09/)
-- [第10章：ログ管理とトラブルシューティング](chapters/chapter10/)
+- [第2章：Podmanのインストールと初期設定](src/chapter-chapter02/index.md)
 
-### 第3部: 応用編
+- [第3章：基本的なコンテナ操作](src/chapter-chapter03/index.md)
 
-- [第11章：Kubernetesとの統合](chapters/chapter11/)
-- [第12章：CI/CDパイプラインの構築](chapters/chapter12/)
-- [第13章：セキュリティとコンプライアンス](chapters/chapter13/)
-- [第14章：パフォーマンスチューニング](chapters/chapter14/)
-- [第15章：エンタープライズ環境での運用](chapters/chapter15/)
+- [第4章：イメージの管理と作成](src/chapter-chapter04/index.md)
 
-### 付録
+- [第5章：ストレージとボリューム管理](src/chapter-chapter05/index.md)
 
-- [付録A：コマンドリファレンス](appendices/appendix-a/)
-- [付録B：トラブルシューティングガイド](appendices/appendix-b/)
-- [付録C：リソース集](appendices/appendix-c/)
+- [第6章：ネットワーキングとポート管理](src/chapter-chapter06/index.md)
 
-- [あとがき](afterword/)
+- [第7章：Pod機能と複数コンテナ管理](src/chapter-chapter07/index.md)
 
-## 著者について
+- [第8章：Dockerfileの作成と最適化](src/chapter-chapter08/index.md)
 
-**太田和彦（株式会社アイティードゥ）**
+- [第9章：レジストリとイメージ配布](src/chapter-chapter09/index.md)
 
-- Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
-- GitHub: [@itdojp](https://github.com/itdojp)
-- Website: [https://www.itdo.jp](https://www.itdo.jp)
+- [第10章：ログ管理とトラブルシューティング](src/chapter-chapter10/index.md)
 
-## ライセンス
+- [第11章：Kubernetesとの統合](src/chapter-chapter11/index.md)
 
-MIT License
+- [第12章：CI/CDパイプラインの構築](src/chapter-chapter12/index.md)
 
-© 2025 ITDO Inc. All rights reserved.
+- [第13章：セキュリティとコンプライアンス](src/chapter-chapter13/index.md)
+
+- [第14章：パフォーマンスチューニング](src/chapter-chapter14/index.md)
+
+- [第15章：エンタープライズ環境での運用](src/chapter-chapter15/index.md)
+
+
+
+
+## 付録
+
+- [付録1 付録A：コマンドリファレンス](src/appendices/appendix-a.md)
+
+- [付録2 付録B：トラブルシューティングガイド](src/appendices/appendix-b.md)
+
+- [付録3 付録C：リソース集](src/appendices/appendix-c.md)
+
+
 
 ---
 
-Built with [Book Publishing Template v3.0](https://github.com/itdojp/book-publishing-template2)
+**著者:** 株式会社アイティードゥ  
+**バージョン:** 1.0.0  
+**最終更新:** 2025-08-05

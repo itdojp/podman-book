@@ -1,17 +1,32 @@
 /**
- * Theme Management
+ * Enhanced Theme Management with Backward Compatibility
  * Handles light/dark theme switching with system preference detection
+ * Migrates from legacy 'theme' key to standardized 'book-theme' key
  */
 
 class ThemeManager {
     constructor() {
+        this.storageKey = 'book-theme';
+        this.legacyKey = 'theme';
         this.init();
     }
 
     init() {
+        this.migrateStorageKey();
         this.setupThemeToggle();
         this.setupSystemThemeListener();
         this.applyInitialTheme();
+    }
+
+    migrateStorageKey() {
+        // Migrate from legacy 'theme' key to 'book-theme' key for consistency
+        const legacyTheme = localStorage.getItem(this.legacyKey);
+        const currentTheme = localStorage.getItem(this.storageKey);
+        
+        if (legacyTheme && !currentTheme) {
+            localStorage.setItem(this.storageKey, legacyTheme);
+            localStorage.removeItem(this.legacyKey);
+        }
     }
 
     setupThemeToggle() {
@@ -29,7 +44,7 @@ class ThemeManager {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             mediaQuery.addEventListener('change', (e) => {
                 // Only update if user hasn't manually set a preference
-                if (!localStorage.getItem('theme')) {
+                if (!localStorage.getItem(this.storageKey)) {
                     this.setTheme(e.matches ? 'dark' : 'light');
                 }
             });
@@ -37,7 +52,7 @@ class ThemeManager {
     }
 
     applyInitialTheme() {
-        const savedTheme = localStorage.getItem('theme');
+        const savedTheme = localStorage.getItem(this.storageKey);
         const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         
         let theme;
@@ -56,7 +71,7 @@ class ThemeManager {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         this.setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
+        localStorage.setItem(this.storageKey, newTheme);
     }
 
     setTheme(theme) {

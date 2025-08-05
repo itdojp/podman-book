@@ -1,5 +1,8 @@
 /* Main CSS for Book Template */
 
+/* Import CSS-only responsive sidebar implementation */
+@import url('./mobile-responsive.css');
+
 /* CSS Variables */
 :root {
     /* Colors */
@@ -300,10 +303,8 @@ a:hover {
 /* Search */
 .search-container {
     position: relative;
-    max-width: 200px;
-    width: 200px;
-    margin-right: 0.75rem;
-    z-index: 1001; /* Ensure search results appear above other elements */
+    max-width: 400px;
+    width: 100%;
 }
 
 .search-input {
@@ -336,7 +337,6 @@ a:hover {
     max-height: 400px;
     overflow-y: auto;
     display: none;
-    z-index: 1002; /* Ensure search results appear above all other elements */
 }
 
 .search-results.active {
@@ -353,19 +353,6 @@ a:hover {
     cursor: pointer;
     border-radius: 6px;
     transition: var(--transition);
-}
-
-/* Sidebar toggle visibility control */
-.sidebar-toggle {
-    display: none; /* Hidden by default on desktop */
-}
-
-/* Hide the checkbox used for CSS-only sidebar toggle */
-.sidebar-toggle-checkbox {
-    display: none;
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
 }
 
 .sidebar-toggle:hover,
@@ -416,122 +403,52 @@ a:hover {
     color: var(--primary-color);
 }
 
-/* Mobile Styles */
-.sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 850;
+/* Copy Button Styles */
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 10;
 }
 
-@media (max-width: 1024px) {
-    /* Show hamburger menu for tablets and below - higher specificity without !important */
-    .book-header .sidebar-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* Hide desktop sidebar, enable mobile CSS-only version */
-    .book-sidebar {
-        position: fixed;
-        top: var(--header-height);
-        left: 0;
-        width: 280px;
-        height: calc(100vh - var(--header-height));
-        background: transparent;
-        border-right: none;
-        padding: 1.5rem;
-        overflow-y: auto;
-        z-index: 1000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-    }
-    
-    /* Sidebar when opened via CSS-only checkbox */
-    .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
-        transform: translateX(0);
-        background-color: var(--bg-secondary);
-        border-right: 1px solid var(--border-color);
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* Ensure sidebar links are clickable when open */
-    .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
-        pointer-events: auto;
-        color: var(--text-secondary);
-        opacity: 1;
-    }
-    
-    .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover,
-    .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
-        background-color: var(--primary-color);
-        color: white;
-    }
-    
-    .book-main {
-        margin-left: 0;
-    }
-    
-    /* Overlay for mobile */
-    .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay {
-        opacity: 1;
-        visibility: visible;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
+.copy-button:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
 }
+
+.copy-button.copied {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.copy-button.error {
+    background: var(--danger-color);
+    color: white;
+    border-color: var(--danger-color);
+}
+
+/* Legacy mobile styles removed - using CSS-only implementation in mobile-responsive.css */
 
 @media (max-width: 768px) {
-    /* Optimized mobile content spacing */
     .book-content {
-        padding: 0 1rem;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
+        padding: 1.5rem 1rem;
     }
     
     .page-content {
-        padding: 1rem;
-        margin: 0;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
+        padding: 1.5rem;
     }
     
     .header-center {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-    }
-    
-    /* Mobile search adjustments */
-    .search-container {
-        max-width: 150px;
-        width: 150px;
-        margin-right: 0.5rem;
-    }
-    
-    /* Mobile-specific improvements */
-    .book-main {
-        padding: 0;
-        margin: 0;
-        width: 100%;
-    }
-    
-    /* Ensure proper text readability with adequate margins */
-    .page-content h1,
-    .page-content h2,
-    .page-content h3,
-    .page-content p,
-    .page-content ul,
-    .page-content ol {
-        margin-left: 0;
-        margin-right: 0;
-        max-width: 100%;
+        display: none;
     }
 }
 
@@ -550,20 +467,6 @@ a:hover {
 .page-navigation {
     margin-top: auto;
     padding-top: 3rem;
-}
-
-/* Sidebar Overlay */
-.book-sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 /* Print Styles */

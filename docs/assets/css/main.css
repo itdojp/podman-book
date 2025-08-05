@@ -173,7 +173,7 @@ a:hover {
     font-weight: 600;
 }
 
-/* Sidebar - Desktop only */
+/* Sidebar */
 .book-sidebar {
     position: fixed;
     top: var(--header-height);
@@ -186,55 +186,6 @@ a:hover {
     z-index: 900;
     transform: translateX(0);
     transition: transform 0.3s ease;
-}
-
-/* Hide sidebar on mobile - OVERRIDE FOR MOBILE */
-@media (max-width: 1024px) {
-    .book-sidebar {
-        transform: translateX(-100%) !important;
-        background: transparent !important;
-        border-right: none !important;
-        z-index: 1000 !important;
-        width: 280px !important;
-        padding: 1rem !important;
-    }
-    
-    /* Show sidebar when hamburger is checked */
-    .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
-        transform: translateX(0) !important;
-        background: var(--bg-secondary) !important;
-        border-right: 1px solid var(--border-color) !important;
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15) !important;
-    }
-    
-    /* Remove sidebar margin on mobile */
-    .book-main {
-        margin-left: 0 !important;
-        width: 100% !important;
-    }
-    
-    /* Show hamburger menu on mobile */
-    .sidebar-toggle {
-        display: flex !important;
-    }
-    
-    /* Mobile overlay */
-    .book-sidebar-overlay {
-        position: fixed !important;
-        inset: 0 !important;
-        background-color: rgba(0, 0, 0, 0.5) !important;
-        z-index: 950 !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        transition: opacity 0.3s ease !important;
-        pointer-events: none !important;
-    }
-    
-    .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-    }
 }
 
 .sidebar-content {
@@ -402,13 +353,6 @@ a:hover {
     cursor: pointer;
     border-radius: 6px;
     transition: var(--transition);
-}
-
-/* Hide hamburger menu on desktop */
-@media (min-width: 1025px) {
-    .sidebar-toggle {
-        display: none !important;
-    }
 }
 
 .sidebar-toggle:hover,

@@ -24,6 +24,10 @@ exclude:
   - scripts/
   - tests/
   - "README.md"
+  - vendor/
+  - .bundle/
+  - Gemfile
+  - Gemfile.lock
 
 # 日本語対応
 kramdown:

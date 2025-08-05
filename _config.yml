@@ -4,17 +4,10 @@ author: "株式会社アイティードゥ"
 version: "1.0.0"
 lang: "ja"
 
-# Jekyll設定
-markdown: kramdown
-highlighter: rouge
-theme: minima
-
-# プラグイン
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-seo-tag
-  - jekyll-remote-theme
+# Build設定（Node.js版）
+build:
+  engine: "node"
+  skipJekyll: true
 
 # 除外ファイル
 exclude:
@@ -23,19 +16,13 @@ exclude:
   - package-lock.json
   - scripts/
   - tests/
+  - "*.md"
   - "README.md"
-  - vendor/
-  - .bundle/
+  - book-formatter-config.json
   - Gemfile
-  - Gemfile.lock
-
-# 日本語対応
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+  - _config.yml
   
 # GitHub Pages設定
-url: "https://itdojp.github.io"
-baseurl: "/podman-book"
+
 repository: "itdojp/podman-book"
 

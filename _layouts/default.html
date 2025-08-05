@@ -1,60 +1,21 @@
-<\!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'ja' }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <title>{{ page.title | default: site.title }}</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            color: #333;
-        }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 0.5rem; }
-        h2 { color: #34495e; margin-top: 2rem; }
-        h3 { color: #7f8c8d; }
-        .chapter-nav {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 5px;
-            margin: 2rem 0;
-            text-align: center;
-        }
-        .chapter-nav a {
-            color: #3498db;
-            text-decoration: none;
-            margin: 0 1rem;
-        }
-        .chapter-nav a:hover {
-            text-decoration: underline;
-        }
-        pre {
-            background: #f4f4f4;
-            padding: 1rem;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        code {
-            background: #f4f4f4;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-        }
-    </style>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon.ico' | relative_url }}">
 </head>
 <body>
-    <div class="chapter-nav">
-        <a href="{{ site.baseurl }}/">← トップページに戻る</a>
-    </div>
-    
-    <main>
+    <div class="container">
         {{ content }}
-    </main>
-    
-    <div class="chapter-nav">
-        <a href="{{ site.baseurl }}/">← トップページに戻る</a>
     </div>
 </body>
 </html>

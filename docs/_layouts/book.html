@@ -183,48 +183,30 @@
                 box-shadow: none !important;
             }
             
-            /* Override when sidebar is open - FORCE HARDCODED COLORS */
+            /* Override when sidebar is open - USE CSS VARIABLES */
             .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
-                background: #f9fafb !important;
-                background-color: #f9fafb !important;
+                background: var(--bg-secondary) !important;
+                background-color: var(--bg-secondary) !important;
                 box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15) !important;
-                border-right: 1px solid #e5e7eb !important;
+                border-right: 1px solid var(--border-color) !important;
             }
             
-            /* Text colors when sidebar is open */
+            /* Text colors when sidebar is open - USE CSS VARIABLES */
             .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .book-title,
             .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-section-title {
-                color: #111827 !important;
+                color: var(--text-primary) !important;
                 opacity: 1 !important;
             }
             
             .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
-                color: #6b7280 !important;
+                color: var(--text-secondary) !important;
                 opacity: 1 !important;
             }
             
             .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover,
             .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
-                background-color: #3b82f6 !important;
+                background-color: var(--primary-color) !important;
                 color: #ffffff !important;
-            }
-            
-            /* Dark mode override */
-            @media (prefers-color-scheme: dark) {
-                .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
-                    background: #1f2937 !important;
-                    background-color: #1f2937 !important;
-                    border-right: 1px solid #374151 !important;
-                }
-                
-                .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .book-title,
-                .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-section-title {
-                    color: #f9fafb !important;
-                }
-                
-                .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
-                    color: #d1d5db !important;
-                }
             }
         }
         

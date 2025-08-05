@@ -1,10 +1,10 @@
 ---
 layout: book
 order: 9
-title: "第10章 セキュリティとRootlessコンテナ"
+title: "第8章：Dockerfileの作成と最適化"
 ---
 
-# 第10章 セキュリティとRootlessコンテナ
+# 第8章：Dockerfileの作成と最適化
 
 ### 本章の意義と学習目標
 

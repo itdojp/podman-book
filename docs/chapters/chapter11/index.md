@@ -1,10 +1,10 @@
 ---
 layout: book
 order: 12
-title: "第13章 Kubernetes連携"
+title: "第11章：Kubernetesとの統合"
 ---
 
-# 第13章 Kubernetes連携
+# 第11章：Kubernetesとの統合
 
 ### 本章の意義と学習目標
 

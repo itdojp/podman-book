@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 5
 title: "第6章 コンテナの基本操作"
 ---
 

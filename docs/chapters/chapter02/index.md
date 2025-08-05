@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 3
 title: "第4章：Podmanのインストールと初期設定"
 ---
 

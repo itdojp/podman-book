@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 12
 title: "第13章 Kubernetes連携"
 ---
 

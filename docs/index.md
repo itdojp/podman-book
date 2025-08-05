@@ -1,3 +1,9 @@
+---
+layout: book
+title: "Podman完全ガイド"
+order: 0
+---
+
 # Podman完全ガイド
 
 コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法

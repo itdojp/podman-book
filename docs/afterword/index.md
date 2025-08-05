@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 20
 title: "あとがき"
 ---
 

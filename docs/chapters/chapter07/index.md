@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 8
 title: "第9章 Podとマルチコンテナ管理"
 ---
 

@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 9
 title: "第10章 セキュリティとRootlessコンテナ"
 ---
 

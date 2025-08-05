@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 7
 title: "第8章 ネットワークとストレージ"
 ---
 

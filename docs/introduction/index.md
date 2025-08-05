@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 1
 title: "はじめに"
 ---
 

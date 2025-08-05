@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 11
 title: "第12章 CI/CDパイプライン構築"
 ---
 

@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 17
 title: "付録A：コマンドリファレンス"
 ---
 

@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 6
 title: "第7章 イメージの作成と管理"
 ---
 

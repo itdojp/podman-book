@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 19
 title: "付録C：参考リンク集"
 ---
 

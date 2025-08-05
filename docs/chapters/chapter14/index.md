@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 15
 title: "第16章 エンタープライズ環境での活用"
 ---
 

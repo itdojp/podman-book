@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 10
 title: "第11章 systemd統合と本番運用"
 ---
 

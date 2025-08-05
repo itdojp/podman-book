@@ -1,4 +1,6 @@
 ---
+layout: book
+order: 13
 title: "第14章 パフォーマンスチューニング"
 ---
 

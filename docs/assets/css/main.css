@@ -188,6 +188,7 @@ a:hover {
     transition: transform 0.3s ease;
 }
 
+/* Desktop-first approach - Let mobile-responsive.css handle mobile */
 .sidebar-content {
     padding: 1.5rem;
 }

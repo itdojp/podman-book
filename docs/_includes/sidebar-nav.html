@@ -1,47 +1,38 @@
-<!-- Sidebar Navigation -->
-<div class="sidebar-header">
-    <div class="sidebar-title">{{ site.title | escape }}</div>
-    {% if site.description %}
-    <div class="sidebar-description">{{ site.description | escape }}</div>
-    {% endif %}
-</div>
-
+<!-- Sidebar Navigation - Enhanced with Competitive Programming Book Style -->
 <div class="sidebar-content">
-    <!-- Introduction -->
-    {% if site.data.navigation.introduction %}
-    <div class="nav-section">
-        {% if site.data.navigation.introduction.size == 1 %}
-        <!-- Single introduction - display as direct link -->
-        {% for item in site.data.navigation.introduction %}
-        <a href="{{ site.baseurl }}{{ item.path }}" 
-           class="nav-link nav-single-item{% if page.url contains item.path %} active{% endif %}"
-           aria-current="{% if page.url contains item.path %}page{% endif %}">
-            {{ item.title }}
-        </a>
-        {% endfor %}
-        {% else %}
-        <!-- Multiple introduction items - display with section header -->
-        <h3 class="nav-section-title">はじめに</h3>
-        <ul class="nav-list">
-            {% for item in site.data.navigation.introduction %}
-            <li class="nav-item">
-                <a href="{{ site.baseurl }}{{ item.path }}" 
-                   class="nav-link{% if page.url contains item.path %} active{% endif %}"
-                   aria-current="{% if page.url contains item.path %}page{% endif %}">
-                    {{ item.title }}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
+    <!-- Book Info -->
+    <div class="book-info">
+        <h2 class="book-title">📚 {{ site.title | escape }}</h2>
+        {% if site.description %}
+        <p class="book-subtitle">{{ site.description | escape }}</p>
         {% endif %}
     </div>
-    {% endif %}
 
-    <!-- Part 0: Introduction Guide -->
-    {% if site.data.navigation.part0_intro %}
-    <div class="nav-section">
-        <h3 class="nav-section-title">第0部：入門編</h3>
-        <ul class="nav-list">
+    <!-- Table of Contents -->
+    <div class="toc">
+    <!-- Introduction -->
+        {% if site.data.navigation.introduction %}
+        <div class="toc-section">
+            <h3 class="toc-section-title">🎯 はじめに</h3>
+            <ul class="toc-list">
+                {% for item in site.data.navigation.introduction %}
+                <li class="toc-item">
+                    <a href="{{ site.baseurl }}{{ item.path }}" 
+                       class="toc-link{% if page.url contains item.path %} active{% endif %}"
+                       aria-current="{% if page.url contains item.path %}page{% endif %}">
+                        {{ item.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Part 0: Introduction Guide -->
+        {% if site.data.navigation.part0_intro %}
+        <div class="toc-section">
+            <h3 class="toc-section-title">🌟 第0部：入門編</h3>
+            <ul class="toc-list">
             {% for chapter in site.data.navigation.part0_intro %}
             <li class="nav-item">
                 <a href="{{ site.baseurl }}{{ chapter.path }}" 

@@ -31,15 +31,23 @@
     <meta name="twitter:title" content="{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}">
     <meta name="twitter:description" content="{{ page.description | default: site.description | escape }}">
     
-    <!-- Optimized theme detection and sidebar reset - minimal inline script -->
+    <!-- Theme Detection Script -->
     <script>
-        const t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-        document.documentElement.setAttribute('data-theme',t);
-        // Reset sidebar checkbox on page load to prevent stuck open state
-        document.addEventListener('DOMContentLoaded',()=>{
-            const cb=document.getElementById('sidebar-toggle-checkbox');
-            if(cb)cb.checked=false;
-        });
+        // Detect system theme preference and apply immediately to prevent flash
+        (function() {
+            // Backward compatibility: check both 'theme' and 'book-theme' keys
+            const legacyTheme = localStorage.getItem('theme');
+            const theme = localStorage.getItem('book-theme') || legacyTheme ||
+                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            
+            // Migrate legacy theme to new key and remove old key
+            if (legacyTheme && !localStorage.getItem('book-theme')) {
+                localStorage.setItem('book-theme', legacyTheme);
+                localStorage.removeItem('theme');
+            }
+            
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
     </script>
 </head>
 <body>
@@ -50,7 +58,7 @@
         <!-- Header -->
         <header class="book-header">
             <div class="header-left">
-                <label for="sidebar-toggle-checkbox" class="sidebar-toggle" aria-label="Toggle sidebar">
+                <label for="sidebar-toggle-checkbox" class="sidebar-toggle sidebar-toggle--visible-mobile" aria-label="Toggle sidebar">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="12" x2="21" y2="12"></line>

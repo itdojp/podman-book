@@ -144,7 +144,9 @@
     <!-- Overlay for mobile sidebar (CSS-only close trigger) -->
     <label for="sidebar-toggle-checkbox" class="book-sidebar-overlay" id="sidebar-overlay" aria-label="Close sidebar"></label>
 
-    <!-- Lightweight code copy - no MutationObserver to prevent freeze -->
+    <!-- JavaScript modules -->
+    <script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
     <script async src="{{ '/assets/js/code-copy-lightweight.js' | relative_url }}"></script>
 </body>
 </html>

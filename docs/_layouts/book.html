@@ -63,10 +63,6 @@
             </div>
             
             <div class="header-center">
-                <!-- Center area can be used for branding or kept empty -->
-            </div>
-            
-            <div class="header-right">
                 <div class="search-container">
                     <input type="search" 
                            placeholder="Search..." 
@@ -75,7 +71,9 @@
                            autocomplete="off">
                     <div class="search-results" id="search-results"></div>
                 </div>
-                
+            </div>
+            
+            <div class="header-right">
                 <button class="theme-toggle" aria-label="Toggle theme">
                     <svg class="theme-icon theme-icon-light" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="5"></circle>
@@ -146,10 +144,6 @@
     <!-- Overlay for mobile sidebar (CSS-only close trigger) -->
     <label for="sidebar-toggle-checkbox" class="book-sidebar-overlay" id="sidebar-overlay" aria-label="Close sidebar"></label>
 
-    <!-- JavaScript -->
-    <script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
-    
     <!-- Lightweight code copy - no MutationObserver to prevent freeze -->
     <script async src="{{ '/assets/js/code-copy-lightweight.js' | relative_url }}"></script>
 </body>

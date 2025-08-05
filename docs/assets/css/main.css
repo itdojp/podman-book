@@ -34,6 +34,9 @@
     --sidebar-width: 280px;
     --content-max-width: 900px;
     
+    /* Accessibility */
+    --link-active-bg: #2563eb; /* Ensures high contrast for active links */
+    
     /* Typography */
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
@@ -62,6 +65,9 @@
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    
+    /* Accessibility - Dark theme */
+    --link-active-bg: #3b82f6; /* High contrast for dark theme active links */
 }
 
 /* Base Styles */
@@ -418,9 +424,9 @@ a:hover {
 }
 
 @media (max-width: 1024px) {
-    /* Show hamburger menu for tablets and below - higher specificity without !important */
-    .book-header .sidebar-toggle {
-        display: flex;
+    /* Show hamburger menu for tablets and below using explicit class for clarity */
+    .sidebar-toggle--visible-mobile {
+        display: flex !important;
         align-items: center;
         justify-content: center;
     }
@@ -458,7 +464,7 @@ a:hover {
     
     .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover,
     .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
-        background-color: var(--primary-color);
+        background-color: var(--link-active-bg);
         color: white;
     }
     

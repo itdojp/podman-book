@@ -1,6 +1,6 @@
 <!-- Page Navigation (Previous/Next) -->
 {% assign current_index = nil %}
-{% assign all_pages = site.pages | where_exp: "page", "page.layout == 'book' and page.order" | sort: 'order' %}
+{% assign all_pages = site.pages | where: "layout", "book" | where_exp: "page", "page.order" | sort: 'order' %}
 
 <!-- Find current page index -->
 {% for p in all_pages %}

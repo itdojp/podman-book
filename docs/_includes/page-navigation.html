@@ -1,6 +1,6 @@
 <!-- Page Navigation (Previous/Next) -->
 {% assign current_index = nil %}
-{% assign all_pages = site.pages | where_exp: "page", "page.url contains '/src/'" | sort: 'order' %}
+{% assign all_pages = site.pages | where_exp: "page", "page.url contains '/chapters/'" | sort: 'order' %}
 
 <!-- Find current page index -->
 {% for p in all_pages %}

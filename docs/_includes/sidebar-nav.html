@@ -22,28 +22,45 @@
             </ul>
         </div>
 
-        <!-- Basic Chapters -->
+        <!-- Introduction Section -->
         <div class="toc-section">
-            <h3 class="toc-section-title">🌟 基礎編</h3>
+            <h3 class="toc-section-title">📖 はじめに</h3>
             <ul class="toc-list">
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-introduction/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-introduction/' %}active{% endif %}">
-                        第1章　競技プログラミングとは
+                    <a href="{{ '/introduction/' | relative_url }}" class="toc-link {% if page.url contains '/introduction/' %}active{% endif %}">
+                        はじめに
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Basic Chapters -->
+        <div class="toc-section">
+            <h3 class="toc-section-title">🌟 第1部：基礎編</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="{{ '/chapters/chapter01/' | relative_url }}" class="toc-link {% if page.url contains '/chapter01/' %}active{% endif %}">
+                        第1章　コンテナ技術の基礎
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-environment-setup/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-environment-setup/' %}active{% endif %}">
-                        第2章　AtCoderを始めよう
+                    <a href="{{ '/chapters/chapter02/' | relative_url }}" class="toc-link {% if page.url contains '/chapter02/' %}active{% endif %}">
+                        第2章　Podmanのインストールと初期設定
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-programming-environment/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-programming-environment/' %}active{% endif %}">
-                        第3章　Python基礎
+                    <a href="{{ '/chapters/chapter03/' | relative_url }}" class="toc-link {% if page.url contains '/chapter03/' %}active{% endif %}">
+                        第3章　基本的なコンテナ操作
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-input-output/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-input-output/' %}active{% endif %}">
-                        第4章　問題解決の基本手順
+                    <a href="{{ '/chapters/chapter04/' | relative_url }}" class="toc-link {% if page.url contains '/chapter04/' %}active{% endif %}">
+                        第4章　イメージの管理と作成
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/chapters/chapter05/' | relative_url }}" class="toc-link {% if page.url contains '/chapter05/' %}active{% endif %}">
+                        第5章　ストレージとボリューム管理
                     </a>
                 </li>
             </ul>
@@ -51,26 +68,31 @@
 
         <!-- Practical Chapters -->
         <div class="toc-section">
-            <h3 class="toc-section-title">💪 実践編</h3>
+            <h3 class="toc-section-title">💪 第2部：実践編</h3>
             <ul class="toc-list">
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-basic-algorithms/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-basic-algorithms/' %}active{% endif %}">
-                        第5章　基本アルゴリズム
+                    <a href="{{ '/chapters/chapter06/' | relative_url }}" class="toc-link {% if page.url contains '/chapter06/' %}active{% endif %}">
+                        第6章　ネットワーキングとポート管理
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-basic-data-structures/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-basic-data-structures/' %}active{% endif %}">
-                        第6章　基本データ構造
+                    <a href="{{ '/chapters/chapter07/' | relative_url }}" class="toc-link {% if page.url contains '/chapter07/' %}active{% endif %}">
+                        第7章　Pod機能と複数コンテナ管理
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-abc-problems/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-abc-problems/' %}active{% endif %}">
-                        第7章　ABC A・B問題を攻略しよう
+                    <a href="{{ '/chapters/chapter08/' | relative_url }}" class="toc-link {% if page.url contains '/chapter08/' %}active{% endif %}">
+                        第8章　Dockerfileの作成と最適化
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-problem-solving/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-problem-solving/' %}active{% endif %}">
-                        第8章　問題解決プロセスを身につけよう
+                    <a href="{{ '/chapters/chapter09/' | relative_url }}" class="toc-link {% if page.url contains '/chapter09/' %}active{% endif %}">
+                        第9章　レジストリとイメージ配布
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/chapters/chapter10/' | relative_url }}" class="toc-link {% if page.url contains '/chapter10/' %}active{% endif %}">
+                        第10章　ログ管理とトラブルシューティング
                     </a>
                 </li>
             </ul>
@@ -78,26 +100,65 @@
 
         <!-- Advanced Chapters -->
         <div class="toc-section">
-            <h3 class="toc-section-title">🚀 発展編</h3>
+            <h3 class="toc-section-title">🚀 第3部：応用編</h3>
             <ul class="toc-list">
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-debugging/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-debugging/' %}active{% endif %}">
-                        第9章　エラーと上手に付き合おう
+                    <a href="{{ '/chapters/chapter11/' | relative_url }}" class="toc-link {% if page.url contains '/chapter11/' %}active{% endif %}">
+                        第11章　Kubernetesとの統合
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-contest-participation/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-contest-participation/' %}active{% endif %}">
-                        第10章　コンテストに参加してみよう
+                    <a href="{{ '/chapters/chapter12/' | relative_url }}" class="toc-link {% if page.url contains '/chapter12/' %}active{% endif %}">
+                        第12章　CI/CDパイプラインの構築
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-community/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-community/' %}active{% endif %}">
-                        第11章　仲間と一緒に成長しよう
+                    <a href="{{ '/chapters/chapter13/' | relative_url }}" class="toc-link {% if page.url contains '/chapter13/' %}active{% endif %}">
+                        第13章　セキュリティとコンプライアンス
                     </a>
                 </li>
                 <li class="toc-item">
-                    <a href="{{ '/src/chapter-future-career/' | relative_url }}" class="toc-link {% if page.url contains '/chapter-future-career/' %}active{% endif %}">
-                        第12章　未来への道筋を描こう
+                    <a href="{{ '/chapters/chapter14/' | relative_url }}" class="toc-link {% if page.url contains '/chapter14/' %}active{% endif %}">
+                        第14章　パフォーマンスチューニング
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/chapters/chapter15/' | relative_url }}" class="toc-link {% if page.url contains '/chapter15/' %}active{% endif %}">
+                        第15章　エンタープライズ環境での運用
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Appendices -->
+        <div class="toc-section">
+            <h3 class="toc-section-title">📚 付録</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="{{ '/appendices/appendix-a/' | relative_url }}" class="toc-link {% if page.url contains '/appendix-a/' %}active{% endif %}">
+                        付録A　コマンドリファレンス
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/appendices/appendix-b/' | relative_url }}" class="toc-link {% if page.url contains '/appendix-b/' %}active{% endif %}">
+                        付録B　トラブルシューティングガイド
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="{{ '/appendices/appendix-c/' | relative_url }}" class="toc-link {% if page.url contains '/appendix-c/' %}active{% endif %}">
+                        付録C　リソース集
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Afterword -->
+        <div class="toc-section">
+            <h3 class="toc-section-title">✨ あとがき</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="{{ '/afterword/' | relative_url }}" class="toc-link {% if page.url contains '/afterword/' %}active{% endif %}">
+                        あとがき
                     </a>
                 </li>
             </ul>

@@ -1,53 +1,23 @@
 {
-  "name": "book-publishing-template-improved",
-  "version": "2.0.0",
-  "description": "Improved Book Publishing Template with Easy Setup",
-  "author": "Book Publishing Template Contributors",
+  "name": "podman-book",
+  "version": "1.0.0", 
+  "description": "Podmanを使用したコンテナ技術の包括的なガイドブック",
+  "author": "株式会社アイティードゥ",
   "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
-    "setup": "node easy-setup.js",
-    "build": "node scripts/build-with-conflict-detection.js",
-    "build:original": "node scripts/build-simple.js",
-    "build:safe": "node scripts/build-with-conflict-detection.js --auto-fix --verbose",
-    "check-conflicts": "node scripts/jekyll-conflict-detector.js src --dry-run",
-    "fix-conflicts": "node scripts/jekyll-conflict-detector.js src --fix",
-    "preview": "npm run build && npx http-server docs -p 8080 --silent",
-    "clean": "rm -rf public output temp docs",
-    "configure:workflows": "node scripts/configure-workflows.js",
-    "lint:light": "markdownlint 'src/**/*.md' --ignore node_modules",
-    "test:light": "npm run lint:light && npm run build",
-    "test:conflicts": "npm run check-conflicts",
-    "help": "echo 'Available commands:\n  npm run setup - Interactive setup\n  npm run build - Build with conflict detection\n  npm run build:safe - Build with auto-fix\n  npm run check-conflicts - Check Jekyll conflicts\n  npm run preview - Local preview\n  npm run configure:workflows - Disable problematic workflows'"
-  },
-  "dependencies": {
-    "fs-extra": "^11.3.0",
-    "gray-matter": "^4.0.3"
+    "build": "bundle exec jekyll build",
+    "serve": "bundle exec jekyll serve --livereload",
+    "deploy": "npm run build && gh-pages -d _site",
+    "deploy-setup": "gh-pages-clean",
+    "validate-deploy": "node scripts/validate-github-pages.js",
+    "pages-status": "node scripts/check-pages-status.js"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "markdownlint-cli": "^0.33.0"
+    "gh-pages": "^6.0.0"
   },
-  "optionalDependencies": {
-    "puppeteer": "^21.0.0",
-    "sharp": "^0.34.2"
-  },
-  "keywords": [
-    "book",
-    "publishing",
-    "markdown",
-    "github-pages",
-    "template",
-    "easy-setup"
-  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itdojp/book-publishing-template2.git"
+    "url": "https://github.com/itdojp/podman-book.git"
   },
-  "bugs": {
-    "url": "https://github.com/itdojp/book-publishing-template2/issues"
-  },
-  "homepage": "https://github.com/itdojp/book-publishing-template2#readme"
+  "homepage": "https://itdojp.github.io/podman-book"
 }

@@ -1,50 +1,37 @@
-# Jekyll設定
 title: "Podman完全ガイド"
 description: "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法"
-author: 
-  name: "太田和彦（株式会社アイティードゥ）"
-  github: itdojp
-  email: knowledge@itdo.jp
-baseurl: "/podman-book"
-url: "https://itdojp.github.io"
+author: "株式会社アイティードゥ"
+version: "1.0.0"
+lang: "ja"
 
-# Repository settings for links
-repository:
-  github: itdojp/podman-book  # GitHub repository path
-  zenn: books/podman-book     # Zenn book path
-
-# テーマ
-theme: minima
-plugins:
-  - jekyll-feed
-
-# 言語設定
-lang: ja
-
-# その他の設定
-show_downloads: false
-google_analytics:
-
-# ビルド設定
-exclude:
-  - README.md
-  - package.json
-  - package-lock.json
-  - node_modules/
-  - scripts/
-  - .gitignore
-  - LICENSE
-  - CONTRIBUTING.md
-  - src/
-
-# v3.0 Design System Configuration
+# Jekyll設定
 markdown: kramdown
 highlighter: rouge
+theme: minima
 
-# Use custom book layout as default
-defaults:
-  - scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "book"
+# プラグイン
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-remote-theme
+
+# 除外ファイル
+exclude:
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - scripts/
+  - tests/
+  - "README.md"
+
+# 日本語対応
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  
+# GitHub Pages設定
+url: "https://itdojp.github.io"
+baseurl: "/podman-book"
+repository: "itdojp/podman-book"
+

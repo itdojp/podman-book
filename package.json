@@ -6,11 +6,9 @@
   "license": "MIT",
   "scripts": {
     "build": "bundle exec jekyll build",
-    "serve": "bundle exec jekyll serve --livereload",
+    "serve": "bundle exec jekyll serve",
     "deploy": "npm run build && gh-pages -d _site",
-    "deploy-setup": "gh-pages-clean",
-    "validate-deploy": "node scripts/validate-github-pages.js",
-    "pages-status": "node scripts/check-pages-status.js"
+    "deploy-setup": "gh-pages-clean"
   },
   "devDependencies": {
     "gh-pages": "^6.0.0"

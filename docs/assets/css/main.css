@@ -46,8 +46,8 @@ html {
     padding-right: 1rem !important;
   }
   
-  /* Show hamburger menu */
-  .sidebar-toggle {
+  /* Show hamburger menu on mobile/tablet */
+  .sidebar-toggle--visible-mobile {
     display: flex !important;
   }
   
@@ -109,7 +109,8 @@ html {
 
 /* Desktop view - keep default main.css sidebar behavior */
 @media (min-width: 1025px) {
-  .sidebar-toggle {
+  .sidebar-toggle,
+  .sidebar-toggle--visible-mobile {
     display: none !important;
   }
 }

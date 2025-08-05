@@ -360,6 +360,14 @@ a:hover {
     display: none; /* Hidden by default on desktop */
 }
 
+/* Hide the checkbox used for CSS-only sidebar toggle */
+.sidebar-toggle-checkbox {
+    display: none;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .sidebar-toggle:hover,
 .theme-toggle:hover {
     background: var(--bg-secondary);

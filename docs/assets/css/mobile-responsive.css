@@ -3,27 +3,6 @@
    Based on mobile-responsive-implementation-guide.md
    ============================================ */
 
-/* CSS Variables for mobile responsive */
-:root {
-  /* Layout */
-  --header-height: 64px;
-  --sidebar-width: 280px;
-  
-  /* Spacing Scale */
-  --space-xs: 0.25rem;   /* 4px */
-  --space-sm: 0.5rem;    /* 8px */
-  --space-md: 1rem;      /* 16px */
-  --space-lg: 1.5rem;    /* 24px */
-  --space-xl: 2rem;      /* 32px */
-  
-  /* Colors (compatible with main.css) */
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --background-secondary: #f8fafc;
-  --border-color: #e2e8f0;
-  --accent-color: #2563eb;
-}
-
 /* Hidden checkbox for state management */
 .sidebar-toggle-checkbox {
   position: absolute;
@@ -40,153 +19,85 @@ html {
   scroll-behavior: auto;
 }
 
-/* Mobile responsive styles */
-@media (max-width: 767px) {
-  /* Mobile content optimization */
-  .book-content {
-    max-width: 100% !important;
-    padding: var(--space-xs) !important;
-    margin: 0 !important;
-    width: 100% !important;
-  }
-  
-  /* Page content mobile optimization */
-  .page-content {
-    padding: var(--space-sm) var(--space-xs) !important;
-    margin: 0 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  /* Mobile main area */
-  .book-main {
-    padding: 0 !important;
-    gap: var(--space-sm);
-    margin: 0 !important;
-    width: 100% !important;
+/* Mobile/Tablet Implementation (≤1024px) */
+@media (max-width: 1024px) {
+  /* Full-width content layout */
+  .book-layout .book-main {
     margin-left: 0 !important;
+    width: 100% !important;
   }
-
-  /* Mobile sidebar - default hidden state */
+  
+  .book-layout .book-main .book-content {
+    margin: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Show hamburger menu */
+  .sidebar-toggle {
+    display: flex !important;
+  }
+  
+  /* Overlay sidebar */
   .book-sidebar {
-    display: block;
     position: fixed;
     top: var(--header-height);
     left: 0;
     width: 280px;
     height: calc(100vh - var(--header-height));
-    background: transparent;
-    border-right: none;
-    padding: var(--space-lg);
-    overflow-y: auto;
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-  }
-
-  /* Sidebar when opened via :checked state */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
-    transform: translateX(0);
-    background-color: var(--background-secondary);
+    background: var(--bg-primary);
     border-right: 1px solid var(--border-color);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
 
-  /* Sidebar content styling when open */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .book-title,
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-section-title {
-    color: var(--text-primary);
+  /* Show sidebar when toggled */
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
+    transform: translateX(0) !important;
   }
-
+  
+  /* Ensure sidebar content is interactive */
   .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
-    color: var(--text-secondary);
+    color: var(--text-secondary) !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
-
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover,
+  
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+  }
+  
   .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
-    background-color: var(--accent-color);
-    color: white;
+    background: var(--bg-tertiary) !important;
+    color: var(--primary-color) !important;
   }
-
-  /* Overlay for mobile */
+  
+  /* Background overlay */
   .book-sidebar-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    z-index: 950;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 
-  /* Overlay visible when sidebar is open */
   .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay {
     opacity: 1;
     visibility: visible;
-  }
-
-  /* Show hamburger menu on mobile */
-  .sidebar-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    cursor: pointer;
-    padding: var(--space-xs);
-    border-radius: 0.375rem;
-    transition: background-color 0.2s ease;
-  }
-
-  .sidebar-toggle:hover {
-    background-color: var(--background-secondary);
-  }
-
-  .sidebar-toggle:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
+    pointer-events: auto;
   }
 }
 
-/* Desktop sidebar - always visible, reset mobile styles */
-@media (min-width: 768px) {
-  .book-sidebar {
-    display: block !important;
-    position: static !important;
-    transform: none !important;
-    width: auto !important;
-    height: auto !important;
-    top: auto !important;
-    left: auto !important;
-    border-right: none;
-    padding: 0;
-    z-index: auto;
-    background-color: transparent;
-    overflow-y: visible;
-    transition: none;
-  }
-  
-  /* Hide mobile-specific elements on desktop */
+/* Desktop view - keep default main.css sidebar behavior */
+@media (min-width: 1025px) {
   .sidebar-toggle {
     display: none !important;
-  }
-  
-  .book-sidebar-overlay {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-  }
-  
-  /* Reset main content margin */
-  .book-main {
-    margin-left: var(--sidebar-width);
   }
 }
 

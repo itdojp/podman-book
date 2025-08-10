@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="700" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title-text { font-family: 'Noto Sans JP', sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .subtitle-text { font-family: 'Noto Sans JP', sans-serif; font-size: 16px; font-weight: bold; fill: #34495e; }
+      .component-text { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; fill: #2c3e50; }
+      .label-text { font-family: 'Noto Sans JP', sans-serif; font-size: 11px; fill: #7f8c8d; }
+      .docker-area { fill: #ffe6e6; stroke: #e74c3c; stroke-width: 2; }
+      .podman-area { fill: #e6ffe6; stroke: #27ae60; stroke-width: 2; }
+      .component-box { fill: #fff; stroke: #34495e; stroke-width: 2; rx: 5; }
+      .daemon-box { fill: #ffcccc; stroke: #c0392b; stroke-width: 2; }
+      .rootless-box { fill: #ccffcc; stroke: #27ae60; stroke-width: 2; }
+      .arrow { stroke: #34495e; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="30" class="title-text" text-anchor="middle">Docker vs Podman アーキテクチャ比較</text>
+
+  <!-- Docker Architecture Section -->
+  <g id="docker-section">
+    <rect x="50" y="60" width="380" height="600" class="docker-area" rx="10"/>
+    <text x="240" y="90" class="subtitle-text" text-anchor="middle">Docker アーキテクチャ</text>
+    
+    <!-- Docker Client -->
+    <rect x="100" y="120" width="280" height="60" class="component-box"/>
+    <text x="240" y="155" class="component-text" text-anchor="middle">Docker クライアント (CLI)</text>
+    
+    <!-- Docker Daemon -->
+    <rect x="100" y="220" width="280" height="100" class="daemon-box"/>
+    <text x="240" y="250" class="component-text" text-anchor="middle" font-weight="bold">Docker デーモン</text>
+    <text x="240" y="270" class="label-text" text-anchor="middle">• root権限で実行</text>
+    <text x="240" y="290" class="label-text" text-anchor="middle">• 単一障害点</text>
+    <text x="240" y="310" class="label-text" text-anchor="middle">• 常時稼働プロセス</text>
+    
+    <!-- Containers -->
+    <rect x="100" y="360" width="130" height="80" class="component-box"/>
+    <text x="165" y="390" class="component-text" text-anchor="middle">コンテナ</text>
+    <text x="165" y="410" class="label-text" text-anchor="middle">root権限</text>
+    
+    <!-- Images -->
+    <rect x="250" y="360" width="130" height="80" class="component-box"/>
+    <text x="315" y="390" class="component-text" text-anchor="middle">イメージ</text>
+    <text x="315" y="410" class="label-text" text-anchor="middle">レイヤー管理</text>
+    
+    <!-- Registry -->
+    <rect x="175" y="480" width="130" height="60" class="component-box"/>
+    <text x="240" y="515" class="component-text" text-anchor="middle">レジストリ</text>
+    
+    <!-- Arrows -->
+    <path d="M 240 180 L 240 220" class="arrow"/>
+    <path d="M 240 320 L 165 360" class="arrow"/>
+    <path d="M 240 320 L 315 360" class="arrow"/>
+    <path d="M 240 440 L 240 480" class="arrow"/>
+  </g>
+
+  <!-- Podman Architecture Section -->
+  <g id="podman-section">
+    <rect x="470" y="60" width="380" height="600" class="podman-area" rx="10"/>
+    <text x="660" y="90" class="subtitle-text" text-anchor="middle">Podman アーキテクチャ</text>
+    
+    <!-- Podman CLI -->
+    <rect x="520" y="120" width="280" height="60" class="component-box"/>
+    <text x="660" y="155" class="component-text" text-anchor="middle">Podman CLI</text>
+    
+    <!-- Libpod (Daemonless) -->
+    <rect x="520" y="220" width="280" height="100" class="rootless-box"/>
+    <text x="660" y="250" class="component-text" text-anchor="middle" font-weight="bold">Libpod (デーモンレス)</text>
+    <text x="660" y="270" class="label-text" text-anchor="middle">• ユーザー権限で実行可能</text>
+    <text x="660" y="290" class="label-text" text-anchor="middle">• プロセス毎に独立</text>
+    <text x="660" y="310" class="label-text" text-anchor="middle">• Rootlessモード対応</text>
+    
+    <!-- Containers -->
+    <rect x="520" y="360" width="130" height="80" class="component-box"/>
+    <text x="585" y="390" class="component-text" text-anchor="middle">コンテナ</text>
+    <text x="585" y="410" class="label-text" text-anchor="middle">ユーザー権限</text>
+    <text x="585" y="425" class="label-text" text-anchor="middle">(Rootless)</text>
+    
+    <!-- Images -->
+    <rect x="670" y="360" width="130" height="80" class="component-box"/>
+    <text x="735" y="390" class="component-text" text-anchor="middle">イメージ</text>
+    <text x="735" y="410" class="label-text" text-anchor="middle">OCI準拠</text>
+    
+    <!-- Registry -->
+    <rect x="595" y="480" width="130" height="60" class="component-box"/>
+    <text x="660" y="515" class="component-text" text-anchor="middle">レジストリ</text>
+    
+    <!-- User Namespace -->
+    <rect x="545" y="570" width="230" height="60" fill="#d5f4e6" stroke="#27ae60" stroke-width="1" rx="5"/>
+    <text x="660" y="595" class="component-text" text-anchor="middle">ユーザー名前空間</text>
+    <text x="660" y="615" class="label-text" text-anchor="middle">UID/GIDマッピング</text>
+    
+    <!-- Arrows -->
+    <path d="M 660 180 L 660 220" class="arrow"/>
+    <path d="M 660 320 L 585 360" class="arrow"/>
+    <path d="M 660 320 L 735 360" class="arrow"/>
+    <path d="M 660 440 L 660 480" class="arrow"/>
+    <path d="M 660 540 L 660 570" class="arrow"/>
+  </g>
+
+  <!-- Comparison Legend -->
+  <g id="legend">
+    <rect x="100" y="680" width="700" height="1" fill="#95a5a6"/>
+    
+    <rect x="200" y="700" width="20" height="20" class="daemon-box"/>
+    <text x="230" y="715" class="label-text">セキュリティリスク（root権限必須）</text>
+    
+    <rect x="500" y="700" width="20" height="20" class="rootless-box"/>
+    <text x="530" y="715" class="label-text">セキュリティ強化（rootless対応）</text>
+  </g>
+</svg>

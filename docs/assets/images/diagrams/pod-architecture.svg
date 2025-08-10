@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title-text { font-family: 'Noto Sans JP', sans-serif; font-size: 20px; font-weight: bold; fill: #2c3e50; }
+      .pod-title { font-family: 'Noto Sans JP', sans-serif; font-size: 16px; font-weight: bold; fill: #34495e; }
+      .container-text { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; fill: #2c3e50; }
+      .namespace-text { font-family: 'Noto Sans JP', sans-serif; font-size: 11px; fill: #7f8c8d; font-style: italic; }
+      .pod-boundary { fill: #f8f9fa; stroke: #2c3e50; stroke-width: 3; stroke-dasharray: 10,5; }
+      .infra-container { fill: #e6f3ff; stroke: #3498db; stroke-width: 2; }
+      .app-container { fill: #fff; stroke: #34495e; stroke-width: 2; }
+      .namespace-box { fill: #fff3cd; stroke: #f39c12; stroke-width: 1; }
+      .shared-line { stroke: #e74c3c; stroke-width: 2; stroke-dasharray: 3,3; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" class="title-text" text-anchor="middle">Podman Pod アーキテクチャ</text>
+
+  <!-- Pod Boundary -->
+  <rect x="100" y="70" width="600" height="480" class="pod-boundary" rx="15"/>
+  <text x="400" y="100" class="pod-title" text-anchor="middle">Pod (共有名前空間を持つコンテナグループ)</text>
+
+  <!-- Infra Container -->
+  <g id="infra-container">
+    <rect x="150" y="130" width="500" height="80" class="infra-container" rx="5"/>
+    <text x="400" y="155" class="container-text" text-anchor="middle" font-weight="bold">Infra Container (Pause Process)</text>
+    <text x="400" y="175" class="namespace-text" text-anchor="middle">• Pod の名前空間を保持</text>
+    <text x="400" y="195" class="namespace-text" text-anchor="middle">• 最小限のリソース使用</text>
+  </g>
+
+  <!-- Shared Namespaces -->
+  <g id="shared-namespaces">
+    <rect x="150" y="240" width="150" height="100" class="namespace-box" rx="5"/>
+    <text x="225" y="265" class="container-text" text-anchor="middle" font-weight="bold">Network NS</text>
+    <text x="225" y="285" class="namespace-text" text-anchor="middle">• 共有IP</text>
+    <text x="225" y="305" class="namespace-text" text-anchor="middle">• localhost通信</text>
+    <text x="225" y="325" class="namespace-text" text-anchor="middle">• ポート共有</text>
+
+    <rect x="325" y="240" width="150" height="100" class="namespace-box" rx="5"/>
+    <text x="400" y="265" class="container-text" text-anchor="middle" font-weight="bold">IPC NS</text>
+    <text x="400" y="285" class="namespace-text" text-anchor="middle">• 共有メモリ</text>
+    <text x="400" y="305" class="namespace-text" text-anchor="middle">• セマフォ</text>
+    <text x="400" y="325" class="namespace-text" text-anchor="middle">• メッセージキュー</text>
+
+    <rect x="500" y="240" width="150" height="100" class="namespace-box" rx="5"/>
+    <text x="575" y="265" class="container-text" text-anchor="middle" font-weight="bold">UTS NS</text>
+    <text x="575" y="285" class="namespace-text" text-anchor="middle">• ホスト名</text>
+    <text x="575" y="305" class="namespace-text" text-anchor="middle">• ドメイン名</text>
+  </g>
+
+  <!-- Application Containers -->
+  <g id="app-containers">
+    <rect x="150" y="370" width="150" height="120" class="app-container" rx="5"/>
+    <text x="225" y="395" class="container-text" text-anchor="middle" font-weight="bold">App Container 1</text>
+    <text x="225" y="415" class="namespace-text" text-anchor="middle">• Webサーバー</text>
+    <text x="225" y="435" class="namespace-text" text-anchor="middle">• Port 80</text>
+    <text x="225" y="455" class="namespace-text" text-anchor="middle">• 独自のPID NS</text>
+    <text x="225" y="475" class="namespace-text" text-anchor="middle">• 独自のMount NS</text>
+
+    <rect x="325" y="370" width="150" height="120" class="app-container" rx="5"/>
+    <text x="400" y="395" class="container-text" text-anchor="middle" font-weight="bold">App Container 2</text>
+    <text x="400" y="415" class="namespace-text" text-anchor="middle">• APIサーバー</text>
+    <text x="400" y="435" class="namespace-text" text-anchor="middle">• Port 8080</text>
+    <text x="400" y="455" class="namespace-text" text-anchor="middle">• 独自のPID NS</text>
+    <text x="400" y="475" class="namespace-text" text-anchor="middle">• 独自のMount NS</text>
+
+    <rect x="500" y="370" width="150" height="120" class="app-container" rx="5"/>
+    <text x="575" y="395" class="container-text" text-anchor="middle" font-weight="bold">Sidecar Container</text>
+    <text x="575" y="415" class="namespace-text" text-anchor="middle">• ログ収集</text>
+    <text x="575" y="435" class="namespace-text" text-anchor="middle">• メトリクス</text>
+    <text x="575" y="455" class="namespace-text" text-anchor="middle">• 独自のPID NS</text>
+    <text x="575" y="475" class="namespace-text" text-anchor="middle">• 独自のMount NS</text>
+  </g>
+
+  <!-- Connection Lines -->
+  <line x1="225" y1="210" x2="225" y2="240" class="shared-line"/>
+  <line x1="400" y1="210" x2="400" y2="240" class="shared-line"/>
+  <line x1="575" y1="210" x2="575" y2="240" class="shared-line"/>
+  
+  <line x1="225" y1="340" x2="225" y2="370" class="shared-line"/>
+  <line x1="400" y1="340" x2="400" y2="370" class="shared-line"/>
+  <line x1="575" y1="340" x2="575" y2="370" class="shared-line"/>
+
+  <!-- Labels -->
+  <text x="50" y="290" class="namespace-text" transform="rotate(-90, 50, 290)">共有名前空間</text>
+  <text x="50" y="430" class="namespace-text" transform="rotate(-90, 50, 430)">アプリケーション</text>
+
+  <!-- Benefits Box -->
+  <rect x="150" y="510" width="500" height="30" fill="#d4edda" stroke="#28a745" stroke-width="1" rx="5"/>
+  <text x="400" y="530" class="container-text" text-anchor="middle">利点: localhost通信、リソース共有、Kubernetesとの互換性</text>
+</svg>

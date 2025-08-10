@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <title>マルチステージビルドレイヤー可視化</title>
+  <desc>マルチステージビルドでレイヤーがどのように作成され最適化されるかを示す詳細図</desc>
+  <defs>
+    <style>
+      :root {
+        --svg-bg: #ffffff;
+        --svg-text: #1a1a1a;
+        --svg-primary: #0066cc;
+        --svg-success: #16a34a;
+        --svg-warning: #ca8a04;
+        --svg-error: #dc2626;
+        --svg-neutral: #6b7280;
+      }
+      .title-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: var(--svg-text); }
+      .stage-title { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: var(--svg-bg); }
+      .layer-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: var(--svg-text); }
+      .annotation-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 400; fill: var(--svg-neutral); }
+      .build-stage { fill: var(--svg-warning); stroke: var(--svg-warning); stroke-width: 2; }
+      .runtime-stage { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 2; }
+      .base-layer { fill: var(--svg-neutral); stroke: var(--svg-neutral); stroke-width: 1; }
+      .build-layer { fill: var(--svg-warning); stroke: var(--svg-warning); stroke-width: 1; }
+      .runtime-layer { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 1; }
+      .copy-flow { stroke: var(--svg-primary); stroke-width: 2; fill: none; marker-end: url(#arrowhead); stroke-dasharray: 5,3; }
+      .layer-flow { stroke: var(--svg-neutral); stroke-width: 1; fill: none; marker-end: url(#arrowhead-gray); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-primary)"/>
+    </marker>
+    <marker id="arrowhead-gray" markerWidth="8" markerHeight="8" refX="7" refY="2" orient="auto">
+      <polygon points="0 0, 8 2, 0 4" fill="var(--svg-neutral)"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="40" class="title-text" text-anchor="middle">マルチステージビルドレイヤー可視化</text>
+
+  <!-- Build Stage -->
+  <g id="build-stage">
+    <rect x="80" y="80" width="280" height="400" class="build-stage" rx="4"/>
+    <text x="220" y="100" class="stage-title" text-anchor="middle">ステージ1: ビルドステージ</text>
+    
+    <!-- Base Image -->
+    <rect x="100" y="120" width="240" height="40" class="base-layer" rx="4"/>
+    <text x="220" y="135" class="layer-text" text-anchor="middle" font-weight="500">ベースイメージ</text>
+    <text x="110" y="150" class="annotation-text">FROM node:18-alpine</text>
+    
+    <!-- Dependencies Layer -->
+    <rect x="100" y="170" width="240" height="40" class="build-layer" rx="4"/>
+    <text x="220" y="185" class="layer-text" text-anchor="middle" font-weight="500">依存関係インストール</text>
+    <text x="110" y="200" class="annotation-text">RUN npm install (300MB)</text>
+    
+    <!-- Build Tools -->
+    <rect x="100" y="220" width="240" height="40" class="build-layer" rx="4"/>
+    <text x="220" y="235" class="layer-text" text-anchor="middle" font-weight="500">ビルドツール</text>
+    <text x="110" y="250" class="annotation-text">RUN apt install build-essential (200MB)</text>
+    
+    <!-- Source Code -->
+    <rect x="100" y="270" width="240" height="40" class="build-layer" rx="4"/>
+    <text x="220" y="285" class="layer-text" text-anchor="middle" font-weight="500">ソースコード</text>
+    <text x="110" y="300" class="annotation-text">COPY . . (50MB)</text>
+    
+    <!-- Build Process -->
+    <rect x="100" y="320" width="240" height="40" class="build-layer" rx="4"/>
+    <text x="220" y="335" class="layer-text" text-anchor="middle" font-weight="500">ビルド実行</text>
+    <text x="110" y="350" class="annotation-text">RUN npm run build (100MB temp)</text>
+    
+    <!-- Build Artifacts -->
+    <rect x="100" y="370" width="240" height="40" fill="var(--svg-primary)" fill-opacity="0.2" stroke="var(--svg-primary)" stroke-width="2" rx="4"/>
+    <text x="220" y="385" class="layer-text" text-anchor="middle" font-weight="500">ビルド成果物</text>
+    <text x="110" y="400" class="annotation-text">./dist/ (10MB) ← 必要な部分のみ</text>
+    
+    <!-- Stage Size -->
+    <rect x="100" y="420" width="240" height="50" fill="var(--svg-warning)" fill-opacity="0.1" stroke="var(--svg-warning)" stroke-width="1" rx="4"/>
+    <text x="220" y="440" class="layer-text" text-anchor="middle" font-weight="500">ステージ1合計サイズ</text>
+    <text x="220" y="455" class="annotation-text" text-anchor="middle">約 660MB</text>
+    <text x="220" y="465" class="annotation-text" text-anchor="middle">(本番では不要)</text>
+  </g>
+
+  <!-- Runtime Stage -->
+  <g id="runtime-stage">
+    <rect x="440" y="80" width="280" height="400" class="runtime-stage" rx="4"/>
+    <text x="580" y="100" class="stage-title" text-anchor="middle">ステージ2: ランタイムステージ</text>
+    
+    <!-- Runtime Base -->
+    <rect x="460" y="120" width="240" height="40" class="base-layer" rx="4"/>
+    <text x="580" y="135" class="layer-text" text-anchor="middle" font-weight="500">軽量ベース</text>
+    <text x="470" y="150" class="annotation-text">FROM nginx:alpine (5MB)</text>
+    
+    <!-- Runtime Config -->
+    <rect x="460" y="170" width="240" height="40" class="runtime-layer" rx="4"/>
+    <text x="580" y="185" class="layer-text" text-anchor="middle" font-weight="500">設定ファイル</text>
+    <text x="470" y="200" class="annotation-text">COPY nginx.conf (1MB)</text>
+    
+    <!-- Copied Artifacts -->
+    <rect x="460" y="220" width="240" height="40" fill="var(--svg-primary)" fill-opacity="0.2" stroke="var(--svg-primary)" stroke-width="2" rx="4"/>
+    <text x="580" y="235" class="layer-text" text-anchor="middle" font-weight="500">コピーされた成果物</text>
+    <text x="470" y="250" class="annotation-text">COPY --from=builder ./dist (10MB)</text>
+    
+    <!-- Runtime Dependencies -->
+    <rect x="460" y="270" width="240" height="40" class="runtime-layer" rx="4"/>
+    <text x="580" y="285" class="layer-text" text-anchor="middle" font-weight="500">ランタイム依存</text>
+    <text x="470" y="300" class="annotation-text">必要最小限のライブラリ (5MB)</text>
+    
+    <!-- Final Size -->
+    <rect x="460" y="350" width="240" height="50" fill="var(--svg-success)" fill-opacity="0.1" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="580" y="370" class="layer-text" text-anchor="middle" font-weight="500">最終イメージサイズ</text>
+    <text x="580" y="385" class="annotation-text" text-anchor="middle">約 21MB</text>
+    <text x="580" y="395" class="annotation-text" text-anchor="middle">97% サイズ削減!</text>
+    
+    <!-- Performance Benefits -->
+    <rect x="460" y="410" width="240" height="60" fill="var(--svg-success)" fill-opacity="0.1" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="580" y="430" class="layer-text" text-anchor="middle" font-weight="500">パフォーマンス利点</text>
+    <text x="470" y="445" class="annotation-text">• 高速デプロイ</text>
+    <text x="470" y="455" class="annotation-text">• セキュリティ向上</text>
+    <text x="470" y="465" class="annotation-text">• 攻撃面の縮小</text>
+  </g>
+
+  <!-- Copy Flow Arrow -->
+  <path d="M 360 390 L 440 235" class="copy-flow"/>
+  <text x="400" y="310" class="annotation-text" text-anchor="middle" fill="var(--svg-primary)" transform="rotate(-25 400 310)">COPY --from=builder</text>
+
+  <!-- Layer Flow Indicators -->
+  <path d="M 220 160 L 220 170" class="layer-flow"/>
+  <path d="M 220 210 L 220 220" class="layer-flow"/>
+  <path d="M 220 260 L 220 270" class="layer-flow"/>
+  <path d="M 220 310 L 220 320" class="layer-flow"/>
+  <path d="M 220 360 L 220 370" class="layer-flow"/>
+  
+  <path d="M 580 160 L 580 170" class="layer-flow"/>
+  <path d="M 580 210 L 580 220" class="layer-flow"/>
+  <path d="M 580 260 L 580 270" class="layer-flow"/>
+
+  <!-- Optimization Summary -->
+  <g id="optimization-summary">
+    <rect x="100" y="500" width="600" height="80" fill="var(--svg-primary)" fill-opacity="0.05" stroke="var(--svg-text)" stroke-width="2" rx="4"/>
+    <text x="400" y="520" class="layer-text" text-anchor="middle" font-weight="500">マルチステージビルド最適化効果</text>
+    
+    <text x="120" y="535" class="annotation-text" font-weight="500">従来の単一ステージ:</text>
+    <text x="250" y="535" class="annotation-text">660MB (開発ツール含む)</text>
+    
+    <text x="120" y="550" class="annotation-text" font-weight="500">マルチステージ:</text>
+    <text x="200" y="550" class="annotation-text">21MB (本番用のみ)</text>
+    
+    <text x="120" y="565" class="annotation-text" font-weight="500">利点:</text>
+    <text x="160" y="565" class="annotation-text">高速転送、セキュリティ向上、ストレージ効率化、デプロイメント時間短縮</text>
+  </g>
+</svg>

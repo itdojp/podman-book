@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <title>Docker vs Podman アーキテクチャ詳細比較</title>
+  <desc>Dockerデーモンベースアーキテクチャと Podman デーモンレスアーキテクチャの詳細な技術比較図</desc>
+  <defs>
+    <style>
+      :root {
+        --svg-bg: #ffffff;
+        --svg-text: #1a1a1a;
+        --svg-primary: #0066cc;
+        --svg-success: #16a34a;
+        --svg-warning: #ca8a04;
+        --svg-error: #dc2626;
+        --svg-neutral: #6b7280;
+      }
+      .title-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: var(--svg-text); }
+      .arch-title { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: var(--svg-bg); }
+      .component-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: var(--svg-text); }
+      .annotation-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 400; fill: var(--svg-neutral); }
+      .docker-box { fill: var(--svg-primary); stroke: var(--svg-primary); stroke-width: 2; }
+      .podman-box { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 2; }
+      .daemon-box { fill: var(--svg-error); stroke: var(--svg-error); stroke-width: 2; }
+      .user-box { fill: var(--svg-warning); stroke: var(--svg-warning); stroke-width: 2; }
+      .process-flow { stroke: var(--svg-primary); stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .direct-flow { stroke: var(--svg-success); stroke-width: 2; fill: none; marker-end: url(#arrowhead-green); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-primary)"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-success)"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="40" class="title-text" text-anchor="middle">Docker vs Podman アーキテクチャ詳細比較</text>
+
+  <!-- Docker Architecture -->
+  <g id="docker-architecture">
+    <rect x="80" y="80" width="300" height="400" class="docker-box" rx="4"/>
+    <text x="230" y="100" class="arch-title" text-anchor="middle">Docker アーキテクチャ (デーモンベース)</text>
+    
+    <!-- User Space -->
+    <rect x="100" y="120" width="260" height="60" class="user-box" rx="4"/>
+    <text x="230" y="140" class="arch-title" text-anchor="middle">ユーザー空間</text>
+    <text x="110" y="155" class="annotation-text">• docker CLI</text>
+    <text x="110" y="170" class="annotation-text">• docker-compose</text>
+    
+    <!-- Docker Daemon -->
+    <rect x="100" y="200" width="260" height="80" class="daemon-box" rx="4"/>
+    <text x="230" y="220" class="arch-title" text-anchor="middle">Docker Daemon (dockerd)</text>
+    <text x="110" y="235" class="annotation-text">• 常駐プロセス</text>
+    <text x="110" y="250" class="annotation-text">• root権限で実行</text>
+    <text x="110" y="265" class="annotation-text">• API Server</text>
+    
+    <!-- Container Runtime -->
+    <rect x="100" y="300" width="260" height="60" fill="var(--svg-bg)" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="230" y="320" class="component-text" text-anchor="middle" font-weight="500">containerd</text>
+    <text x="110" y="335" class="annotation-text">• 高レベルランタイム</text>
+    <text x="110" y="350" class="annotation-text">• イメージ管理</text>
+    
+    <!-- Low-level Runtime -->
+    <rect x="100" y="380" width="260" height="60" fill="var(--svg-bg)" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="230" y="400" class="component-text" text-anchor="middle" font-weight="500">runc (OCI Runtime)</text>
+    <text x="110" y="415" class="annotation-text">• コンテナ実行</text>
+    <text x="110" y="430" class="annotation-text">• Linux namespaces/cgroups</text>
+  </g>
+
+  <!-- Podman Architecture -->
+  <g id="podman-architecture">
+    <rect x="420" y="80" width="300" height="400" class="podman-box" rx="4"/>
+    <text x="570" y="100" class="arch-title" text-anchor="middle">Podman アーキテクチャ (デーモンレス)</text>
+    
+    <!-- User Space -->
+    <rect x="440" y="120" width="260" height="60" class="user-box" rx="4"/>
+    <text x="570" y="140" class="arch-title" text-anchor="middle">ユーザー空間</text>
+    <text x="450" y="155" class="annotation-text">• podman CLI</text>
+    <text x="450" y="170" class="annotation-text">• podman-compose</text>
+    
+    <!-- Podman Process -->
+    <rect x="440" y="200" width="260" height="60" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="2" rx="4"/>
+    <text x="570" y="220" class="component-text" text-anchor="middle" font-weight="500">Podman プロセス</text>
+    <text x="450" y="235" class="annotation-text">• フォーク/エグゼック</text>
+    <text x="450" y="250" class="annotation-text">• デーモン不要</text>
+    
+    <!-- Conmon -->
+    <rect x="440" y="280" width="260" height="60" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="570" y="300" class="component-text" text-anchor="middle" font-weight="500">conmon</text>
+    <text x="450" y="315" class="annotation-text">• コンテナ監視</text>
+    <text x="450" y="330" class="annotation-text">• ログ管理</text>
+    
+    <!-- Low-level Runtime -->
+    <rect x="440" y="360" width="260" height="80" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="570" y="380" class="component-text" text-anchor="middle" font-weight="500">runc/crun (OCI Runtime)</text>
+    <text x="450" y="395" class="annotation-text">• 直接実行</text>
+    <text x="450" y="410" class="annotation-text">• Rootless対応</text>
+    <text x="450" y="425" class="annotation-text">• 高性能crun使用可能</text>
+  </g>
+
+  <!-- Process Flow Arrows -->
+  <path d="M 230 180 L 230 200" class="process-flow"/>
+  <path d="M 230 280 L 230 300" class="process-flow"/>
+  <path d="M 230 360 L 230 380" class="process-flow"/>
+  
+  <path d="M 570 180 L 570 200" class="direct-flow"/>
+  <path d="M 570 260 L 570 280" class="direct-flow"/>
+  <path d="M 570 340 L 570 360" class="direct-flow"/>
+
+  <!-- Comparison Benefits -->
+  <g id="comparison-benefits">
+    <rect x="100" y="500" width="600" height="80" fill="var(--svg-neutral)" fill-opacity="0.05" stroke="var(--svg-text)" stroke-width="2" rx="4"/>
+    <text x="400" y="520" class="component-text" text-anchor="middle" font-weight="500">アーキテクチャ比較の利点</text>
+    
+    <!-- Docker Benefits -->
+    <text x="120" y="535" class="annotation-text" font-weight="500">Docker:</text>
+    <text x="120" y="550" class="annotation-text">• 成熟したエコシステム</text>
+    <text x="120" y="565" class="annotation-text">• 強力なAPI Server</text>
+    
+    <!-- Podman Benefits -->
+    <text x="400" y="535" class="annotation-text" font-weight="500">Podman:</text>
+    <text x="400" y="550" class="annotation-text">• セキュアなrootless実行</text>
+    <text x="400" y="565" class="annotation-text">• 軽量・高速起動</text>
+    <text x="400" y="575" class="annotation-text">• システムd統合</text>
+  </g>
+</svg>

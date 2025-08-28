@@ -7,7 +7,7 @@ lang: "ja"
 # Jekyll設定
 markdown: kramdown
 highlighter: rouge
-theme: minima
+permalink: pretty
 
 # プラグイン
 plugins:
@@ -15,6 +15,8 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-remote-theme
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
 
 # 除外ファイル
 exclude:
@@ -39,3 +41,10 @@ url: "https://itdojp.github.io"
 baseurl: "/podman-book"
 repository: "itdojp/podman-book"
 
+# Use custom book layout as default
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "book"

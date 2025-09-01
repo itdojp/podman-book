@@ -1,34 +1,61 @@
 <!-- Page Navigation (Previous/Next) -->
-{% assign current_index = nil %}
-{% assign all_pages = site.pages | where: "layout", "book" | where_exp: "page", "page.order" | sort: 'order' %}
+<!-- Fallbacks to list-based navigation if per-page nav_data is unavailable -->
+{% assign current_path = page.url | remove: '.html' | remove_first: '/' %}
+{% assign previous_page = nil %}
+{% assign next_page = nil %}
 
-<!-- Find current page index -->
-{% for p in all_pages %}
-    {% if p.url == page.url %}
-        {% assign current_index = forloop.index0 %}
-        {% break %}
+{%- comment -%}
+Try BookGenerator-style per-page navigation first: site.data.navigation[<path>]
+{%- endcomment -%}
+{% assign nav_data = site.data.navigation[current_path] %}
+{% if nav_data %}
+  {% if nav_data.previous %}{% assign previous_page = nav_data.previous %}{% endif %}
+  {% if nav_data.next %}{% assign next_page = nav_data.next %}{% endif %}
+{% endif %}
+
+{%- comment -%}
+If previous/next not resolved, derive from list-based navigation
+{%- endcomment -%}
+{% if previous_page == nil and next_page == nil %}
+  {% assign items = "" | split: "" %}
+  {% if site.data.navigation.introduction %}
+    {% assign items = items | concat: site.data.navigation.introduction %}
+  {% endif %}
+  {% if site.data.navigation.chapters %}
+    {% assign items = items | concat: site.data.navigation.chapters %}
+  {% endif %}
+  {% if site.data.navigation.appendices %}
+    {% assign items = items | concat: site.data.navigation.appendices %}
+  {% endif %}
+  {% if site.data.navigation.afterword %}
+    {% assign items = items | concat: site.data.navigation.afterword %}
+  {% endif %}
+
+  {% assign current_index = -1 %}
+  {% for it in items %}
+    {% if page.url == it.path or page.url contains it.path %}
+      {% assign current_index = forloop.index0 %}
+      {% break %}
     {% endif %}
-{% endfor %}
+  {% endfor %}
 
-<!-- Calculate previous and next indices -->
-{% if current_index %}
+  {% if current_index != -1 %}
     {% assign prev_index = current_index | minus: 1 %}
     {% assign next_index = current_index | plus: 1 %}
-    
     {% if prev_index >= 0 %}
-        {% assign previous_page = all_pages[prev_index] %}
+      {% assign previous_page = items[prev_index] %}
     {% endif %}
-    
-    {% if next_index < all_pages.size %}
-        {% assign next_page = all_pages[next_index] %}
+    {% if next_index < items.size %}
+      {% assign next_page = items[next_index] %}
     {% endif %}
+  {% endif %}
 {% endif %}
 
 <div class="page-nav">
     <!-- Previous Page -->
     <div class="page-nav-item page-nav-prev">
         {% if previous_page %}
-        <a href="{{ previous_page.url | relative_url }}" class="page-nav-link">
+        <a href="{{ previous_page.path | relative_url }}" class="page-nav-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
@@ -43,7 +70,7 @@
     <!-- Next Page -->
     <div class="page-nav-item page-nav-next">
         {% if next_page %}
-        <a href="{{ next_page.url | relative_url }}" class="page-nav-link">
+        <a href="{{ next_page.path | relative_url }}" class="page-nav-link">
             <div class="page-nav-content">
                 <span class="page-nav-label">次のページ</span>
                 <span class="page-nav-title">{{ next_page.title }}</span>

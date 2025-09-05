@@ -1,60 +1,38 @@
-# Auto-generated navigation data
-introduction:
-  - title: "はじめに"
-    path: "/introduction/"
-
-part0_intro:
-  - title: "第0章：コンテナ技術基礎"
-    path: "/chapters/chapter00/"
-  - title: "第1章：Podman概要と環境構築"
-    path: "/chapters/chapter01-intro/"
-  - title: "第2章：基本操作と内部理解"
-    path: "/chapters/chapter02-intro/"
-
-part1_basic:
-  - title: "第3章：コンテナ技術の基礎"
-    path: "/chapters/chapter01/"
-  - title: "第4章：Podmanのインストールと初期設定"
-    path: "/chapters/chapter02/"
-  - title: "第5章 Podman環境構築の最適化"
-    path: "/chapters/chapter03/"
-  - title: "第6章 コンテナの基本操作"
-    path: "/chapters/chapter04/"
-  - title: "第7章 イメージの作成と管理"
-    path: "/chapters/chapter05/"
-
-part2_practical:
-  - title: "第8章 ネットワークとストレージ"
-    path: "/chapters/chapter06/"
-  - title: "第9章 Podとマルチコンテナ管理"
-    path: "/chapters/chapter07/"
-  - title: "第10章 セキュリティとRootlessコンテナ"
-    path: "/chapters/chapter08/"
-  - title: "第11章 systemd統合と本番運用"
-    path: "/chapters/chapter09/"
-  - title: "第12章 CI/CDパイプライン構築"
-    path: "/chapters/chapter10/"
-
-part3_advanced:
-  - title: "第13章 Kubernetes連携"
-    path: "/chapters/chapter11/"
-  - title: "第14章 パフォーマンスチューニング"
-    path: "/chapters/chapter12/"
-  - title: "第15章 マイクロサービスアーキテクチャ"
-    path: "/chapters/chapter13/"
-  - title: "第16章 エンタープライズ環境での活用"
-    path: "/chapters/chapter14/"
-  - title: "第17章 トラブルシューティング完全ガイド"
-    path: "/chapters/chapter15/"
-
+chapters:
+- title: 第1章：コンテナ技術の基礎
+  path: /chapters/chapter01/
+- title: 第2章：Podmanのインストールと初期設定
+  path: /chapters/chapter02/
+- title: 第3章：基本的なコンテナ操作
+  path: /chapters/chapter03/
+- title: 第4章：イメージの管理と作成
+  path: /chapters/chapter04/
+- title: 第5章：ストレージとボリューム管理
+  path: /chapters/chapter05/
+- title: 第6章：ネットワーキングとポート管理
+  path: /chapters/chapter06/
+- title: 第7章：Pod機能と複数コンテナ管理
+  path: /chapters/chapter07/
+- title: 第8章：Dockerfileの作成と最適化
+  path: /chapters/chapter08/
+- title: 第9章：レジストリとイメージ配布
+  path: /chapters/chapter09/
+- title: 第10章：ログ管理とトラブルシューティング
+  path: /chapters/chapter10/
+- title: 第11章：Kubernetesとの統合
+  path: /chapters/chapter11/
+- title: 第12章：CI/CDパイプラインの構築
+  path: /chapters/chapter12/
+- title: 第13章：セキュリティとコンプライアンス
+  path: /chapters/chapter13/
+- title: 第14章：パフォーマンスチューニング
+  path: /chapters/chapter14/
+- title: 第15章：エンタープライズ環境での運用
+  path: /chapters/chapter15/
 appendices:
-  - title: "付録A：コマンドリファレンス"
-    path: "/appendices/appendix-a/"
-  - title: "付録B：トラブルシューティングガイド"
-    path: "/appendices/appendix-b/"
-  - title: "付録C：参考リンク集"
-    path: "/appendices/appendix-c/"
-
-afterword:
-  - title: "あとがき"
-    path: "/afterword/"
+- title: 付録A：コマンドリファレンス
+  path: /appendices/appendix-a/
+- title: 付録B：トラブルシューティングガイド
+  path: /appendices/appendix-b/
+- title: 付録C：参考リンク集
+  path: /appendices/appendix-c/

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <title>Linux名前空間とcgroupsの可視化</title>
+  <desc>Linux名前空間（PID、ネットワーク、マウント、IPC、UTS）とcgroupsがコンテナとどのように相互作用するかを示す詳細図</desc>
+  <defs>
+    <style>
+      :root {
+        --svg-bg: #ffffff;
+        --svg-text: #1a1a1a;
+        --svg-primary: #0066cc;
+        --svg-success: #16a34a;
+        --svg-warning: #ca8a04;
+        --svg-error: #dc2626;
+        --svg-neutral: #6b7280;
+      }
+      .title-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: var(--svg-text); }
+      .section-title { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: var(--svg-bg); }
+      .namespace-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: var(--svg-text); }
+      .annotation-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 400; fill: var(--svg-neutral); }
+      .host-box { fill: var(--svg-neutral); stroke: var(--svg-neutral); stroke-width: 2; }
+      .namespace-box { fill: var(--svg-primary); stroke: var(--svg-primary); stroke-width: 2; }
+      .cgroup-box { fill: var(--svg-warning); stroke: var(--svg-warning); stroke-width: 2; }
+      .container-box { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 2; }
+      .isolation-line { stroke: var(--svg-error); stroke-width: 2; stroke-dasharray: 5,3; fill: none; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="40" class="title-text" text-anchor="middle">Linux名前空間とcgroupsの可視化</text>
+
+  <!-- Host System -->
+  <g id="host-system">
+    <rect x="60" y="70" width="680" height="480" class="host-box" rx="4"/>
+    <text x="400" y="90" class="section-title" text-anchor="middle">ホストシステム (Linux Kernel)</text>
+  </g>
+
+  <!-- Namespace Section -->
+  <g id="namespaces-section">
+    <rect x="80" y="110" width="320" height="420" fill="var(--svg-primary)" fill-opacity="0.1" stroke="var(--svg-primary)" stroke-width="2" rx="4"/>
+    <text x="240" y="130" class="namespace-text" text-anchor="middle" font-weight="500">Linux 名前空間 (Namespaces)</text>
+    
+    <!-- PID Namespace -->
+    <rect x="100" y="150" width="280" height="50" class="namespace-box" rx="4"/>
+    <text x="240" y="170" class="section-title" text-anchor="middle">PID Namespace</text>
+    <text x="110" y="185" class="annotation-text">• プロセスID分離</text>
+    <text x="110" y="195" class="annotation-text">• コンテナ内PID 1から開始</text>
+    
+    <!-- Network Namespace -->
+    <rect x="100" y="210" width="280" height="50" class="namespace-box" rx="4"/>
+    <text x="240" y="230" class="section-title" text-anchor="middle">Network Namespace</text>
+    <text x="110" y="245" class="annotation-text">• 独立ネットワークスタック</text>
+    <text x="110" y="255" class="annotation-text">• 仮想インターフェース</text>
+    
+    <!-- Mount Namespace -->
+    <rect x="100" y="270" width="280" height="50" class="namespace-box" rx="4"/>
+    <text x="240" y="290" class="section-title" text-anchor="middle">Mount Namespace</text>
+    <text x="110" y="305" class="annotation-text">• ファイルシステム分離</text>
+    <text x="110" y="315" class="annotation-text">• 独立マウントポイント</text>
+    
+    <!-- IPC Namespace -->
+    <rect x="100" y="330" width="280" height="50" class="namespace-box" rx="4"/>
+    <text x="240" y="350" class="section-title" text-anchor="middle">IPC Namespace</text>
+    <text x="110" y="365" class="annotation-text">• プロセス間通信分離</text>
+    <text x="110" y="375" class="annotation-text">• 共有メモリ・セマフォ</text>
+    
+    <!-- UTS Namespace -->
+    <rect x="100" y="390" width="280" height="50" class="namespace-box" rx="4"/>
+    <text x="240" y="410" class="section-title" text-anchor="middle">UTS Namespace</text>
+    <text x="110" y="425" class="annotation-text">• ホスト名・ドメイン名分離</text>
+    <text x="110" y="435" class="annotation-text">• システム識別情報</text>
+    
+    <!-- User Namespace -->
+    <rect x="100" y="450" width="280" height="50" class="namespace-box" rx="4"/>
+    <text x="240" y="470" class="section-title" text-anchor="middle">User Namespace</text>
+    <text x="110" y="485" class="annotation-text">• UID/GID マッピング</text>
+    <text x="110" y="495" class="annotation-text">• Rootless コンテナ</text>
+  </g>
+
+  <!-- Cgroups Section -->
+  <g id="cgroups-section">
+    <rect x="420" y="110" width="300" height="280" fill="var(--svg-warning)" fill-opacity="0.1" stroke="var(--svg-warning)" stroke-width="2" rx="4"/>
+    <text x="570" y="130" class="namespace-text" text-anchor="middle" font-weight="500">Control Groups (cgroups)</text>
+    
+    <!-- CPU Control -->
+    <rect x="440" y="150" width="260" height="40" class="cgroup-box" rx="4"/>
+    <text x="570" y="170" class="section-title" text-anchor="middle">CPU制御</text>
+    <text x="450" y="185" class="annotation-text">• CPU使用率制限・優先度設定</text>
+    
+    <!-- Memory Control -->
+    <rect x="440" y="200" width="260" height="40" class="cgroup-box" rx="4"/>
+    <text x="570" y="220" class="section-title" text-anchor="middle">メモリ制御</text>
+    <text x="450" y="235" class="annotation-text">• メモリ使用量制限・スワップ制御</text>
+    
+    <!-- Block I/O Control -->
+    <rect x="440" y="250" width="260" height="40" class="cgroup-box" rx="4"/>
+    <text x="570" y="270" class="section-title" text-anchor="middle">Block I/O制御</text>
+    <text x="450" y="285" class="annotation-text">• ディスクI/O帯域制限・優先度</text>
+    
+    <!-- Network Control -->
+    <rect x="440" y="300" width="260" height="40" class="cgroup-box" rx="4"/>
+    <text x="570" y="320" class="section-title" text-anchor="middle">ネットワーク制御</text>
+    <text x="450" y="335" class="annotation-text">• ネットワーク帯域制限・QoS</text>
+  </g>
+
+  <!-- Container Process -->
+  <g id="container-process">
+    <rect x="420" y="410" width="300" height="120" class="container-box" rx="4"/>
+    <text x="570" y="430" class="section-title" text-anchor="middle">コンテナプロセス</text>
+    
+    <!-- Process Details -->
+    <rect x="440" y="450" width="260" height="70" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="570" y="470" class="namespace-text" text-anchor="middle" font-weight="500">アプリケーション</text>
+    <text x="450" y="485" class="annotation-text">• 名前空間による分離</text>
+    <text x="450" y="500" class="annotation-text">• cgroupsによるリソース制御</text>
+    <text x="450" y="515" class="annotation-text">• セキュアな実行環境</text>
+  </g>
+
+  <!-- Isolation Lines -->
+  <line x1="400" y1="150" x2="420" y2="150" class="isolation-line"/>
+  <line x1="400" y1="210" x2="420" y2="210" class="isolation-line"/>
+  <line x1="400" y1="270" x2="420" y2="270" class="isolation-line"/>
+  <line x1="400" y1="330" x2="420" y2="330" class="isolation-line"/>
+
+  <text x="410" y="145" class="annotation-text" text-anchor="middle" fill="var(--svg-error)" transform="rotate(-90 410 145)">分離</text>
+
+  <!-- Integration Benefits -->
+  <g id="integration-benefits">
+    <rect x="100" y="560" width="600" height="30" fill="var(--svg-success)" fill-opacity="0.1" stroke="var(--svg-success)" stroke-width="2" rx="4"/>
+    <text x="400" y="580" class="namespace-text" text-anchor="middle" font-weight="500">統合効果: プロセス分離 + リソース制御 = セキュアで効率的なコンテナ実行環境</text>
+  </g>
+</svg>

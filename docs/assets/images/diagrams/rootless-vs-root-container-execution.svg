@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <title>Rootless vs Root コンテナ実行モデル比較</title>
+  <desc>rootlessとrootコンテナ実行モデルの詳細比較とUID/GIDマッピングの視覚的表現</desc>
+  <defs>
+    <style>
+      :root {
+        --svg-bg: #ffffff;
+        --svg-text: #1a1a1a;
+        --svg-primary: #0066cc;
+        --svg-success: #16a34a;
+        --svg-warning: #ca8a04;
+        --svg-error: #dc2626;
+        --svg-neutral: #6b7280;
+      }
+      .title-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: var(--svg-text); }
+      .mode-title { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 500; fill: var(--svg-bg); }
+      .layer-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: var(--svg-text); }
+      .annotation-text { font-family: Inter, 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 400; fill: var(--svg-neutral); }
+      .root-box { fill: var(--svg-error); stroke: var(--svg-error); stroke-width: 2; }
+      .rootless-box { fill: var(--svg-success); stroke: var(--svg-success); stroke-width: 2; }
+      .mapping-box { fill: var(--svg-warning); stroke: var(--svg-warning); stroke-width: 2; }
+      .security-box { fill: var(--svg-primary); stroke: var(--svg-primary); stroke-width: 2; }
+      .mapping-arrow { stroke: var(--svg-warning); stroke-width: 2; fill: none; marker-end: url(#arrow-warning); }
+    </style>
+    <marker id="arrow-warning" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="var(--svg-warning)"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="40" class="title-text" text-anchor="middle">Rootless vs Root コンテナ実行モデル比較</text>
+
+  <!-- Root Container Mode -->
+  <g id="root-mode">
+    <rect x="80" y="80" width="300" height="220" class="root-box" rx="4"/>
+    <text x="230" y="100" class="mode-title" text-anchor="middle">Root コンテナモード</text>
+    
+    <!-- Host Root -->
+    <rect x="100" y="120" width="260" height="40" fill="var(--svg-bg)" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="230" y="135" class="layer-text" text-anchor="middle" font-weight="500">ホスト root (UID: 0)</text>
+    <text x="110" y="150" class="annotation-text">• フル権限実行</text>
+    
+    <!-- Container Root -->
+    <rect x="100" y="170" width="260" height="60" fill="var(--svg-bg)" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="230" y="190" class="layer-text" text-anchor="middle" font-weight="500">コンテナ内 root (UID: 0)</text>
+    <text x="110" y="205" class="annotation-text">• ホストrootと同じUID</text>
+    <text x="110" y="220" class="annotation-text">• 直接マッピング</text>
+    
+    <!-- Security Risks -->
+    <rect x="100" y="240" width="260" height="50" fill="var(--svg-error)" fill-opacity="0.1" stroke="var(--svg-error)" stroke-width="1" rx="4"/>
+    <text x="230" y="260" class="layer-text" text-anchor="middle" font-weight="500">セキュリティリスク</text>
+    <text x="110" y="275" class="annotation-text">• コンテナ脱獄でホスト侵害</text>
+    <text x="110" y="285" class="annotation-text">• 高い権限による攻撃面拡大</text>
+  </g>
+
+  <!-- Rootless Container Mode -->
+  <g id="rootless-mode">
+    <rect x="420" y="80" width="300" height="220" class="rootless-box" rx="4"/>
+    <text x="570" y="100" class="mode-title" text-anchor="middle">Rootless コンテナモード</text>
+    
+    <!-- User Process -->
+    <rect x="440" y="120" width="260" height="40" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="570" y="135" class="layer-text" text-anchor="middle" font-weight="500">ユーザープロセス (UID: 1000)</text>
+    <text x="450" y="150" class="annotation-text">• 非特権ユーザー実行</text>
+    
+    <!-- Container Root Mapped -->
+    <rect x="440" y="170" width="260" height="60" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="570" y="190" class="layer-text" text-anchor="middle" font-weight="500">コンテナ内 root → UID: 1000</text>
+    <text x="450" y="205" class="annotation-text">• User Namespace マッピング</text>
+    <text x="450" y="220" class="annotation-text">• 実際の権限なし</text>
+    
+    <!-- Security Benefits -->
+    <rect x="440" y="240" width="260" height="50" fill="var(--svg-success)" fill-opacity="0.1" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
+    <text x="570" y="260" class="layer-text" text-anchor="middle" font-weight="500">セキュリティ利点</text>
+    <text x="450" y="275" class="annotation-text">• ホスト保護</text>
+    <text x="450" y="285" class="annotation-text">• 最小権限原則</text>
+  </g>
+
+  <!-- UID/GID Mapping Detail -->
+  <g id="uid-mapping">
+    <rect x="80" y="330" width="640" height="160" class="mapping-box" rx="4"/>
+    <text x="400" y="350" class="mode-title" text-anchor="middle">UID/GID マッピング詳細</text>
+    
+    <!-- Mapping Table -->
+    <rect x="100" y="370" width="600" height="110" fill="var(--svg-bg)" stroke="var(--svg-warning)" stroke-width="1" rx="4"/>
+    
+    <!-- Header -->
+    <text x="150" y="390" class="layer-text" font-weight="500">コンテナ内</text>
+    <text x="300" y="390" class="layer-text" font-weight="500">ホスト</text>
+    <text x="450" y="390" class="layer-text" font-weight="500">説明</text>
+    <text x="600" y="390" class="layer-text" font-weight="500">権限</text>
+    
+    <!-- Root Mapping -->
+    <text x="150" y="410" class="annotation-text">root (UID: 0)</text>
+    <text x="300" y="410" class="annotation-text">user (UID: 1000)</text>
+    <text x="450" y="410" class="annotation-text">管理者権限マッピング</text>
+    <text x="600" y="410" class="annotation-text">制限あり</text>
+    
+    <!-- User Mapping -->
+    <text x="150" y="430" class="annotation-text">app (UID: 1000)</text>
+    <text x="300" y="430" class="annotation-text">subuid (UID: 100000)</text>
+    <text x="450" y="430" class="annotation-text">アプリユーザー</text>
+    <text x="600" y="430" class="annotation-text">最小</text>
+    
+    <!-- Range Mapping -->
+    <text x="150" y="450" class="annotation-text">UID: 0-65535</text>
+    <text x="300" y="450" class="annotation-text">UID: 1000-66535</text>
+    <text x="450" y="450" class="annotation-text">範囲マッピング</text>
+    <text x="600" y="450" class="annotation-text">分離</text>
+    
+    <!-- Configuration Files -->
+    <text x="120" y="470" class="annotation-text">/etc/subuid, /etc/subgid でマッピング設定</text>
+  </g>
+
+  <!-- Implementation Comparison -->
+  <g id="implementation-comparison">
+    <rect x="100" y="510" width="600" height="60" fill="var(--svg-primary)" fill-opacity="0.1" stroke="var(--svg-primary)" stroke-width="2" rx="4"/>
+    <text x="400" y="530" class="layer-text" text-anchor="middle" font-weight="500">実装とパフォーマンス比較</text>
+    
+    <text x="120" y="545" class="annotation-text" font-weight="500">Root:</text>
+    <text x="160" y="545" class="annotation-text">簡単設定、高いリスク</text>
+    
+    <text x="350" y="545" class="annotation-text" font-weight="500">Rootless:</text>
+    <text x="410" y="545" class="annotation-text">初期設定必要、セキュア、若干のオーバーヘッド</text>
+    
+    <text x="120" y="560" class="annotation-text">共有: パフォーマンス差は実用上無視可能、セキュリティ重視でRootless推奨</text>
+  </g>
+
+  <!-- Mapping Arrows -->
+  <path d="M 230 300 L 230 330" class="mapping-arrow"/>
+  <path d="M 570 300 L 570 330" class="mapping-arrow"/>
+  
+  <text x="230" y="320" class="annotation-text" text-anchor="middle" fill="var(--svg-warning)">直接</text>
+  <text x="570" y="320" class="annotation-text" text-anchor="middle" fill="var(--svg-warning)">変換</text>
+</svg>

@@ -174,7 +174,7 @@ wsl --install
 # 上記のLinux用手順に従ってインストール
 ```
 
-## 2.2 初期設定
+## 2.3 初期設定
 
 ### 設定ファイルの場所
 
@@ -223,7 +223,7 @@ size = "10G"
 override_kernel_check = "true"
 ```
 
-## 2.3 Rootlessモードの設定
+## 2.4 Rootlessモードの設定
 
 ### 前提条件の確認
 
@@ -252,7 +252,7 @@ echo 'export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock' >> ~/.bashr
 podman info | grep -i cgroup
 ```
 
-## 2.4 Docker互換性の設定
+## 2.5 Docker互換性の設定
 
 ### Docker CLIの置き換え
 
@@ -279,7 +279,7 @@ sudo systemctl enable --now podman.socket
 curl --unix-socket /run/user/$(id -u)/podman/podman.sock http://localhost/v1.41/info
 ```
 
-## 2.5 基本動作の確認
+## 2.6 基本動作の確認
 
 ### Hello Worldコンテナの実行
 
@@ -310,7 +310,7 @@ podman info
 podman system df
 ```
 
-## 2.6 トラブルシューティング
+## 2.7 トラブルシューティング
 
 ### よくある問題と解決方法
 

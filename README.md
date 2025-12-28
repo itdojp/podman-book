@@ -97,7 +97,7 @@ my-book/
 
 ## 🔧 カスタマイズ
 
-必要に応じて高度な機能を追加：
+必要に応じて、次の高度な機能を追加できます。
 - `package.json` - フル機能版
 - `scripts/build.js` - 高度なビルド
 - プラグインシステム
@@ -130,7 +130,7 @@ my-book/
 npm run configure:workflows
 ```
 
-このコマンドで以下のワークフローを自動無効化します：
+このコマンドで以下のワークフローを自動無効化します。
 - `content-validation.yml` (リンクチェックでハングアップ)
 - `quality-checks.yml` (長時間実行)
 - `build-with-cache.yml` (重複ビルド)
@@ -139,7 +139,7 @@ npm run configure:workflows
 
 ### 推奨ワークフロー構成
 
-本番環境では`build.yml`のみを有効にすることを推奨します：
+本番環境では`build.yml`のみを有効にすることを推奨します。
 - GitHub Pagesへの自動デプロイ
 - 最小限のビルド時間
 - エラーが少ない安定動作

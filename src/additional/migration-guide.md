@@ -73,7 +73,7 @@ echo -n "[ ] カスタムDockerネットワーク: "
 docker network ls --format '{{.Name}}' | grep -v -E 'bridge|host|none' | wc -l | xargs -I {} test {} -gt 0 && echo "使用中 (要確認)" || echo "標準のみ ✓"
 ```
 
-## 🔄 Phase 1: 互換性確認と準備（1-2週間）
+## 🔄 Phase 1: 互換性確認と準備（1〜2週間）
 
 ### Docker Compose互換性の確保
 
@@ -198,7 +198,7 @@ docker volume ls -q | while read volume; do
 done
 ```
 
-## 🚀 Phase 2: パイロット導入（2-4週間）
+## 🚀 Phase 2: パイロット導入（2〜4週間）
 
 ### 段階的移行戦略
 
@@ -264,7 +264,7 @@ docker run --log-driver json-file nginx
 podman run --log-driver json-file nginx  # Dockerと同じ動作
 ```
 
-## 📊 Phase 3: 本番環境移行（1-3ヶ月）
+## 📊 Phase 3: 本番環境移行（1〜3ヶ月）
 
 ### カットオーバー計画
 

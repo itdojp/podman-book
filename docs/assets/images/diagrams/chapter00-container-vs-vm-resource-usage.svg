@@ -231,7 +231,7 @@
   <text x="480" y="175" class="label">• Single kernel shared</text>
   <text x="480" y="190" class="label">• Boot time: 1〜3s</text>
   <text x="480" y="205" class="label">• Memory: 50〜500MB</text>
-  <text x="480" y="220" class="label">• Storage: 100MB-2GB</text>
+  <text x="480" y="220" class="label">• Storage: 100MB〜2GB</text>
   <text x="480" y="235" class="label">• CPU: Native performance</text>
   <text x="480" y="250" class="label">• Network: Shared stack</text>
   

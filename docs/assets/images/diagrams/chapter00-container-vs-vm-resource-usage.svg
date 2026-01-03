@@ -185,9 +185,9 @@
   <text x="80" y="145" class="label">• Hypervisor layer</text>
   <text x="80" y="160" class="label">• Hardware emulation</text>
   <text x="80" y="175" class="label">• Separate kernel per VM</text>
-  <text x="80" y="190" class="label">• Boot time: 30-60s</text>
-  <text x="80" y="205" class="label">• Memory: 2-4GB+ per VM</text>
-  <text x="80" y="220" class="label">• Storage: 10-20GB+ per VM</text>
+  <text x="80" y="190" class="label">• Boot time: 30〜60s</text>
+  <text x="80" y="205" class="label">• Memory: 2〜4GB+ per VM</text>
+  <text x="80" y="220" class="label">• Storage: 10〜20GB+ per VM</text>
   <text x="80" y="235" class="label">• CPU: Full virtualization</text>
   <text x="80" y="250" class="label">• Network: Virtual adapters</text>
   
@@ -229,9 +229,9 @@
   <text x="480" y="145" class="label">• No hypervisor needed</text>
   <text x="480" y="160" class="label">• Process isolation only</text>
   <text x="480" y="175" class="label">• Single kernel shared</text>
-  <text x="480" y="190" class="label">• Boot time: 1-3s</text>
-  <text x="480" y="205" class="label">• Memory: 50-500MB</text>
-  <text x="480" y="220" class="label">• Storage: 100MB-2GB</text>
+  <text x="480" y="190" class="label">• Boot time: 1〜3s</text>
+  <text x="480" y="205" class="label">• Memory: 50〜500MB</text>
+  <text x="480" y="220" class="label">• Storage: 100MB〜2GB</text>
   <text x="480" y="235" class="label">• CPU: Native performance</text>
   <text x="480" y="250" class="label">• Network: Shared stack</text>
   
@@ -239,6 +239,6 @@
   <text x="400" y="510" class="text">Resource Comparison</text>
   <text x="200" y="530" class="label">VMs: High overhead</text>
   <text x="600" y="530" class="label">Containers: Low overhead</text>
-  <text x="400" y="550" class="small-text">Containers use ~10-20% of VM resources for same workload</text>
-  <text x="400" y="565" class="small-text">Can run 10-100x more containers than VMs on same hardware</text>
+  <text x="400" y="550" class="small-text">Containers use ~10〜20% of VM resources for same workload</text>
+  <text x="400" y="565" class="small-text">Can run 10〜100x more containers than VMs on same hardware</text>
 </svg>

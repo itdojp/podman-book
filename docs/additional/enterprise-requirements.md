@@ -396,7 +396,22 @@ restore_podman_environment() {
     done
     
     # 4. コンテナの再作成
-    # TODO: containers.jsonから復元ロジックを実装
+    #
+    # NOTE:
+    # `containers.json`（`podman ps -a --format json` の出力）だけでは、`podman create/run` の完全再現には不十分である。
+    # 運用では systemd unit / compose / kube YAML 等を「コンテナ定義のソース・オブ・トゥルース」として管理し、
+    # そこから再作成できる形にしておくことを推奨する。
+    if compgen -G "/etc/systemd/system/podman-*.service" > /dev/null; then
+        echo "systemd unit を検出しました。サービスを有効化して起動します。"
+        systemctl daemon-reload
+        for unit in /etc/systemd/system/podman-*.service; do
+            [ -e "$unit" ] || continue
+            systemctl enable --now "$(basename "$unit")" || true
+        done
+    else
+        echo "注意: systemd unit が見つからないため、コンテナの再作成は手動になります。"
+        echo "compose/kube YAML などの定義ファイルから再作成してください。"
+    fi
     
     echo "リストア完了"
 }

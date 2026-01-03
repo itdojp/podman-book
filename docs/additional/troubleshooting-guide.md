@@ -548,7 +548,72 @@ done | tee memory-trend.log
 
 # 増加傾向の分析
 echo "メモリ増加率の計算..."
-# TODO: 実装
+python3 - memory-trend.log <<'PY'
+import re
+import sys
+from typing import Optional
+
+
+path = sys.argv[1]
+unit_to_bytes = {
+    "B": 1,
+    "KB": 1000,
+    "MB": 1000**2,
+    "GB": 1000**3,
+    "TB": 1000**4,
+    "KiB": 1024,
+    "MiB": 1024**2,
+    "GiB": 1024**3,
+    "TiB": 1024**4,
+}
+
+
+def to_bytes(value: str) -> Optional[float]:
+    value = value.strip()
+    match = re.match(r"^([0-9.]+)\s*([A-Za-z]+)$", value)
+    if not match:
+        return None
+    number = float(match.group(1))
+    unit = match.group(2)
+    multiplier = unit_to_bytes.get(unit)
+    if multiplier is None:
+        return None
+    return number * multiplier
+
+
+values = []
+with open(path, encoding="utf-8") as file:
+    for line in file:
+        line = line.strip()
+        parts = line.split(" - ", 1)
+        if len(parts) != 2:
+            continue
+        bytes_value = to_bytes(parts[1])
+        if bytes_value is None:
+            continue
+        values.append(bytes_value)
+
+
+if len(values) < 2:
+    print("メモリ使用量ログが不足しています。")
+    sys.exit(1)
+
+delta = values[-1] - values[0]
+rate = delta / (len(values) - 1)
+
+print(f"開始: {values[0]:.0f} B")
+print(f"終了: {values[-1]:.0f} B")
+print(f"差分: {delta:.0f} B")
+print(f"平均増加（1サンプルあたり）: {rate:.0f} B")
+
+threshold = 10 * 1024  # 1サンプルあたり10KiB以上の増加をリーク疑いとみなす
+if rate > threshold:
+    print(f"判定: 増加傾向あり（リーク疑い、平均 {rate/1024:.1f} KiB/サンプル）")
+elif delta > 0:
+    print(f"判定: 微増傾向（要観察、平均 {rate:.0f} B/サンプル）")
+else:
+    print("判定: 増加傾向なし（安定）")
+PY
 EOF
 
 # 5. 最適化提案

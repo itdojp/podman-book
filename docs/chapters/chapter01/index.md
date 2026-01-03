@@ -117,7 +117,7 @@ int flags = CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWNET |
 pid_t pid = clone(container_main, stack_top, flags | SIGCHLD, &config);
 ```
 
-各フラグの実際の影響：
+各フラグの実際の影響は次のとおりです。
 
 ```bash
 # ホストから見たプロセス
@@ -396,7 +396,7 @@ CPU speed:
 
 ## 対象バージョンと前提条件
 
-本書は以下のバージョンを対象としています：
+本書は以下のバージョンを対象としています。
 
 - **Podman**: 5.0.x（2024年3月リリース）
 - **動作確認OS**: 

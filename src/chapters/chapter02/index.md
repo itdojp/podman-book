@@ -225,6 +225,10 @@ override_kernel_check = "true"
 
 ### 前提条件の確認
 
+> **注意（OS設定の変更について）**
+> - `/etc/subuid`・`/etc/subgid` の設定変更は、ユーザー名前空間のマッピングに影響します。誤設定すると rootless 実行ができなくなったり、既存のコンテナ環境に影響が出る可能性があります。
+> - まずは検証環境で試し、必要に応じて設定ファイルのバックアップを取得したうえで変更してください。
+
 ```bash
 # ユーザー名前空間の確認
 sysctl kernel.unprivileged_userns_clone

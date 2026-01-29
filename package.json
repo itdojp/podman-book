@@ -1,9 +1,9 @@
 {
   "name": "podman-book",
   "version": "1.0.0",
-  "description": "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法",
-  "author": "株式会社アイティードゥ",
-  "license": "MIT",
+  "description": "\u30b3\u30f3\u30c6\u30ca\u6280\u8853\u306e\u7406\u8ad6\u3068\u5b9f\u8df5 - \u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba\u74b0\u5883\u3067\u306ePodman\u6d3b\u7528\u6cd5",
+  "author": "\u682a\u5f0f\u4f1a\u793e\u30a2\u30a4\u30c6\u30a3\u30fc\u30c9\u30a5",
+  "license": "CC-BY-NC-SA-4.0",
   "scripts": {
     "build": "node scripts/node-build.js",
     "serve": "cd dist && python3 -m http.server 4000 || python -m http.server 4000",

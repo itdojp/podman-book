@@ -1,10 +1,10 @@
 {
-  "title": "Podman完全ガイド",
-  "description": "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法",
-  "author": "株式会社アイティードゥ",
+  "title": "Podman\u5b8c\u5168\u30ac\u30a4\u30c9",
+  "description": "\u30b3\u30f3\u30c6\u30ca\u6280\u8853\u306e\u7406\u8ad6\u3068\u5b9f\u8df5 - \u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba\u74b0\u5883\u3067\u306ePodman\u6d3b\u7528\u6cd5",
+  "author": "\u682a\u5f0f\u4f1a\u793e\u30a2\u30a4\u30c6\u30a3\u30fc\u30c9\u30a5",
   "version": "1.0.0",
   "language": "ja",
-  "license": "MIT",
+  "license": "CC BY-NC-SA 4.0",
   "repository": {
     "url": "https://github.com/itdojp/podman-book.git",
     "branch": "main"
@@ -13,125 +13,125 @@
     "chapters": [
       {
         "id": "introduction",
-        "title": "はじめに",
-        "description": "Podman完全ガイドの概要と読み進め方",
+        "title": "\u306f\u3058\u3081\u306b",
+        "description": "Podman\u5b8c\u5168\u30ac\u30a4\u30c9\u306e\u6982\u8981\u3068\u8aad\u307f\u9032\u3081\u65b9",
         "order": 1
       },
       {
         "id": "chapter01",
-        "title": "第1章：コンテナ技術の基礎",
-        "description": "Linux名前空間とcgroupsによるプロセス分離の実装",
+        "title": "\u7b2c1\u7ae0\uff1a\u30b3\u30f3\u30c6\u30ca\u6280\u8853\u306e\u57fa\u790e",
+        "description": "Linux\u540d\u524d\u7a7a\u9593\u3068cgroups\u306b\u3088\u308b\u30d7\u30ed\u30bb\u30b9\u5206\u96e2\u306e\u5b9f\u88c5",
         "order": 2
       },
       {
         "id": "chapter02",
-        "title": "第2章：Podmanのインストールと初期設定",
-        "description": "各OS対応のインストール方法と基本設定",
+        "title": "\u7b2c2\u7ae0\uff1aPodman\u306e\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb\u3068\u521d\u671f\u8a2d\u5b9a",
+        "description": "\u5404OS\u5bfe\u5fdc\u306e\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb\u65b9\u6cd5\u3068\u57fa\u672c\u8a2d\u5b9a",
         "order": 3
       },
       {
         "id": "chapter03",
-        "title": "第3章：基本的なコンテナ操作",
-        "description": "コンテナの作成、実行、管理の基本コマンド",
+        "title": "\u7b2c3\u7ae0\uff1a\u57fa\u672c\u7684\u306a\u30b3\u30f3\u30c6\u30ca\u64cd\u4f5c",
+        "description": "\u30b3\u30f3\u30c6\u30ca\u306e\u4f5c\u6210\u3001\u5b9f\u884c\u3001\u7ba1\u7406\u306e\u57fa\u672c\u30b3\u30de\u30f3\u30c9",
         "order": 4
       },
       {
         "id": "chapter04",
-        "title": "第4章：イメージの管理と作成",
-        "description": "イメージのビルド、プッシュ、プルの実践",
+        "title": "\u7b2c4\u7ae0\uff1a\u30a4\u30e1\u30fc\u30b8\u306e\u7ba1\u7406\u3068\u4f5c\u6210",
+        "description": "\u30a4\u30e1\u30fc\u30b8\u306e\u30d3\u30eb\u30c9\u3001\u30d7\u30c3\u30b7\u30e5\u3001\u30d7\u30eb\u306e\u5b9f\u8df5",
         "order": 5
       },
       {
         "id": "chapter05",
-        "title": "第5章：ストレージとボリューム管理",
-        "description": "永続化ストレージとボリューム操作",
+        "title": "\u7b2c5\u7ae0\uff1a\u30b9\u30c8\u30ec\u30fc\u30b8\u3068\u30dc\u30ea\u30e5\u30fc\u30e0\u7ba1\u7406",
+        "description": "\u6c38\u7d9a\u5316\u30b9\u30c8\u30ec\u30fc\u30b8\u3068\u30dc\u30ea\u30e5\u30fc\u30e0\u64cd\u4f5c",
         "order": 6
       },
       {
         "id": "chapter06",
-        "title": "第6章：ネットワーキングとポート管理",
-        "description": "コンテナネットワークの設定と管理",
+        "title": "\u7b2c6\u7ae0\uff1a\u30cd\u30c3\u30c8\u30ef\u30fc\u30ad\u30f3\u30b0\u3068\u30dd\u30fc\u30c8\u7ba1\u7406",
+        "description": "\u30b3\u30f3\u30c6\u30ca\u30cd\u30c3\u30c8\u30ef\u30fc\u30af\u306e\u8a2d\u5b9a\u3068\u7ba1\u7406",
         "order": 7
       },
       {
         "id": "chapter07",
-        "title": "第7章：Pod機能と複数コンテナ管理",
-        "description": "Kubernetes互換のPod機能活用",
+        "title": "\u7b2c7\u7ae0\uff1aPod\u6a5f\u80fd\u3068\u8907\u6570\u30b3\u30f3\u30c6\u30ca\u7ba1\u7406",
+        "description": "Kubernetes\u4e92\u63db\u306ePod\u6a5f\u80fd\u6d3b\u7528",
         "order": 8
       },
       {
         "id": "chapter08",
-        "title": "第8章：Dockerfileの作成と最適化",
-        "description": "効率的なDockerfileの作成技法",
+        "title": "\u7b2c8\u7ae0\uff1aDockerfile\u306e\u4f5c\u6210\u3068\u6700\u9069\u5316",
+        "description": "\u52b9\u7387\u7684\u306aDockerfile\u306e\u4f5c\u6210\u6280\u6cd5",
         "order": 9
       },
       {
         "id": "chapter09",
-        "title": "第9章：レジストリとイメージ配布",
-        "description": "イメージレジストリの構築と管理",
+        "title": "\u7b2c9\u7ae0\uff1a\u30ec\u30b8\u30b9\u30c8\u30ea\u3068\u30a4\u30e1\u30fc\u30b8\u914d\u5e03",
+        "description": "\u30a4\u30e1\u30fc\u30b8\u30ec\u30b8\u30b9\u30c8\u30ea\u306e\u69cb\u7bc9\u3068\u7ba1\u7406",
         "order": 10
       },
       {
         "id": "chapter10",
-        "title": "第10章：ログ管理とトラブルシューティング",
-        "description": "ログ収集とデバッグ技法",
+        "title": "\u7b2c10\u7ae0\uff1a\u30ed\u30b0\u7ba1\u7406\u3068\u30c8\u30e9\u30d6\u30eb\u30b7\u30e5\u30fc\u30c6\u30a3\u30f3\u30b0",
+        "description": "\u30ed\u30b0\u53ce\u96c6\u3068\u30c7\u30d0\u30c3\u30b0\u6280\u6cd5",
         "order": 11
       },
       {
         "id": "chapter11",
-        "title": "第11章：Kubernetesとの統合",
-        "description": "K8s環境でのPodman活用",
+        "title": "\u7b2c11\u7ae0\uff1aKubernetes\u3068\u306e\u7d71\u5408",
+        "description": "K8s\u74b0\u5883\u3067\u306ePodman\u6d3b\u7528",
         "order": 12
       },
       {
         "id": "chapter12",
-        "title": "第12章：CI/CDパイプラインの構築",
-        "description": "自動化された開発ワークフロー",
+        "title": "\u7b2c12\u7ae0\uff1aCI/CD\u30d1\u30a4\u30d7\u30e9\u30a4\u30f3\u306e\u69cb\u7bc9",
+        "description": "\u81ea\u52d5\u5316\u3055\u308c\u305f\u958b\u767a\u30ef\u30fc\u30af\u30d5\u30ed\u30fc",
         "order": 13
       },
       {
         "id": "chapter13",
-        "title": "第13章：セキュリティとコンプライアンス",
-        "description": "エンタープライズレベルのセキュリティ設定",
+        "title": "\u7b2c13\u7ae0\uff1a\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3\u3068\u30b3\u30f3\u30d7\u30e9\u30a4\u30a2\u30f3\u30b9",
+        "description": "\u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba\u30ec\u30d9\u30eb\u306e\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3\u8a2d\u5b9a",
         "order": 14
       },
       {
         "id": "chapter14",
-        "title": "第14章：パフォーマンスチューニング",
-        "description": "本番環境での最適化技法",
+        "title": "\u7b2c14\u7ae0\uff1a\u30d1\u30d5\u30a9\u30fc\u30de\u30f3\u30b9\u30c1\u30e5\u30fc\u30cb\u30f3\u30b0",
+        "description": "\u672c\u756a\u74b0\u5883\u3067\u306e\u6700\u9069\u5316\u6280\u6cd5",
         "order": 15
       },
       {
         "id": "chapter15",
-        "title": "第15章：エンタープライズ環境での運用",
-        "description": "大規模環境での運用ベストプラクティス",
+        "title": "\u7b2c15\u7ae0\uff1a\u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba\u74b0\u5883\u3067\u306e\u904b\u7528",
+        "description": "\u5927\u898f\u6a21\u74b0\u5883\u3067\u306e\u904b\u7528\u30d9\u30b9\u30c8\u30d7\u30e9\u30af\u30c6\u30a3\u30b9",
         "order": 16
       }
     ],
     "appendices": [
       {
         "id": "appendix-a",
-        "title": "付録A：コマンドリファレンス",
-        "description": "Podmanコマンドの完全リファレンス",
+        "title": "\u4ed8\u9332A\uff1a\u30b3\u30de\u30f3\u30c9\u30ea\u30d5\u30a1\u30ec\u30f3\u30b9",
+        "description": "Podman\u30b3\u30de\u30f3\u30c9\u306e\u5b8c\u5168\u30ea\u30d5\u30a1\u30ec\u30f3\u30b9",
         "order": 17
       },
       {
         "id": "appendix-b",
-        "title": "付録B：トラブルシューティングガイド",
-        "description": "よくある問題と解決方法",
+        "title": "\u4ed8\u9332B\uff1a\u30c8\u30e9\u30d6\u30eb\u30b7\u30e5\u30fc\u30c6\u30a3\u30f3\u30b0\u30ac\u30a4\u30c9",
+        "description": "\u3088\u304f\u3042\u308b\u554f\u984c\u3068\u89e3\u6c7a\u65b9\u6cd5",
         "order": 18
       },
       {
         "id": "appendix-c",
-        "title": "付録C：リソース集",
-        "description": "参考資料とリンク集",
+        "title": "\u4ed8\u9332C\uff1a\u30ea\u30bd\u30fc\u30b9\u96c6",
+        "description": "\u53c2\u8003\u8cc7\u6599\u3068\u30ea\u30f3\u30af\u96c6",
         "order": 19
       }
     ],
     "afterword": {
       "id": "afterword",
-      "title": "あとがき",
-      "description": "書籍のまとめと今後の展望",
+      "title": "\u3042\u3068\u304c\u304d",
+      "description": "\u66f8\u7c4d\u306e\u307e\u3068\u3081\u3068\u4eca\u5f8c\u306e\u5c55\u671b",
       "order": 20
     }
   },

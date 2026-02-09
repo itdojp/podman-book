@@ -129,7 +129,7 @@ podman run --rm hello-world
 # コンテナが正常に実行され、メッセージが表示されることを確認
 ```
 
-### Ubuntu/Debian
+### Ubuntu
 
 ```bash
 # Ubuntu 22.04/24.04でのインストール（公式リポジトリ）

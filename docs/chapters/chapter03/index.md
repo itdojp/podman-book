@@ -74,15 +74,22 @@ $ ps -eZ | grep podman
 system_u:system_r:container_runtime_t:s0 12345 ? 00:00:01 podman
 ```
 
-### Ubuntu/Debian
+### Ubuntu
 
 ```bash
-# Ubuntu 22.04以降の場合（Kubicリポジトリから最新版）
-$ echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_$(lsb_release -rs)/ /" | \
-  sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+# Ubuntu 22.04/24.04 の場合（Kubicリポジトリから最新版）
+$ sudo apt update
+$ sudo apt install -y ca-certificates curl gpg
 
-$ curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_$(lsb_release -rs)/Release.key" | \
-  sudo apt-key add -
+$ . /etc/os-release
+$ sudo install -m 0755 -d /etc/apt/keyrings
+
+$ curl -fsSL "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | \
+  sudo gpg --dearmor --yes --batch -o /etc/apt/keyrings/libcontainers.gpg
+$ sudo chmod a+r /etc/apt/keyrings/libcontainers.gpg
+
+$ echo "deb [signed-by=/etc/apt/keyrings/libcontainers.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | \
+  sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list > /dev/null
 
 $ sudo apt update
 $ sudo apt install -y podman buildah skopeo

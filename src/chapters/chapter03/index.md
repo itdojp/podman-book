@@ -83,7 +83,8 @@ $ . /etc/os-release
 $ sudo install -m 0755 -d /etc/apt/keyrings
 
 $ curl -fsSL "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | \
-  sudo gpg --dearmor -o /etc/apt/keyrings/libcontainers.gpg
+  sudo gpg --dearmor --yes --batch -o /etc/apt/keyrings/libcontainers.gpg
+$ sudo chmod a+r /etc/apt/keyrings/libcontainers.gpg
 
 $ echo "deb [signed-by=/etc/apt/keyrings/libcontainers.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | \
   sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list > /dev/null

@@ -129,20 +129,10 @@ podman run --rm hello-world
 # コンテナが正常に実行され、メッセージが表示されることを確認
 ```
 
-### Ubuntu/Debian
+### Ubuntu
 
 ```bash
-# Ubuntu 20.10以降
-sudo apt update
-sudo apt install -y podman
-
-# Ubuntu 22.04/24.04でのインストール
-sudo apt update
-sudo apt install -y podman
-
-# Ubuntu 20.04の場合（公式リポジトリを使用）
-sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
-wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key -O- | sudo apt-key add -
+# Ubuntu 22.04/24.04でのインストール（公式リポジトリ）
 sudo apt update
 sudo apt install -y podman
 ```

@@ -173,7 +173,7 @@
   
   <!-- WSL Distributions -->
   <rect class="wsl-layer" x="120" y="320" width="160" height="180" />
-  <text x="200" y="340" class="text">Ubuntu 20.04</text>
+  <text x="200" y="340" class="text">Ubuntu 22.04</text>
   
   <rect class="linux-app" x="140" y="360" width="120" height="40" />
   <text x="200" y="380" class="label">podman</text>

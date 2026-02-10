@@ -255,7 +255,10 @@ source ~/.bashrc
 
 # Docker Compose（docker compose）の互換性（Composeファイル）
 pip3 install podman-compose
-podman-compose up -d
+
+# docker-compose.yml があるディレクトリで実行するか、-f で Compose ファイルを明示的に指定する
+cd /path/to/project
+podman-compose -f docker-compose.yml up -d
 ```
 
 ### Docker APIソケットの有効化

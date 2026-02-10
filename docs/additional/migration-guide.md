@@ -63,7 +63,7 @@ echo "チェック項目:"
 echo -n "[ ] Docker Swarmの使用: "
 docker node ls 2>&1 | grep -q "This node is not a swarm manager" && echo "未使用 ✓" || echo "使用中 ⚠️"
 
-echo -n "[ ] Docker Compose v2（docker compose）の使用: "
+echo -n "[ ] Docker Compose v2（docker compose）の利用可/インストール状況: "
 docker compose version >/dev/null 2>&1 && echo "利用可 ✓" || echo "未検出 ⚠️"
 
 echo -n "[ ] Docker Compose v1（docker-compose）の残存: "
@@ -213,8 +213,23 @@ alias docker=podman
 # Composeファイル（docker-compose.yml 等）は podman-compose を使用
 pip3 install podman-compose
 
+# 1-1. 既存スクリプトに残る Compose 呼び出しの吸収（検証用途）
+#   - docker-compose を呼ぶ場合（Compose v1 形式）
+alias docker-compose=podman-compose
+#
+#   - docker compose を呼ぶ場合（Compose v2 形式）のラッパー例（bash）
+#     ※ 本番運用前には、スクリプト側の呼び出しを `podman-compose` / `podman` に書き換えることを推奨
+# docker() {
+#   if [ "${1:-}" = "compose" ]; then
+#     shift
+#     podman-compose "$@"
+#   else
+#     command podman "$@"
+#   fi
+# }
+
 # 2. 既存スクリプトのテスト
-./deploy.sh  # 既存のデプロイスクリプト
+./deploy.sh  # 既存のデプロイスクリプト（上記方針で Compose 呼び出しを吸収）
 
 # 3. 動作確認
 podman ps

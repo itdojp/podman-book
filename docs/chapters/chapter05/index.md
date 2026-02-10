@@ -123,14 +123,14 @@ CMD ["server.js"]
 # - 攻撃面の増大
 
 # Stage 1: Dependencies - 依存関係の分離
-FROM node:18-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 # このステージの成果物：本番用node_modules
 
 # Stage 2: Build - ビルドプロセスの分離
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci  # 開発依存関係も含めてインストール
@@ -139,7 +139,7 @@ RUN npm run build
 # このステージの成果物：ビルド済みアプリケーション
 
 # Stage 3: Runtime - 最小限の実行環境
-FROM node:18-alpine AS runtime
+FROM node:22-alpine AS runtime
 RUN apk add --no-cache dumb-init  # PID 1問題の解決
 WORKDIR /app
 

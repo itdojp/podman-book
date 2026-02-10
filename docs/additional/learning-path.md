@@ -139,7 +139,7 @@ curl http://localhost:8081  # データが残っていることを確認
 ```bash
 # 1. Dockerfileの作成
 cat > Dockerfile << EOF
-FROM python:3.9-alpine
+FROM python:3.11-alpine
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt

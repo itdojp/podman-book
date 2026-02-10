@@ -81,7 +81,7 @@
     <!-- App Container -->
     <rect x="520" y="190" width="180" height="120" class="app-container" rx="4"/>
     <text x="610" y="210" class="pod-title" text-anchor="middle">アプリコンテナ</text>
-    <text x="530" y="225" class="annotation-text">node:18-alpine</text>
+    <text x="530" y="225" class="annotation-text">node:22-alpine</text>
     
     <rect x="540" y="240" width="140" height="60" fill="var(--svg-bg)" stroke="var(--svg-success)" stroke-width="1" rx="4"/>
     <text x="610" y="255" class="namespace-text" text-anchor="middle" font-weight="500">機能</text>

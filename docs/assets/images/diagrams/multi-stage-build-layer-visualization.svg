@@ -44,7 +44,7 @@
     <!-- Base Image -->
     <rect x="100" y="120" width="240" height="40" class="base-layer" rx="4"/>
     <text x="220" y="135" class="layer-text" text-anchor="middle" font-weight="500">ベースイメージ</text>
-    <text x="110" y="150" class="annotation-text">FROM node:18-alpine</text>
+    <text x="110" y="150" class="annotation-text">FROM node:22-alpine</text>
     
     <!-- Dependencies Layer -->
     <rect x="100" y="170" width="240" height="40" class="build-layer" rx="4"/>

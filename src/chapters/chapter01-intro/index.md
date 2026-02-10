@@ -399,7 +399,7 @@ podman run -d --pod devenv \
   --name web \
   -v $(pwd):/app:Z \
   -w /app \
-  node:18 \
+  node:22 \
   npm start
 
 # 4. 状態確認

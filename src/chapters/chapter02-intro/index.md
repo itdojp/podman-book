@@ -163,7 +163,7 @@ podman run -d --pod microservices \
   -w /app \
   -e DATABASE_URL=postgresql://postgres:devpass@localhost:5432/microservices \
   -e REDIS_URL=redis://localhost:6379 \
-  node:18 \
+  node:22 \
   npm start
 
 # 5. サイドカーコンテナ（ログ収集）

@@ -80,7 +80,7 @@ body:
       label: Pre-requirements check / 前提条件チェック
       description: Please confirm you have checked these
       options:
-        - label: I have Node.js 18+ installed / Node.js 18以上がインストール済み
+        - label: I have Node.js 20+ installed / Node.js 20以上がインストール済み
           required: true
         - label: I have git installed / gitがインストール済み
           required: true

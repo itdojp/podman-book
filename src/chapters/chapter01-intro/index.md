@@ -107,7 +107,7 @@ Podmanは**Docker CLI互換**を提供しています：
 | コンテナ実行 | `docker run` | `podman run` | 完全互換 |
 | イメージ管理 | `docker images` | `podman images` | 完全互換 |
 | Pod管理 | なし | `podman pod` | Podman独自 |
-| Compose | `docker-compose` | `podman-compose` | 互換ツール |
+| Compose | `docker compose` | `podman-compose` | 互換ツール |
 
 **Docker代替設定**:
 ```bash

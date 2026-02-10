@@ -33,7 +33,7 @@ Podmanは従来のDockerとは大きく異なるアーキテクチャを採用�
 | **Windows対応** | △ WSL2経由 | ◎ ネイティブ | Windows中心→Docker |
 | **macOS対応** | △ VM経由 | ◎ Docker Desktop | macOS開発→Docker |
 | **イメージ互換性** | ◎ OCI準拠 | ◎ OCI準拠 | 両者で相互利用可能 |
-| **docker-compose** | ○ podman-compose | ◎ ネイティブ | 既存compose資産→Docker |
+| **docker compose** | ○ podman-compose | ◎ ネイティブ | 既存compose資産→Docker |
 | **Swarmモード** | × なし | ◎ 内蔵 | Swarm利用中→Docker |
 
 #### パフォーマンス特性
@@ -382,7 +382,7 @@ CPU speed:
 ### Docker継続が推奨されるケース
 
 1. **既存のDocker資産が大きい**
-   - 大量のdocker-composeファイル
+   - 大量のComposeファイル（docker-compose.yml）
    - Dockerfileの複雑な依存関係
    - Docker専用ツールの利用
 

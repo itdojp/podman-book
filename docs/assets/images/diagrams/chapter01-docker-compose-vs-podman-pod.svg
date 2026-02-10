@@ -170,7 +170,7 @@
   
   <!-- Commands -->
   <text x="200" y="500" class="text">Commands:</text>
-  <text x="80" y="520" class="small-text">docker-compose up -d</text>
+  <text x="80" y="520" class="small-text">docker compose up -d</text>
   
   <!-- Podman Pod Section -->
   <rect class="podman-section" x="440" y="60" width="320" height="480" />

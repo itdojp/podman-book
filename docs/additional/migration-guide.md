@@ -43,7 +43,7 @@ echo "5. ネットワーク一覧:"
 docker network ls
 
 echo ""
-echo "6. docker-composeプロジェクト:"
+echo "6. Composeプロジェクト（docker-compose*.yml）:"
 find . -name "docker-compose*.yml" -type f 2>/dev/null | head -20
 
 echo ""
@@ -63,8 +63,11 @@ echo "チェック項目:"
 echo -n "[ ] Docker Swarmの使用: "
 docker node ls 2>&1 | grep -q "This node is not a swarm manager" && echo "未使用 ✓" || echo "使用中 ⚠️"
 
-echo -n "[ ] Docker Compose v1の使用: "
-docker-compose version 2>&1 | grep -q "version 1" && echo "v1使用中 ⚠️" || echo "v2以降 ✓"
+echo -n "[ ] Docker Compose v2（docker compose）の使用: "
+docker compose version >/dev/null 2>&1 && echo "利用可 ✓" || echo "未検出 ⚠️"
+
+echo -n "[ ] Docker Compose v1（docker-compose）の残存: "
+command -v docker-compose >/dev/null 2>&1 && echo "検出 ⚠️（legacy）" || echo "未検出 ✓"
 
 echo -n "[ ] 特権コンテナの使用: "
 docker ps --format '\{\{.Names\}\}' | xargs -I {} docker inspect {} | grep -q '"Privileged": true' && echo "使用中 ⚠️" || echo "未使用 ✓"
@@ -206,7 +209,9 @@ done
 ```bash
 # 1. Podman aliasの設定（一時的）
 alias docker=podman
-alias docker-compose=podman-compose
+
+# Composeファイル（docker-compose.yml 等）は podman-compose を使用
+pip3 install podman-compose
 
 # 2. 既存スクリプトのテスト
 ./deploy.sh  # 既存のデプロイスクリプト

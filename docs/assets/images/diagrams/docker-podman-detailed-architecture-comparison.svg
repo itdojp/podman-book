@@ -44,7 +44,7 @@
     <rect x="100" y="120" width="260" height="60" class="user-box" rx="4"/>
     <text x="230" y="140" class="arch-title" text-anchor="middle">ユーザー空間</text>
     <text x="110" y="155" class="annotation-text">• docker CLI</text>
-    <text x="110" y="170" class="annotation-text">• docker-compose</text>
+    <text x="110" y="170" class="annotation-text">• docker compose</text>
     
     <!-- Docker Daemon -->
     <rect x="100" y="200" width="260" height="80" class="daemon-box" rx="4"/>

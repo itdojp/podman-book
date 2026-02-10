@@ -434,7 +434,7 @@ pipeline {
                 stage('Integration Tests') {
                     steps {
                         sh """
-                            # docker-compose互換のpodman-compose使用
+                            # Docker Compose（docker compose）互換のpodman-compose使用
                             podman-compose -f docker-compose.test.yml up \
                                 --abort-on-container-exit \
                                 --exit-code-from app

@@ -312,7 +312,7 @@ spec:
 
 ### 7.4 マルチコンテナアプリケーション
 
-#### 7.4.1 docker-compose互換
+#### 7.4.1 Docker Compose（docker compose）互換
 
 ```yaml
 # docker-compose.yml

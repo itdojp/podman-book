@@ -253,9 +253,9 @@ podman info | grep -i cgroup
 echo 'alias docker=podman' >> ~/.bashrc
 source ~/.bashrc
 
-# Docker Composeの互換性
+# Docker Compose（docker compose）の互換性（Composeファイル）
 pip3 install podman-compose
-alias docker-compose=podman-compose
+podman-compose up -d
 ```
 
 ### Docker APIソケットの有効化

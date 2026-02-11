@@ -308,7 +308,7 @@ jobs:
           podman run --rm ${{ env.IMAGE_NAME }}:${{ github.sha }} npm test
       
       - name: Security scan with Trivy
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: 'sarif'  # GitHub Security タブ統合

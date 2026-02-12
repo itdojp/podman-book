@@ -63,7 +63,7 @@ podman run nginx
 
 Podmanの最大の特徴は、**Pod**（複数コンテナのグループ）をネイティブサポートしていることです：
 
-```
+```text
 Docker Compose (外部ツール)
 ┌─────────────────────────────────────┐
 │ docker-compose.yml                  │
@@ -234,7 +234,7 @@ podman logs myapp-prod
 #### Podman Desktop
 
 **アーキテクチャ**:
-```
+```text
 Podman Desktop
 ┌─────────────────────────────────────┐
 │ Windows                             │
@@ -266,7 +266,7 @@ Podman Desktop
 
 ### 使い分けの指針
 
-```
+```text
 学習フェーズ別推奨
 ┌─────────────────────────────────────┐
 │ 初心者（概念理解）                   │
@@ -289,7 +289,7 @@ Podman Desktop
 
 ### コンテナライフサイクル
 
-```
+```text
 Container Lifecycle with Podman
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │ Image       │───▶│ Container   │───▶│ Running     │

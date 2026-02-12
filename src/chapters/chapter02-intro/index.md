@@ -33,7 +33,7 @@ podman pull nginx:alpine
 
 Podmanは効率的なストレージのために**Overlay2**を使用：
 
-```
+```text
 Overlay2 Storage Structure
 /var/lib/containers/storage/overlay/
 ├── imagedb.json                 # イメージメタデータ
@@ -74,7 +74,7 @@ CMD ["nginx", "-g", "daemon off;"]
 ```
 
 **キャッシュ効率の比較**:
-```
+```text
 非効率な順序（毎回全再ビルド）:
 COPY app/ → RUN apk install → COPY config
 

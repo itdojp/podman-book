@@ -12,7 +12,7 @@ title: "はじめに"
 
 Dockerは`dockerd`デーモンがroot権限で常駐し、全コンテナのライフサイクルを管理する集中型アーキテクチャを採用しています。この設計は以下の制約を生みます：
 
-```
+```text
 # Dockerデーモンのプロセス構造
 systemd
  └─ dockerd (root)
@@ -113,7 +113,7 @@ struct uid_gid_extent {
 
 ### 実装アーキテクチャ
 
-```
+```text
                     ┌─────────────┐
                     │  podman CLI │
                     └──────┬──────┘

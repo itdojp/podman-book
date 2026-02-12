@@ -69,7 +69,7 @@ title: "第0章：コンテナ技術基礎"
 #### cgroups（Control Groups）
 リソース制限・監視を実現する機能：
 
-```
+```text
 cgroups階層構造
 /sys/fs/cgroup/
 ├── cpu/           # CPU使用率制限
@@ -98,7 +98,7 @@ cgroups階層構造
 
 コンテナの本格的な活用では、Kubernetesとの連携が重要です：
 
-```
+```text
 Container to Kubernetes Migration Path
 ┌─────────────────────────────────────┐
 │ Single Container                    │
@@ -116,7 +116,7 @@ Container to Kubernetes Migration Path
 
 現代の開発フローにおけるコンテナの位置づけ：
 
-```
+```text
 DevOps Pipeline with Containers
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │ Code        │───▶│ Build       │───▶│ Test        │
@@ -170,7 +170,7 @@ DevOps Pipeline with Containers
 ## 0.5 次世代のコンテナ技術
 
 ### WebAssembly (WASM) との融合
-```
+```text
 Traditional Container vs WASM Container
 ┌─────────────────────────────────────┐
 │ Traditional Container               │

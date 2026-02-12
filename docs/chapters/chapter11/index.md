@@ -6,7 +6,7 @@ title: "第11章：Kubernetesとの統合"
 
 # 第11章：Kubernetesとの統合
 
-### 本章の意義と学習目標
+## 本章の意義と学習目標
 
 **なぜPodmanのKubernetes連携を学ぶ必要があるのか**
 
@@ -134,7 +134,7 @@ podman run --rm myapp:latest pytest tests/
 #### 11.1.2 アーキテクチャの比較
 
 **Podmanのアーキテクチャ**
-```
+```text
 ┌─────────────┐
 │   podman    │ ← CLI/API
 ├─────────────┤
@@ -148,7 +148,7 @@ podman run --rm myapp:latest pytest tests/
 ```
 
 **Kubernetesのアーキテクチャ（簡略図）**
-```
+```text
 ┌─────────────┐
 │  API Server │
 ├─────────────┤

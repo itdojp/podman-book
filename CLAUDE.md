@@ -8,7 +8,7 @@ This is a comprehensive technical book about Podman container technology titled 
 
 ## Repository Structure
 
-```
+```text
 podman-book/
 ├── src/                    # Source markdown files
 │   ├── introduction/       # Introduction chapter

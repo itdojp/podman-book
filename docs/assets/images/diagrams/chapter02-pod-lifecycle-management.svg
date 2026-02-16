@@ -26,7 +26,7 @@
       }
       
       .diagram {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
         background: var(--bg-color);
       }
       
@@ -110,7 +110,7 @@
         fill: var(--text-color);
         font-size: 10px;
         font-weight: 400;
-        font-family: 'Monaco', 'Menlo', monospace;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
         text-anchor: middle;
       }
       

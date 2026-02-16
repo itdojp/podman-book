@@ -1,10 +1,10 @@
 <svg width="700" height="500" viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .title { font: 600 16px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
-      .subtitle { font: 500 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
-      .label { font: 400 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
-      .note { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #718096); text-anchor: middle; }
+      .title { font: 600 16px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
+      .subtitle { font: 500 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
+      .label { font: 400 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
+      .note { font: 400 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-secondary, #718096); text-anchor: middle; }
       .box { fill: var(--color-bg-secondary, #f7fafc); stroke: var(--color-border, #e2e8f0); stroke-width: 2; rx: 8; }
       .cli-box { fill: var(--color-blue-50, #ebf8ff); stroke: var(--color-blue-200, #90cdf4); stroke-width: 2; rx: 8; }
       .daemon-box { fill: var(--color-red-50, #fed7d7); stroke: var(--color-red-200, #fc8181); stroke-width: 2; rx: 8; }

@@ -218,5 +218,21 @@
         });
     </script>
 
+    <script>
+        // Wrap tables so they can scroll horizontally on small screens without affecting page-wide overflow.
+        document.addEventListener('DOMContentLoaded', function() {
+            var tables = document.querySelectorAll('.book-content table');
+            for (var i = 0; i < tables.length; i++) {
+                var table = tables[i];
+                if (!table || !table.parentNode) continue;
+                if (table.parentElement && table.parentElement.classList.contains('table-wrapper')) continue;
+                var wrapper = document.createElement('div');
+                wrapper.className = 'table-wrapper';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            }
+        });
+    </script>
+
 </body>
 </html>

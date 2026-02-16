@@ -8,6 +8,8 @@
   position: absolute;
   left: -9999px;
   opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 /* Prevent page jumping and unwanted focus */
@@ -21,6 +23,25 @@ html {
 
 /* Mobile/Tablet Implementation (≤1024px) */
 @media (max-width: 1024px) {
+  /* Avoid subtle horizontal scrolling on small screens by constraining the main content area. */
+  .book-layout .book-main {
+    overflow-x: hidden;
+  }
+
+  /* Keep wide tables scrollable without expanding the whole page width. */
+  .book-content .table-wrapper {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .book-content .table-wrapper table {
+    min-width: 100%;
+    width: max-content;
+    table-layout: auto;
+  }
+
   /* Full-width content layout */
   .book-layout .book-main {
     margin-left: 0 !important;

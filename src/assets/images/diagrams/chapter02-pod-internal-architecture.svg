@@ -1,11 +1,11 @@
 <svg width="750" height="600" viewBox="0 0 750 600" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .title { font: 600 16px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
-      .section-title { font: 500 14px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
-      .label { font: 400 12px Inter, sans-serif; fill: var(--color-text-primary, #1a202c); text-anchor: start; }
-      .note { font: 400 10px Inter, sans-serif; fill: var(--color-text-secondary, #718096); text-anchor: start; }
-      .shared-note { font: 500 12px Inter, sans-serif; fill: var(--color-primary, #3182ce); text-anchor: middle; }
+      .title { font: 600 16px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
+      .section-title { font: 500 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-primary, #1a202c); text-anchor: middle; }
+      .label { font: 400 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-primary, #1a202c); text-anchor: start; }
+      .note { font: 400 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-text-secondary, #718096); text-anchor: start; }
+      .shared-note { font: 500 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: var(--color-primary, #3182ce); text-anchor: middle; }
       .pod-box { fill: var(--color-bg-secondary, #f7fafc); stroke: var(--color-primary, #3182ce); stroke-width: 3; rx: 12; }
       .infra-box { fill: var(--color-amber-50, #fffbeb); stroke: var(--color-amber-400, #fbbf24); stroke-width: 2; rx: 8; }
       .app-box { fill: var(--color-green-50, #f0fff4); stroke: var(--color-green-400, #38a169); stroke-width: 2; rx: 8; }
@@ -82,5 +82,5 @@
 
   <!-- Pod name label -->
   <rect x="620" y="65" width="70" height="20" fill="var(--color-primary, #3182ce)" rx="4"/>
-  <text x="655" y="78" style="font: 500 10px Inter, sans-serif; fill: white; text-anchor: middle;">webapp</text>
+  <text x="655" y="78" style="font: 500 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; fill: white; text-anchor: middle;">webapp</text>
 </svg>

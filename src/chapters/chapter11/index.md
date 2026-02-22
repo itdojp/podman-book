@@ -1,14 +1,14 @@
 ---
-title: "第13章 Kubernetes連携"
+title: "第11章 Kubernetes連携"
 ---
 
-# 第13章 Kubernetes連携
+# 第11章 Kubernetes連携
 
 > **注意（この章のスコープ）**
 >
 > - 本章は **Podman と Kubernetes の相互運用**（Kubernetes YAML の生成／簡易実行）を扱います。
 > - **Kubernetes の設計・運用（クラスタ構成、Service/Ingress、スケジューリング、RBAC、ローリング更新等）の学習は対象外** です。
-> - `podman kube play` は Kubernetes を完全再現しません。特に **Service/Ingress、複数レプリカ、readiness/startup probe 等** は差分があるため、**本番相当の挙動確認は実クラスタで実施** してください（差分は後述）。
+> - `podman kube play` は Kubernetes を完全再現しません（`podman play kube` は同義のエイリアスです）。特に **Service/Ingress、複数レプリカ、readiness/startup probe 等** は差分があるため、**本番相当の挙動確認は実クラスタで実施** してください（差分は後述）。
 
 ## 本章の意義と学習目標
 

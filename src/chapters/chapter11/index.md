@@ -4,33 +4,39 @@ title: "第13章 Kubernetes連携"
 
 # 第13章 Kubernetes連携
 
+> **注意（この章のスコープ）**
+>
+> - 本章は **Podman と Kubernetes の相互運用**（Kubernetes YAML の生成／簡易実行）を扱います。
+> - **Kubernetes の設計・運用（クラスタ構成、Service/Ingress、スケジューリング、RBAC、ローリング更新等）の学習は対象外** です。
+> - `podman kube play` は Kubernetes を完全再現しません。特に **Service/Ingress、複数レプリカ、readiness/startup probe 等** は差分があるため、**本番相当の挙動確認は実クラスタで実施** してください（差分は後述）。
+
 ## 本章の意義と学習目標
 
 **なぜPodmanのKubernetes連携を学ぶ必要があるのか**
 
-「開発環境と本番環境の乖離」は、多くの組織が抱える根本的な課題です。PodmanのKubernetes連携機能は、この課題に対する革新的な解決策を提供します：
+「開発環境と本番環境の乖離」は、多くの組織が抱える根本的な課題です。PodmanのKubernetes連携機能は、この課題に対する有効なアプローチの1つです。
 
 1. **開発サイクルの劇的な短縮**: ローカルでKubernetes YAMLを直接実行し、即座にフィードバック
-2. **学習コストの削減**: Kubernetesクラスターなしで、同じ概念とツールを使用
-3. **デプロイリスクの最小化**: 開発環境で検証したものがそのまま本番で動作
+2. **学習コストの削減**: Kubernetes YAML（主にPod/Deployment等）の形を保ったままローカルで簡易検証
+3. **デプロイリスクの最小化**: YAML/イメージ/設定の差分を早期に減らし、本番移行時の手戻りを削減
 4. **段階的移行の実現**: 単一ホストからクラスターへ、無理のない移行パス
 
-本章では、PodmanをKubernetesへの「架け橋」として活用し、クラウドネイティブへの移行を成功させる方法を学びます。
+本章では、PodmanをKubernetes YAMLへの「橋渡し」として活用し、移行に向けた差分を早期に洗い出す観点を扱います。
 
 ### 11.1 PodmanとKubernetesの関係
 
 #### なぜPodmanがKubernetesと深い関係を持つのか
 
-PodmanはKubernetesのローカル開発環境として設計されています。これは偶然ではなく、以下の戦略的理由があります：
+PodmanはKubernetes YAMLとの相互運用（`podman generate kube` / `podman kube play`）を提供し、ローカルでの簡易検証や移行の橋渡しに利用できます。これは偶然ではなく、以下の戦略的理由があります。
 
 - **同じ概念モデル**: Pod、Container、Volumeなど、Kubernetesの中核概念を共有
-- **開発者体験の統一**: ローカル開発から本番デプロイまで一貫したワークフロー
+- **開発者体験の統一**: ローカル検証から実クラスタへの移行を意識したワークフロー
 - **Red Hatのビジョン**: OpenShiftを通じたエンタープライズKubernetesの推進
 
 #### 11.1.1 共通点と相違点
 
 **共通点が生む価値**
-- **OCI標準準拠**: 同じコンテナイメージが両環境で動作し、「動作保証」を実現
+- **OCI標準準拠**: 同じコンテナイメージを前提にでき、移行時の差分を減らす
 - **Pod概念のサポート**: 複雑なマルチコンテナアプリケーションの開発が容易
 - **YAML形式での定義**: Infrastructure as Codeの実践、GitOpsワークフローの実現
 - **CRI互換性**: 同じランタイムインターフェースにより、移行時の問題を最小化
@@ -110,7 +116,7 @@ systemctl --user enable container-iot-collector.service
 
 **Podman活用の効果：**
 ```bash
-# 開発者各自がKubernetes環境を再現
+# Kubernetes YAML（Pod/Deployment等）の簡易検証（完全再現ではない）
 podman play kube production-deployment.yaml
 
 # ローカルでの統合テスト
@@ -183,9 +189,13 @@ podman play kube --down deployment.yaml
 **サポートされるリソースタイプ**
 - Pod
 - Deployment（Podとして実行）
+- DaemonSet
+- Job
 - PersistentVolumeClaim
 - ConfigMap
 - Secret
+
+※ Service/Ingress を前提にした疎通（ClusterIP/LoadBalancer/Ingress）やルーティングは `podman kube play` では再現しないため、実クラスタで確認してください。
 
 **実践例: Webアプリケーションのデプロイ**
 ```yaml
@@ -219,14 +229,21 @@ curl http://localhost:8080
 #### 11.2.2 制限事項と回避策
 
 **主な制限事項**
-1. **Service未サポート**: ClusterIPやLoadBalancerは機能しない
+1. **Service/Ingress未サポート**: ClusterIP/LoadBalancer/Ingressは機能しない
    - 回避策: hostPortを使用、またはpodman-composeで代替
 
-2. **複数レプリカ未対応**: ReplicaSetのスケーリングは無視される
-   - 回避策: 開発時は単一インスタンスで十分
+2. **複数レプリカの再現不可**: Deploymentの `spec.replicas` は指定しても無視され、実行は1レプリカ相当になる
+   - 回避策: ローカルでは単一インスタンスで起動確認し、スケール動作は実クラスタで検証
 
-3. **ネームスペース制限**: 完全な分離は提供されない
+3. **probeの一部未対応**: `readinessProbe` / `startupProbe` は未対応（`livenessProbe` は対応）
+   - 回避策: ローカルは起動/ヘルスエンドポイントの確認に留め、プローブ前提の制御は実クラスタで検証
+
+4. **ネームスペース制限**: 完全な分離は提供されない
    - 回避策: Pod名でのプレフィックス使用
+
+**いつ `podman kube play` で良いか / いつ実クラスタが必要か**
+- `podman kube play`: YAMLの構文・主要フィールド、イメージ/環境変数/ボリューム/コマンド等の差分を早期に確認したい場合
+- 実クラスタ: Service/Ingress を前提にした疎通、複数レプリカ、readiness/startup probe に依存する制御、運用要件（RBAC/NetworkPolicy等）を確認したい場合
 
 **実用的な対処法**
 ```bash
@@ -239,7 +256,7 @@ kubectl apply -f prod-deploy.yaml  # 本番用（Service使用）
 
 #### 11.3.1 podman generate kubeコマンド
 
-既存のPodmanコンテナからKubernetes YAMLを生成できます。これにより、ローカルで動作確認したものを確実にKubernetesに移行できます。
+既存のPodmanコンテナからKubernetes YAMLを生成できます。これにより、ローカルで確認した構成をベースに、実クラスタ向けの差分を調整しやすくなります。
 
 **基本的な使用方法**
 ```bash
@@ -429,6 +446,7 @@ sudo kubeadm join <master-ip>:6443 \
 #### 11.6.1 Minikubeとの統合
 
 ```bash
+# 注記: `minikube --driver=podman` は experimental 扱いです。再現性重視の演習やチームでの手順共有は kind を推奨します。
 # Podmanドライバーでminikube起動
 minikube start --driver=podman --container-runtime=cri-o
 

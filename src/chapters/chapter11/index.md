@@ -10,13 +10,15 @@ title: "第11章 Kubernetes連携"
 > - **Kubernetes の設計・運用（クラスタ構成、Service/Ingress、スケジューリング、RBAC、ローリング更新等）の学習は対象外** です。
 > - `podman kube play` は Kubernetes を完全再現しません（`podman play kube` は同義のエイリアスです）。特に **Service/Ingress、複数レプリカ、readiness/startup probe 等** は差分があるため、**本番相当の挙動確認は実クラスタで実施** してください（差分は後述）。
 
+補足: Podman 4.3 以降、Kubernetes 連携コマンドは `podman kube ...` 配下に整理されています。本章では `podman kube play / podman kube generate / podman kube down` 表記に統一し、旧コマンド（`podman play kube` / `podman generate kube` など）はエイリアスとして扱います。
+
 ## 本章の意義と学習目標
 
 **なぜPodmanのKubernetes連携を学ぶ必要があるのか**
 
 「開発環境と本番環境の乖離」は、多くの組織が抱える根本的な課題です。PodmanのKubernetes連携機能は、この課題に対する有効なアプローチの1つです。
 
-1. **開発サイクルの劇的な短縮**: ローカルでKubernetes YAMLを直接実行し、即座にフィードバック
+1. **開発サイクルの劇的な短縮**: ローカルで（対応範囲の）Kubernetes YAMLを簡易実行し、即座にフィードバック
 2. **学習コストの削減**: Kubernetes YAML（主にPod/Deployment等）の形を保ったままローカルで簡易検証
 3. **デプロイリスクの最小化**: YAML/イメージ/設定の差分を早期に減らし、本番移行時の手戻りを削減
 4. **段階的移行の実現**: 単一ホストからクラスターへ、無理のない移行パス
@@ -27,7 +29,7 @@ title: "第11章 Kubernetes連携"
 
 #### なぜPodmanがKubernetesと深い関係を持つのか
 
-PodmanはKubernetes YAMLとの相互運用（`podman generate kube` / `podman kube play`）を提供し、ローカルでの簡易検証や移行の橋渡しに利用できます。これは偶然ではなく、以下の戦略的理由があります。
+PodmanはKubernetes YAMLとの相互運用（`podman kube generate` / `podman kube play`）を提供し、ローカルでの簡易検証や移行の橋渡しに利用できます。これは偶然ではなく、以下の戦略的理由があります。
 
 - **同じ概念モデル**: Pod、Container、Volumeなど、Kubernetesの中核概念を共有
 - **開発者体験の統一**: ローカル検証から実クラスタへの移行を意識したワークフロー
@@ -39,9 +41,12 @@ PodmanはKubernetes YAMLとの相互運用（`podman generate kube` / `podman ku
 - **OCI標準準拠**: 同じコンテナイメージを前提にでき、移行時の差分を減らす
 - **Pod概念のサポート**: 複雑なマルチコンテナアプリケーションの開発が容易
 - **YAML形式での定義**: Infrastructure as Codeの実践、GitOpsワークフローの実現
-- **CRI互換性**: 同じランタイムインターフェースにより、移行時の問題を最小化
+- **共有コンポーネント**: OCI準拠と共通コンポーネント（images/storage/runtime 等）により、イメージ資産や運用ノウハウを流用しやすい
+
+補足: Kubernetes のコンテナランタイムは CRI-O / containerd 等の CRI 実装であり、Podman 自体は CRI ではありません（CRI-O との関係は 11.5 を参照）。
 
 **相違点とその理由**
+
 | 特徴 | Podman | Kubernetes | なぜ違いが必要か |
 |------|--------|------------|-----------------|
 | スケール | 単一ホスト | クラスター | 開発環境のシンプルさと本番のスケーラビリティの両立 |
@@ -68,7 +73,7 @@ podman run -d --pod banking-app-pod --name web-frontend nginx:alpine
 podman run -d --pod banking-app-pod --name api-backend python:3.11-alpine
 
 # 段階2: Kubernetes YAML生成での本番環境準備
-podman generate kube banking-app-pod > banking-app-k8s.yaml
+podman kube generate banking-app-pod > banking-app-k8s.yaml
 
 # 段階3: セキュリティポリシーの検証
 podman pod create --security-opt seccomp=banking-policy.json \
@@ -102,6 +107,8 @@ podman generate systemd --name iot-collector --files
 systemctl --user enable container-iot-collector.service
 ```
 
+※ `podman generate systemd` は非推奨です。systemd連携は Quadlet（例: `.container`）を推奨します。
+
 **効果：**
 - メモリ使用量: 30%削減
 - セキュリティインシデント: 90%削減
@@ -117,7 +124,7 @@ systemctl --user enable container-iot-collector.service
 **Podman活用の効果：**
 ```bash
 # Kubernetes YAML（Pod/Deployment等）の簡易検証（完全再現ではない）
-podman play kube production-deployment.yaml
+podman kube play production-deployment.yaml
 
 # ローカルでの統合テスト
 podman pod create --name test-environment
@@ -170,20 +177,21 @@ podman run --rm myapp:latest pytest tests/
 
 ### 11.2 Kubernetes YAMLの実行
 
-#### 11.2.1 podman playによるYAML実行
+#### 11.2.1 podman kube playによるYAML実行
 
-PodmanはKubernetes YAMLを直接実行できます。これにより、開発環境での検証が劇的に簡単になります。
+Podmanは（対応範囲の）Kubernetes YAMLをローカルで簡易実行できます。これにより、開発環境での検証が簡単になります。
+対応する kind/フィールドは Podman の man page（`podman-kube-play(1)`）の supported kinds / fields を参照してください。
 
 **基本的な使用方法**
 ```bash
 # Kubernetes YAMLの実行
-podman play kube deployment.yaml
+podman kube play deployment.yaml
 
 # 実行中のPodの確認
 podman pod ps
 
 # Podの停止と削除
-podman play kube --down deployment.yaml
+podman kube down deployment.yaml
 ```
 
 **サポートされるリソースタイプ**
@@ -220,7 +228,7 @@ spec:
 
 ```bash
 # 実行
-podman play kube webapp.yaml
+podman kube play webapp.yaml
 
 # 動作確認
 curl http://localhost:8080
@@ -248,26 +256,26 @@ curl http://localhost:8080
 **実用的な対処法**
 ```bash
 # 開発用と本番用でYAMLを分ける
-podman play kube dev-pod.yaml     # 開発用（hostPort含む）
+podman kube play dev-pod.yaml     # 開発用（hostPort含む）
 kubectl apply -f prod-deploy.yaml  # 本番用（Service使用）
 ```
 
 ### 11.3 Kubernetes YAMLの生成
 
-#### 11.3.1 podman generate kubeコマンド
+#### 11.3.1 podman kube generateコマンド
 
 既存のPodmanコンテナからKubernetes YAMLを生成できます。これにより、ローカルで確認した構成をベースに、実クラスタ向けの差分を調整しやすくなります。
 
 **基本的な使用方法**
 ```bash
 # 単一コンテナから生成
-podman generate kube mycontainer > pod.yaml
+podman kube generate mycontainer > pod.yaml
 
 # Podから生成
-podman generate kube mypod > pod.yaml
+podman kube generate mypod > pod.yaml
 
 # Serviceも含めて生成
-podman generate kube -s mypod > deployment.yaml
+podman kube generate -s mypod > deployment.yaml
 ```
 
 **生成されるYAMLの例**
@@ -339,7 +347,7 @@ spec:
 
 **フェーズ2: Kubernetes互換性確認（Podman + YAML）**
 - Kubernetes YAMLでの定義
-- podman play kubeでの動作確認
+- podman kube playでの動作確認
 - 設定の外部化（ConfigMap/Secret）
 
 **フェーズ3: ステージング環境（Kubernetes）**
@@ -400,7 +408,7 @@ http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 
 #### 11.5.1 CRI-O概要
 
-CRI-Oは、Kubernetes専用の軽量コンテナランタイムで、Podmanと同じライブラリを使用します。
+CRI-Oは、KubernetesのCRI実装の1つで、Podmanとコンテナ技術スタックの一部を共有します。PodmanはCLI/管理ツールであり、KubernetesのCRIランタイムではありません。
 
 **なぜCRI-Oが重要か**
 - **Kubernetes専用設計**: 不要な機能を削ぎ落とし、高速・軽量
@@ -460,26 +468,21 @@ kubectl run myapp --image=myapp:dev --image-pull-policy=Never
 
 #### 11.6.2 Kindとの統合
 
-```yaml
-# kind-config.yaml
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-- role: control-plane
-  extraMounts:
-  - hostPath: /run/user/1000/podman/podman.sock
-    containerPath: /var/run/docker.sock
-- role: worker
-- role: worker
-```
-
 ```bash
-# クラスター作成
-kind create cluster --config kind-config.yaml
+# クラスター作成（rootless Podman provider; 公式推奨）
+export KIND_EXPERIMENTAL_PROVIDER=podman
+kind create cluster
+
+# 一部環境では systemd-run が必要（公式docsの記載）
+systemd-run --scope --user kind create cluster
+# まだエラーが出る場合
+systemd-run --scope --user -p "Delegate=yes" kind create cluster
 
 # ローカルレジストリ設定
 podman run -d -p 5000:5000 --name registry registry:2
 ```
+
+※ `podman.sock` を `docker.sock` としてマウントする構成例は特殊環境向けのため、本章では標準手順として扱いません。
 
 ### 11.7 実践演習
 
@@ -489,9 +492,9 @@ podman run -d -p 5000:5000 --name registry registry:2
 
 **手順**:
 1. Podmanでマイクロサービスを構築
-2. podman generate kubeでYAML生成
+2. podman kube generateでYAML生成
 3. 生成されたYAMLをカスタマイズ
-4. Minikubeでテスト
+4. kind（推奨）またはMinikubeでテスト
 5. 本番相当の設定を追加
 
 **期待される成果**:

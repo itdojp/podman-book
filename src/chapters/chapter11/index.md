@@ -107,7 +107,7 @@ podman generate systemd --name iot-collector --files
 systemctl --user enable container-iot-collector.service
 ```
 
-※ `podman generate systemd` は非推奨です。systemd連携は Quadlet（例: `.container`）を推奨します。
+※ `podman generate systemd` は非推奨（deprecated）です。今後の systemd 連携は Quadlet（例: `.container` ユニット）による管理を前提にしてください。
 
 **効果：**
 - メモリ使用量: 30%削減
@@ -470,13 +470,12 @@ kubectl run myapp --image=myapp:dev --image-pull-policy=Never
 
 ```bash
 # クラスター作成（rootless Podman provider; 公式推奨）
-export KIND_EXPERIMENTAL_PROVIDER=podman
-kind create cluster
+KIND_EXPERIMENTAL_PROVIDER=podman kind create cluster
 
 # 一部環境では systemd-run が必要（公式docsの記載）
-systemd-run --scope --user kind create cluster
+systemd-run --scope --user env KIND_EXPERIMENTAL_PROVIDER=podman kind create cluster
 # まだエラーが出る場合
-systemd-run --scope --user -p "Delegate=yes" kind create cluster
+systemd-run --scope --user -p "Delegate=yes" env KIND_EXPERIMENTAL_PROVIDER=podman kind create cluster
 
 # ローカルレジストリ設定
 podman run -d -p 5000:5000 --name registry registry:2

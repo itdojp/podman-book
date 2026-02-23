@@ -48,7 +48,7 @@ PodmanはKubernetes YAMLとの相互運用（`podman kube generate` / `podman ku
 **相違点とその理由**
 
 | 特徴 | Podman | Kubernetes | なぜ違いが必要か |
-|------|--------|------------|-----------------|
+|---|---|---|---|
 | スケール | 単一ホスト | クラスター | 開発環境のシンプルさと本番のスケーラビリティの両立 |
 | オーケストレーション | なし | あり | ローカルでは不要な複雑性を排除 |
 | サービスディスカバリ | 基本的 | 高度 | 開発時は簡潔さを優先 |
@@ -57,6 +57,8 @@ PodmanはKubernetes YAMLとの相互運用（`podman kube generate` / `podman ku
 これらの違いは欠点ではなく、各環境の目的に最適化された設計の結果です。
 
 ## 実際のエンタープライズ運用事例
+
+※本節の事例・数値は理解を助けるためのモデルケース（例示）です。
 
 ### 事例1: 金融機関での段階的移行（A銀行）
 
@@ -194,6 +196,8 @@ podman pod ps
 podman kube down deployment.yaml
 ```
 
+※ `podman kube down` 実行後も、`podman kube play` が作成した volume は残ります。不要な場合は `--force` を使用するか、手動で volume を削除してください。
+
 **サポートされるリソースタイプ**
 - Pod
 - Deployment（Podとして実行）
@@ -277,6 +281,8 @@ podman kube generate mypod > pod.yaml
 # Serviceも含めて生成
 podman kube generate -s mypod > deployment.yaml
 ```
+
+※ `-s/--service` で Service 定義も生成できますが、`podman kube play` は Service を再現しません。生成した Service は実クラスタ適用用の雛形として扱ってください。
 
 **生成されるYAMLの例**
 ```yaml

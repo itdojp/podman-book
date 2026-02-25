@@ -13,7 +13,7 @@ title: "Docker→Podman包括的移行ガイドライン"
 
 ## 表記について
 - 本ガイドでは Compose の定義ファイル名として `docker-compose.yml` 等の表記を用います（ファイル名/パターンを示すため）。
-- コマンドは Compose v2 の `docker compose` を基本とし、`docker-compose` は Compose v1（legacy）の残存チェック等の文脈でのみ登場します。
+- コマンドは Compose v2 の `docker compose` を基本とし、`docker-compose` は Compose v1（legacy）の残存チェックや互換目的のエイリアス/ラッパー例など、限定的な文脈でのみ登場します。
 
 ## 📋 移行前評価チェックリスト
 

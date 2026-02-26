@@ -11,6 +11,10 @@ title: "Docker→Podman包括的移行ガイドライン"
 - **移行先**: Podman 5.0.x
 - **検証済みOS**: RHEL 9.3、Ubuntu 22.04 LTS、CentOS Stream 9
 
+## 表記について
+- 本ガイドでは Compose の定義ファイル名として `docker-compose.yml` 等の表記を用います（ファイル名/パターンを示すため）。
+- コマンドは Compose v2 の `docker compose` を基本とし、`docker-compose` は Compose v1（legacy）の残存チェックや互換目的のエイリアス/ラッパー例など、限定的な文脈でのみ登場します。
+
 ## 📋 移行前評価チェックリスト
 
 ### Phase 0: 現状分析（1週間）
@@ -43,7 +47,7 @@ echo "5. ネットワーク一覧:"
 docker network ls
 
 echo ""
-echo "6. Composeプロジェクト（docker-compose*.yml）:"
+echo "6. Composeプロジェクト（Compose 定義ファイル: docker-compose*.yml）:"
 find . -name "docker-compose*.yml" -type f 2>/dev/null | head -20
 
 echo ""

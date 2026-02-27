@@ -10,6 +10,7 @@ Issue:
 - スクリーンショットは「実行すると何が表示されるか」「どこを見るか」を補助する目的で追加する（一次情報は code block を維持）。
 - UI は変更に弱いので、**キャプションに前提（OS/Podman/関連ツールのバージョン）**を短く併記する。
 - **秘匿情報は必ずマスク**する（トークン/認証情報/実ホスト名/IP/社内URL/メール等）。
+- 一般的な画像/スクリーンショットのガイドライン（圧縮目標・sRGB カラープロファイル・アクセシビリティ/alt テキスト など）は `docs/assets/images/README-IMAGES.md` を**正として**従う（本 README はスクリーンショット固有の追加ルールのみを記載）。
 
 ## 配置と命名（推奨）
 
@@ -24,6 +25,5 @@ Issue:
 ## 本文からの参照例
 
 ```md
-![podman のバージョン確認（例: Podman 5.x）]({{ '/assets/images/screenshots/chapter02/01-podman-version.png' | relative_url }})
+![podman のバージョン確認（例: Podman 5.x）](../../assets/images/screenshots/chapter02/01-podman-version.png)
 ```
-

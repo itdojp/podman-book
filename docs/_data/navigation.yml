@@ -1,5 +1,5 @@
 introduction:
-- title: 序章
+- title: はじめに
   path: /introduction/
 chapters:
 - title: 第1章：コンテナ技術の基礎
@@ -37,5 +37,5 @@ appendices:
   path: /appendices/appendix-a/
 - title: 付録B：トラブルシューティングガイド
   path: /appendices/appendix-b/
-- title: 付録C：参考リンク集
+- title: 付録C：リソース集
   path: /appendices/appendix-c/

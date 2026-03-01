@@ -4,6 +4,7 @@
 
 Issue:
 - 図表強化の候補一覧: Issue #180
+- 章別チェックリスト（候補一覧の管理ファイル）: [CHECKLIST.md](./CHECKLIST.md)
 
 ## 方針（要点）
 

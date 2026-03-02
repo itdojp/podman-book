@@ -92,9 +92,9 @@ verify_installation() {
     podman run --rm hello-world
     
     if [ $? -eq 0 ]; then
-        echo "✅ Podmanが正常にインストールされました！"
+        echo "[OK] Podman が正常にインストールされた"
     else
-        echo "❌ インストールに問題があります"
+        echo "[NG] インストールに問題がある"
         exit 1
     fi
 }
@@ -106,8 +106,8 @@ setup_podman
 verify_installation
 
 echo ""
-echo "インストールが完了しました！"
-echo "次のコマンドでPodmanを使い始められます:"
+echo "インストールが完了しました"
+echo "次のコマンドで Podman を使い始められます:"
 echo "  podman run -it alpine sh"
 ```
 
@@ -353,29 +353,29 @@ podman system prune -a
 #!/bin/bash
 # インストール検証スクリプト
 
-echo "✓ Podmanバージョン確認"
+echo "[INFO] Podman バージョン確認"
 podman --version
 
-echo "✓ システム情報"
+echo "[INFO] システム情報"
 podman info --format json | jq '.version, .kernel, .os'
 
-echo "✓ cgroupバージョン"
+echo "[INFO] cgroup バージョン"
 podman info | grep -i cgroup
 
-echo "✓ rootless動作確認"
+echo "[INFO] rootless 動作確認"
 if podman info | grep -q "rootless: true"; then
-    echo "  Rootlessモードで動作中"
+    echo "  Rootless モードで動作中"
 else
-    echo "  Rootモードで動作中"
+    echo "  Root モードで動作中"
 fi
 
-echo "✓ ネットワーク接続"
+echo "[INFO] ネットワーク接続"
 podman run --rm alpine ping -c 1 google.com
 
-echo "✓ ストレージ状態"
+echo "[INFO] ストレージ状態"
 podman system df
 
-echo "✓ Docker互換ソケット"
+echo "[INFO] Docker 互換ソケット"
 if systemctl --user is-active podman.socket >/dev/null 2>&1; then
     echo "  Podmanソケットが有効"
 fi

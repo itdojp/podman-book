@@ -15,7 +15,7 @@ title: "Docker→Podman包括的移行ガイドライン"
 - 本ガイドでは Compose の定義ファイル名として `docker-compose.yml` 等の表記を用います（ファイル名/パターンを示すため）。
 - コマンドは Compose v2 の `docker compose` を基本とし、`docker-compose` は Compose v1（legacy）の残存チェックや互換目的のエイリアス/ラッパー例など、限定的な文脈でのみ登場します。
 
-## 📋 移行前評価チェックリスト
+## 移行前評価チェックリスト
 
 ### Phase 0: 現状分析（1週間）
 
@@ -65,22 +65,22 @@ echo "=== Podman互換性チェック ==="
 # Docker特有機能の使用確認
 echo "チェック項目:"
 echo -n "[ ] Docker Swarmの使用: "
-docker node ls 2>&1 | grep -q "This node is not a swarm manager" && echo "未使用 ✓" || echo "使用中 ⚠️"
+docker node ls 2>&1 | grep -q "This node is not a swarm manager" && echo "[OK] 未使用" || echo "[WARN] 使用中"
 
 echo -n "[ ] Docker Compose v2（docker compose）の利用可/インストール状況: "
-docker compose version >/dev/null 2>&1 && echo "利用可 ✓" || echo "未検出 ⚠️"
+docker compose version >/dev/null 2>&1 && echo "[OK] 利用可" || echo "[WARN] 未検出"
 
 echo -n "[ ] Docker Compose v1（docker-compose）の残存: "
-command -v docker-compose >/dev/null 2>&1 && echo "検出 ⚠️（legacy）" || echo "未検出 ✓"
+command -v docker-compose >/dev/null 2>&1 && echo "[WARN] 検出（legacy）" || echo "[OK] 未検出"
 
 echo -n "[ ] 特権コンテナの使用: "
-docker ps --format '\{\{.Names\}\}' | xargs -I {} docker inspect {} | grep -q '"Privileged": true' && echo "使用中 ⚠️" || echo "未使用 ✓"
+docker ps --format '\{\{.Names\}\}' | xargs -I {} docker inspect {} | grep -q '"Privileged": true' && echo "[WARN] 使用中" || echo "[OK] 未使用"
 
 echo -n "[ ] カスタムDockerネットワーク: "
-docker network ls --format '\{\{.Name\}\}' | grep -v -E 'bridge|host|none' | wc -l | xargs -I {} test {} -gt 0 && echo "使用中 (要確認)" || echo "標準のみ ✓"
+docker network ls --format '\{\{.Name\}\}' | grep -v -E 'bridge|host|none' | wc -l | xargs -I {} test {} -gt 0 && echo "[WARN] 使用中（要確認）" || echo "[OK] 標準のみ"
 ```
 
-## 🔄 Phase 1: 互換性確認と準備（1〜2週間）
+## Phase 1: 互換性確認と準備（1〜2週間）
 
 ### Docker Compose互換性の確保
 
@@ -205,7 +205,7 @@ docker volume ls -q | while read volume; do
 done
 ```
 
-## 🚀 Phase 2: パイロット導入（2〜4週間）
+## Phase 2: パイロット導入（2〜4週間）
 
 ### 段階的移行戦略
 
@@ -288,7 +288,7 @@ docker run --log-driver json-file nginx
 podman run --log-driver json-file nginx  # Dockerと同じ動作
 ```
 
-## 📊 Phase 3: 本番環境移行（1〜3ヶ月）
+## Phase 3: 本番環境移行（1〜3ヶ月）
 
 ### カットオーバー計画
 
@@ -340,7 +340,7 @@ if ! podman healthcheck run app-production; then
 fi
 ```
 
-## 🛠️ 移行ツールとユーティリティ
+## 移行ツールとユーティリティ
 
 ### 自動変換ツール
 ```python
@@ -402,7 +402,7 @@ run_compatibility_test() {
 }
 ```
 
-## 📈 移行後の最適化
+## 移行後の最適化
 
 ### パフォーマンスチューニング
 ```bash
@@ -431,7 +431,7 @@ podman run -d \
 podman stats --format json | jq '.'
 ```
 
-## ✅ 移行完了チェックリスト
+## 移行完了チェックリスト
 
 - [ ] すべてのコンテナがPodmanで実行されている
 - [ ] ボリュームデータの整合性確認

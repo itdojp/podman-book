@@ -6,7 +6,7 @@ title: "Podman実践的トラブルシューティングガイド"
 
 本ガイドは、Podman運用で実際に遭遇する問題とその解決方法を、具体的な手順とともに解説します。
 
-## 🔍 トラブルシューティングの基本アプローチ
+## トラブルシューティングの基本アプローチ
 
 ### 診断フローチャート
 
@@ -37,11 +37,11 @@ echo "=== Podman環境診断 ==="
 echo ""
 
 # 1. バージョン情報
-echo "📌 バージョン情報:"
+echo "[INFO] バージョン情報:"
 podman version
 
 # 2. システム情報
-echo -e "\n📌 システム情報:"
+echo -e "\n[INFO] システム情報:"
 podman info --format json | jq '{
   host: {
     os: .host.os,
@@ -58,23 +58,23 @@ podman info --format json | jq '{
 }'
 
 # 3. 実行中のコンテナ
-echo -e "\n📌 実行中のコンテナ:"
+echo -e "\n[INFO] 実行中のコンテナ:"
 podman ps --format "table \{\{.Names\}\}\t\{\{.Status\}\}\t\{\{.State\}\}"
 
 # 4. システムリソース
-echo -e "\n📌 システムリソース:"
+echo -e "\n[INFO] システムリソース:"
 podman system df
 
 # 5. ネットワーク
-echo -e "\n📌 ネットワーク:"
+echo -e "\n[INFO] ネットワーク:"
 podman network ls
 
 # 6. 最近のイベント
-echo -e "\n📌 最近のイベント (エラーのみ):"
+echo -e "\n[INFO] 最近のイベント (エラーのみ):"
 podman events --since 1h --filter event=died --format json | jq '.'
 ```
 
-## 🚫 起動エラーの解決
+## 起動エラーの解決
 
 ### 1. Permission Denied エラー
 
@@ -97,7 +97,7 @@ if command -v getenforce &> /dev/null; then
     echo "SELinux: $selinux_status"
     
     if [ "$selinux_status" = "Enforcing" ]; then
-        echo "⚠️  SELinuxが原因の可能性があります"
+        echo "[WARN] SELinux が原因の可能性がある"
         
         # SELinuxコンテキストの修正
         echo "SELinuxコンテキストを修正中..."
@@ -114,31 +114,31 @@ echo -e "\nユーザー名前空間の確認:"
 if [ -f /proc/sys/kernel/unprivileged_userns_clone ]; then
     userns_enabled=$(cat /proc/sys/kernel/unprivileged_userns_clone)
     if [ "$userns_enabled" = "0" ]; then
-        echo "❌ ユーザー名前空間が無効です"
+        echo "[NG] ユーザー名前空間が無効"
         echo "修正方法:"
         echo "sudo sysctl -w kernel.unprivileged_userns_clone=1"
         echo "永続化: echo 'kernel.unprivileged_userns_clone=1' | sudo tee /etc/sysctl.d/userns.conf"
     else
-        echo "✅ ユーザー名前空間は有効です"
+        echo "[OK] ユーザー名前空間は有効"
     fi
 fi
 
 # 3. subuid/subgid確認
 echo -e "\nUID/GIDマッピング:"
 if ! grep -q "^$USER:" /etc/subuid; then
-    echo "❌ subuidエントリがありません"
+    echo "[NG] subuid エントリがない"
     echo "修正方法:"
     echo "sudo usermod --add-subuids 100000-165535 $USER"
 else
-    echo "✅ subuid: $(grep "^$USER:" /etc/subuid)"
+    echo "[OK] subuid: $(grep "^$USER:" /etc/subuid)"
 fi
 
 if ! grep -q "^$USER:" /etc/subgid; then
-    echo "❌ subgidエントリがありません"
+    echo "[NG] subgid エントリがない"
     echo "修正方法:"
     echo "sudo usermod --add-subgids 100000-165535 $USER"
 else
-    echo "✅ subgid: $(grep "^$USER:" /etc/subgid)"
+    echo "[OK] subgid: $(grep "^$USER:" /etc/subgid)"
 fi
 
 # 4. ストレージ権限
@@ -183,19 +183,19 @@ echo "レジストリ接続問題の診断: $registry_url"
 # 1. DNS解決確認
 echo -e "\n1. DNS解決テスト:"
 if host $registry_url > /dev/null 2>&1; then
-    echo "✅ DNS解決成功"
+    echo "[OK] DNS 解決成功"
     host $registry_url | head -3
 else
-    echo "❌ DNS解決失敗"
+    echo "[NG] DNS 解決失敗"
     echo "対処法: /etc/resolv.confを確認してください"
 fi
 
 # 2. ネットワーク接続性
 echo -e "\n2. ネットワーク接続性:"
 if curl -k -s -o /dev/null -w "%{http_code}" https://$registry_url/v2/ | grep -q "401\|200"; then
-    echo "✅ レジストリに到達可能"
+    echo "[OK] レジストリに到達可能"
 else
-    echo "❌ レジストリに到達不可"
+    echo "[NG] レジストリに到達不可"
     echo "ファイアウォールやプロキシ設定を確認してください"
 fi
 
@@ -223,9 +223,9 @@ EOF
 # 5. 認証設定
 echo -e "\n5. レジストリ認証:"
 if podman login --get-login $registry_url > /dev/null 2>&1; then
-    echo "✅ 認証情報が保存されています"
+    echo "[OK] 認証情報が保存されている"
 else
-    echo "⚠️  認証が必要な場合:"
+    echo "[WARN] 認証が必要な場合:"
     echo "podman login $registry_url"
 fi
 ```
@@ -246,22 +246,22 @@ Error: writing blob: write /var/tmp/storage123/layer.tar: no space left on devic
 echo "ストレージ問題の診断..."
 
 # 1. ディスク使用状況
-echo "📊 ディスク使用状況:"
+echo "ディスク使用状況:"
 df -h | grep -E "Filesystem|podman|containers|overlay|/var|/home|/$"
 
 # 2. Podmanストレージ使用状況
-echo -e "\n📊 Podmanストレージ分析:"
+echo -e "\nPodmanストレージ分析:"
 podman system df -v
 
 # 3. 大きなイメージ/コンテナの特定
-echo -e "\n📊 大きなイメージ (上位10):"
+echo -e "\n大きなイメージ (上位10):"
 podman images --format "table \{\{.Repository\}\}:\{\{.Tag\}\}\t\{\{.Size\}\}" | sort -k2 -hr | head -10
 
-echo -e "\n📊 大きなコンテナ (上位10):"
+echo -e "\n大きなコンテナ (上位10):"
 podman ps -a --format "table \{\{.Names\}\}\t\{\{.Size\}\}" | sort -k2 -hr | head -10
 
 # 4. クリーンアップ提案
-echo -e "\n🧹 クリーンアップオプション:"
+echo -e "\nクリーンアップオプション:"
 
 # 未使用イメージ
 unused_images=$(podman images -f dangling=true -q | wc -l)
@@ -285,7 +285,7 @@ if [ $unused_volumes -gt 0 ]; then
 fi
 
 # 5. 自動クリーンアップスクリプト
-echo -e "\n🤖 自動クリーンアップスクリプト:"
+echo -e "\n自動クリーンアップスクリプト:"
 cat << 'EOF'
 #!/bin/bash
 # auto-cleanup.sh - 定期実行用
@@ -304,7 +304,7 @@ podman system prune --volumes -f
 EOF
 ```
 
-## 🌐 ネットワーク問題の解決
+## ネットワーク問題の解決
 
 ### 1. コンテナ間通信不可
 
@@ -323,10 +323,10 @@ ping: container-b: Name or service not known
 echo "コンテナネットワーク診断..."
 
 # 1. ネットワーク構成の確認
-echo "📡 ネットワーク一覧:"
+echo "ネットワーク一覧:"
 podman network ls
 
-echo -e "\n📡 デフォルトネットワークの詳細:"
+echo -e "\nデフォルトネットワークの詳細:"
 podman network inspect podman | jq '.[0] | {
     name: .name,
     driver: .driver,
@@ -336,7 +336,7 @@ podman network inspect podman | jq '.[0] | {
 
 # 2. コンテナのネットワーク設定確認
 container_name=${1:-"container-a"}
-echo -e "\n📡 コンテナ '$container_name' のネットワーク設定:"
+echo -e "\nコンテナ '$container_name' のネットワーク設定:"
 podman inspect $container_name | jq '.[0].NetworkSettings | {
     Networks: .Networks,
     IPAddress: .IPAddress,
@@ -344,7 +344,7 @@ podman inspect $container_name | jq '.[0].NetworkSettings | {
 }'
 
 # 3. 同一ネットワーク上での通信設定
-echo -e "\n💡 解決方法:"
+echo -e "\n解決方法:"
 cat << 'EOF'
 # 方法1: 同じカスタムネットワークを使用
 podman network create myapp-net
@@ -361,7 +361,7 @@ podman run -d --pod myapp-pod --name app python:alpine
 EOF
 
 # 4. ネットワークデバッグツール
-echo -e "\n🔧 デバッグコマンド:"
+echo -e "\nデバッグコマンド:"
 cat << 'EOF'
 # DNS解決テスト
 podman exec container-a nslookup container-b
@@ -391,15 +391,15 @@ port=${1:-8080}
 echo "ポートマッピング診断 (ポート: $port)"
 
 # 1. ポートマッピング確認
-echo -e "\n🔌 ポートマッピング状態:"
+echo -e "\nポートマッピング状態:"
 podman port --all | grep -E ":$port|Port"
 
 # 2. リッスンポート確認
-echo -e "\n🔌 システムのリッスンポート:"
+echo -e "\nシステムのリッスンポート:"
 ss -tlnp | grep ":$port" || echo "ポート $port でリッスンしているプロセスなし"
 
 # 3. ファイアウォール確認
-echo -e "\n🔥 ファイアウォール状態:"
+echo -e "\nファイアウォール状態:"
 if command -v firewall-cmd &> /dev/null; then
     sudo firewall-cmd --list-ports
     
@@ -410,18 +410,18 @@ if command -v firewall-cmd &> /dev/null; then
 fi
 
 # 4. iptables確認（rootlessの場合）
-echo -e "\n🔗 iptablesルール (rootless):"
+echo -e "\niptablesルール (rootless):"
 if [ -f /proc/sys/net/ipv4/ip_forward ]; then
     ip_forward=$(cat /proc/sys/net/ipv4/ip_forward)
     echo "IP転送: $ip_forward"
     if [ "$ip_forward" = "0" ]; then
-        echo "⚠️  IP転送が無効です"
+        echo "[WARN] IP転送が無効"
         echo "有効化: echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward"
     fi
 fi
 
 # 5. 正しいポートマッピング例
-echo -e "\n✅ 正しいポートマッピング方法:"
+echo -e "\n正しいポートマッピング方法:"
 cat << EOF
 # 基本的なマッピング
 podman run -d -p 8080:80 nginx
@@ -437,7 +437,7 @@ podman run -d -p 8080:80 -p 8443:443 nginx
 EOF
 ```
 
-## 🐌 パフォーマンス問題の解決
+## パフォーマンス問題の解決
 
 ### 1. コンテナの起動が遅い
 
@@ -452,30 +452,30 @@ image=${2:-"alpine"}
 echo "起動パフォーマンス分析..."
 
 # 1. 起動時間の計測
-echo -e "\n⏱️  起動時間計測:"
+echo -e "\n起動時間計測:"
 time_output=$(time -p podman run --rm --name $container $image echo "Started" 2>&1)
 echo "$time_output"
 
 # 2. 起動プロセスの詳細分析
-echo -e "\n📊 詳細なタイミング分析:"
+echo -e "\n詳細なタイミング分析:"
 podman --log-level=debug run --rm $image true 2>&1 | grep -E "time=|duration=" | tail -20
 
 # 3. ストレージドライバーの確認
-echo -e "\n💾 ストレージドライバー:"
+echo -e "\nストレージドライバー:"
 storage_driver=$(podman info --format '\{\{.Store.GraphDriverName\}\}')
 echo "現在のドライバー: $storage_driver"
 
 if [ "$storage_driver" != "overlay" ]; then
-    echo "⚠️  最適でないストレージドライバーを使用中"
+    echo "[WARN] 最適でないストレージドライバーを使用中"
     echo "推奨: overlay (native) または overlay (fuse-overlayfs)"
 fi
 
 # 4. イメージレイヤーの分析
-echo -e "\n🏗️  イメージレイヤー分析:"
+echo -e "\nイメージレイヤー分析:"
 podman history --format "table \{\{.ID\}\}\t\{\{.Size\}\}\t\{\{.CreatedBy\}\}" $image | head -10
 
 # 5. 最適化の提案
-echo -e "\n💡 パフォーマンス改善方法:"
+echo -e "\nパフォーマンス改善方法:"
 cat << EOF
 1. イメージの最適化
    - マルチステージビルドの使用
@@ -504,15 +504,15 @@ EOF
 echo "メモリ使用状況の分析..."
 
 # 1. 全体的なメモリ使用状況
-echo "📊 システムメモリ状態:"
+echo "システムメモリ状態:"
 free -h
 
 # 2. コンテナごとのメモリ使用量
-echo -e "\n📊 コンテナメモリ使用量:"
+echo -e "\nコンテナメモリ使用量:"
 podman stats --no-stream --format "table \{\{.Name\}\}\t\{\{.MemUsage\}\}\t\{\{.MemPerc\}\}\t\{\{.PIDs\}\}"
 
 # 3. 詳細なメモリ分析
-echo -e "\n📊 メモリ詳細分析:"
+echo -e "\nメモリ詳細分析:"
 for container in $(podman ps --format "\{\{.Names\}\}"); do
     echo -e "\n--- $container ---"
     
@@ -531,7 +531,7 @@ for container in $(podman ps --format "\{\{.Names\}\}"); do
 done
 
 # 4. メモリリークの検出
-echo -e "\n🔍 メモリリーク検出:"
+echo -e "\nメモリリーク検出:"
 cat << 'EOF'
 #!/bin/bash
 # memory-leak-detector.sh
@@ -617,13 +617,13 @@ PY
 EOF
 
 # 5. 最適化提案
-echo -e "\n💡 メモリ最適化方法:"
+echo -e "\nメモリ最適化方法:"
 echo "1. メモリ制限の設定: podman run -m 512m"
 echo "2. スワップ制限: podman run -m 512m --memory-swap 512m"
 echo "3. OOMキラーの調整: podman run --oom-kill-disable=false"
 ```
 
-## 🔧 高度なトラブルシューティング
+## 高度なトラブルシューティング
 
 ### 1. systemd統合の問題
 
@@ -643,20 +643,20 @@ container_name=${1:-"myapp"}
 echo "systemd統合の診断..."
 
 # 1. systemdユニットファイルの生成
-echo -e "\n📝 systemdユニットファイル生成:"
+echo -e "\nsystemdユニットファイル生成:"
 podman generate systemd --new --name $container_name > $container_name.service
 
 echo "生成されたユニットファイル:"
 cat $container_name.service
 
 # 2. ユニットファイルの配置
-echo -e "\n📁 ユニットファイルの配置:"
+echo -e "\nユニットファイルの配置:"
 mkdir -p ~/.config/systemd/user
 cp $container_name.service ~/.config/systemd/user/
 systemctl --user daemon-reload
 
 # 3. 自動起動の設定
-echo -e "\n🚀 サービスの管理:"
+echo -e "\nサービスの管理:"
 cat << EOF
 # サービスの有効化と起動
 systemctl --user enable $container_name.service
@@ -670,7 +670,7 @@ journalctl --user -u $container_name.service
 EOF
 
 # 4. トラブルシューティングチェックリスト
-echo -e "\n✅ チェックリスト:"
+echo -e "\nチェックリスト:"
 echo "- [ ] loginctl show-user でLinger=yes確認"
 echo "- [ ] XDG_RUNTIME_DIR が設定されている"
 echo "- [ ] systemd --user が実行されている"
@@ -686,23 +686,23 @@ echo "- [ ] systemd --user が実行されている"
 echo "cgroup設定の診断..."
 
 # 1. cgroupバージョン確認
-echo "📊 cgroupバージョン:"
+echo "cgroupバージョン:"
 if [ -f /sys/fs/cgroup/cgroup.controllers ]; then
     echo "cgroup v2 が有効"
     echo "利用可能なコントローラー:"
     cat /sys/fs/cgroup/cgroup.controllers
 else
     echo "cgroup v1 が有効"
-    echo "⚠️  cgroup v2への移行を推奨"
+    echo "[WARN] cgroup v2 への移行を推奨"
 fi
 
 # 2. 委譲設定の確認
-echo -e "\n🔧 systemd委譲設定:"
+echo -e "\nsystemd委譲設定:"
 systemctl show --user -p Delegate
 systemctl show --user -p DelegateControllers
 
 # 3. ユーザースライスの設定
-echo -e "\n👤 ユーザースライス設定:"
+echo -e "\nユーザースライス設定:"
 cat << 'EOF'
 # /etc/systemd/system/user@.service.d/delegate.conf
 [Service]
@@ -710,14 +710,14 @@ Delegate=cpu cpuset io memory pids
 EOF
 
 # 4. リソース制限の適用確認
-echo -e "\n📊 リソース制限テスト:"
+echo -e "\nリソース制限テスト:"
 podman run --rm --memory 100m --cpus 0.5 alpine sh -c '
     echo "メモリ制限: $(cat /sys/fs/cgroup/memory.max | numfmt --to=iec)"
     echo "CPU制限: $(cat /sys/fs/cgroup/cpu.max)"
 '
 ```
 
-## 📋 トラブルシューティングチェックリスト
+## トラブルシューティングチェックリスト
 
 ### 起動時の問題
 - [ ] SELinuxの状態確認 (`getenforce`)
@@ -743,7 +743,7 @@ podman run --rm --memory 100m --cpus 0.5 alpine sh -c '
 - [ ] バックアップスクリプトの実行
 - [ ] 自動クリーンアップの設定
 
-## 🆘 緊急時の対処法
+## 緊急時の対処法
 
 ```bash
 #!/bin/bash

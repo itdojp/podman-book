@@ -6,7 +6,7 @@ title: "エンタープライズ環境でのPodman要件詳細"
 
 本ドキュメントは、企業環境でPodmanを導入・運用する際の詳細な要件と実装方法を解説します。
 
-## 🏢 エンタープライズ要件概要
+## エンタープライズ要件概要
 
 ### 必須要件マトリクス
 
@@ -19,7 +19,7 @@ title: "エンタープライズ環境でのPodman要件詳細"
 | **スケーラビリティ** | 水平スケーリング | ✓ | Pod + LB |
 | **統合** | 既存システム連携 | ✓ | REST API |
 
-## 🔐 セキュリティ要件
+## セキュリティ要件
 
 ### 1. ロールベースアクセス制御（RBAC）
 
@@ -126,10 +126,10 @@ scan_image() {
         vulnerabilities=$(jq '.Results[].Vulnerabilities | length' scan-results.json | awk '{sum+=$1} END {print sum}')
         
         if [ "$vulnerabilities" -gt 0 ]; then
-            echo "⚠️  脆弱性が検出されました: $vulnerabilities 件"
+            echo "[NG] 脆弱性が検出された: $vulnerabilities 件"
             return 1
         else
-            echo "✅ 脆弱性は検出されませんでした"
+            echo "[OK] 脆弱性は検出されなかった"
             return 0
         fi
     fi
@@ -141,7 +141,7 @@ for image in $(podman images --format "\{\{.Repository\}\}:\{\{.Tag\}\}" | grep 
 done
 ```
 
-## 📊 監査とコンプライアンス
+## 監査とコンプライアンス
 
 ### 1. 包括的な監査ログ設定
 
@@ -228,37 +228,37 @@ declare -A checks
 
 # 1. FIPSモード確認
 if [ "$(cat /proc/sys/crypto/fips_enabled)" = "1" ]; then
-    checks["FIPS 140-2"]="✓ 有効"
+    checks["FIPS 140-2"]="[OK] 有効"
 else
-    checks["FIPS 140-2"]="✗ 無効"
+    checks["FIPS 140-2"]="[NG] 無効"
 fi
 
 # 2. SELinux確認
 if [ "$(getenforce)" = "Enforcing" ]; then
-    checks["SELinux"]="✓ Enforcing"
+    checks["SELinux"]="[OK] Enforcing"
 else
-    checks["SELinux"]="✗ $(getenforce)"
+    checks["SELinux"]="[NG] $(getenforce)"
 fi
 
 # 3. 監査デーモン確認
 if systemctl is-active auditd >/dev/null 2>&1; then
-    checks["監査ログ"]="✓ 有効"
+    checks["監査ログ"]="[OK] 有効"
 else
-    checks["監査ログ"]="✗ 無効"
+    checks["監査ログ"]="[NG] 無効"
 fi
 
 # 4. rootlessモード確認
 if podman info | grep -q "rootless: true"; then
-    checks["Rootlessモード"]="✓ 有効"
+    checks["Rootlessモード"]="[OK] 有効"
 else
-    checks["Rootlessモード"]="✗ 無効"
+    checks["Rootlessモード"]="[NG] 無効"
 fi
 
 # 5. 暗号化ストレージ確認
 if lsblk -o NAME,FSTYPE | grep -q "crypto_LUKS"; then
-    checks["ディスク暗号化"]="✓ 有効"
+    checks["ディスク暗号化"]="[OK] 有効"
 else
-    checks["ディスク暗号化"]="⚠ 確認必要"
+    checks["ディスク暗号化"]="[WARN] 確認必要"
 fi
 
 # レポート出力
@@ -269,7 +269,7 @@ for check in "${!checks[@]}"; do
 done
 ```
 
-## 🔄 高可用性とディザスタリカバリ
+## 高可用性とディザスタリカバリ
 
 ### 1. 自動フェイルオーバー設定
 
@@ -417,7 +417,7 @@ restore_podman_environment() {
 }
 ```
 
-## 📈 パフォーマンスとスケーラビリティ
+## パフォーマンスとスケーラビリティ
 
 ### 1. リソース管理とクォータ
 
@@ -507,7 +507,7 @@ server {
 }
 ```
 
-## 🔌 エンタープライズ統合
+## エンタープライズ統合
 
 ### 1. LDAP/Active Directory統合
 
@@ -614,7 +614,7 @@ data:
 </match>
 ```
 
-## ✅ エンタープライズ導入チェックリスト
+## エンタープライズ導入チェックリスト
 
 ### セキュリティ
 - [ ] RBAC設定完了

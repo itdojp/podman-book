@@ -534,7 +534,7 @@ for container in $(podman ps -q); do
     privileged=$(podman inspect $container --format '\{\{.HostConfig.Privileged\}\}')
     
     if [ "$privileged" = "true" ]; then
-        echo "⚠️  WARNING: $name is running in privileged mode"
+        echo "[WARN] $name is running in privileged mode"
         
         # 代替案の提案
         echo "   Alternative: Use specific capabilities instead"
@@ -554,10 +554,10 @@ for container in $(podman ps -q); do
         
         # 危険なケーパビリティの警告
         if echo "$caps" | grep -q "SYS_ADMIN"; then
-            echo "  ⚠️  WARNING: SYS_ADMIN capability is very powerful"
+            echo "  [WARN] SYS_ADMIN capability is very powerful"
         fi
         if echo "$caps" | grep -q "SYS_PTRACE"; then
-            echo "  ⚠️  WARNING: SYS_PTRACE can be used for container escape"
+            echo "  [WARN] SYS_PTRACE can be used for container escape"
         fi
     fi
 done
@@ -569,7 +569,7 @@ for container in $(podman ps -q); do
     user=$(podman exec $container whoami 2>/dev/null || echo "unknown")
     
     if [ "$user" = "root" ]; then
-        echo "⚠️  $name is running as root user"
+        echo "[WARN] $name is running as root user"
         echo "   Recommendation: Use USER directive in Dockerfile"
     fi
 done
@@ -859,15 +859,19 @@ generate_report() {
     
     for key in "${!DIAGNOSTICS[@]}"; do
         STATUS="${DIAGNOSTICS[$key]}"
+        DISPLAY_STATUS="$STATUS"
+        DISPLAY_STATUS="${DISPLAY_STATUS#OK: }"
+        DISPLAY_STATUS="${DISPLAY_STATUS#WARN: }"
+        DISPLAY_STATUS="${DISPLAY_STATUS#FAIL: }"
         
         if [[ "$STATUS" == OK* ]]; then
-            echo "✓ $key: $STATUS"
+            echo "[OK] $key: $DISPLAY_STATUS"
             ((PASS_COUNT++))
         elif [[ "$STATUS" == WARN* ]]; then
-            echo "⚠ $key: $STATUS"
+            echo "[WARN] $key: $DISPLAY_STATUS"
             ((WARN_COUNT++))
         else
-            echo "✗ $key: $STATUS"
+            echo "[NG] $key: $DISPLAY_STATUS"
             ((FAIL_COUNT++))
         fi
     done
@@ -878,13 +882,13 @@ generate_report() {
     echo "  Failed: $FAIL_COUNT"
     
     if [ $FAIL_COUNT -gt 0 ]; then
-        echo -e "\n⚠️  System has critical issues that need to be resolved"
+        echo -e "\n[NG] System has critical issues that need to be resolved"
         return 1
     elif [ $WARN_COUNT -gt 0 ]; then
-        echo -e "\n⚠️  System has warnings that should be reviewed"
+        echo -e "\n[WARN] System has warnings that should be reviewed"
         return 0
     else
-        echo -e "\n✅ System is properly configured"
+        echo -e "\n[OK] System is properly configured"
         return 0
     fi
 }

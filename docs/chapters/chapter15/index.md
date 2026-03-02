@@ -859,15 +859,19 @@ generate_report() {
     
     for key in "${!DIAGNOSTICS[@]}"; do
         STATUS="${DIAGNOSTICS[$key]}"
+        DISPLAY_STATUS="$STATUS"
+        DISPLAY_STATUS="${DISPLAY_STATUS#OK: }"
+        DISPLAY_STATUS="${DISPLAY_STATUS#WARN: }"
+        DISPLAY_STATUS="${DISPLAY_STATUS#FAIL: }"
         
         if [[ "$STATUS" == OK* ]]; then
-            echo "[OK] $key: $STATUS"
+            echo "[OK] $key: $DISPLAY_STATUS"
             ((PASS_COUNT++))
         elif [[ "$STATUS" == WARN* ]]; then
-            echo "[WARN] $key: $STATUS"
+            echo "[WARN] $key: $DISPLAY_STATUS"
             ((WARN_COUNT++))
         else
-            echo "[NG] $key: $STATUS"
+            echo "[NG] $key: $DISPLAY_STATUS"
             ((FAIL_COUNT++))
         fi
     done

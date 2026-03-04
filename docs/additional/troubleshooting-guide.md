@@ -287,20 +287,32 @@ fi
 # 5. 自動クリーンアップスクリプト
 echo -e "\n自動クリーンアップスクリプト:"
 cat << 'EOF'
-#!/bin/bash
-# auto-cleanup.sh - 定期実行用
+#!/usr/bin/env bash
+# auto-cleanup.sh - 定期実行用（注意: 影響範囲を理解した上で利用する）
+
+set -euo pipefail
+
+# 誤実行防止: 明示的に有効化しない限り動かない
+if [ "${PODMAN_AUTO_CLEANUP:-NO}" != "YES" ]; then
+  echo "[ABORT] Set PODMAN_AUTO_CLEANUP=YES to enable cleanup." >&2
+  exit 1
+fi
 
 # 30日以上古いイメージを削除
-podman image prune -a --filter "until=720h" -f
+# 影響が大きい（未使用イメージも削除されるため注意）
+podman image prune --all --filter "until=720h" --force
 
 # 終了したコンテナを削除
-podman container prune -f
+podman container prune --force
 
-# 未使用ボリュームを削除
-podman volume prune -f
+# 未使用ネットワーク等を削除（影響が大きい）
+podman system prune --force
 
-# ビルドキャッシュをクリア
-podman system prune --volumes -f
+# ボリューム削除はデータ消失につながるため、明示的に opt-in（必要時のみ）
+if [ "${PRUNE_VOLUMES:-NO}" = "YES" ]; then
+  podman volume prune --force
+  podman system prune --volumes --force
+fi
 EOF
 ```
 
@@ -749,27 +761,56 @@ podman run --rm --memory 100m --cpus 0.5 alpine sh -c '
 #!/bin/bash
 # emergency-recovery.sh
 
+set -euo pipefail
+
 echo "緊急リカバリ手順..."
+echo
+echo "[WARNING] このスクリプトは Podman のデータを削除します。"
+echo "  - podman system reset（イメージ/コンテナ/ネットワーク等の削除）"
+echo "  - ~/.config/containers と ~/.local/share/containers の退避（必要なら削除）"
+echo
+echo "原則としてテスト環境でのみ使用し、本番環境では実行しないでください。"
+echo "実行する場合は、事前に影響範囲を確認し、必要なデータをバックアップしてください。"
+echo
 
-# 1. 全コンテナの強制停止
+if [ "${PODMAN_EMERGENCY_RECOVERY:-}" != "YES" ]; then
+  echo "[ABORT] 実行を中止しました。"
+  echo "実行する場合は、環境変数 PODMAN_EMERGENCY_RECOVERY=YES を設定して再実行してください。"
+  exit 1
+fi
+
+read -r -p "本当に実行しますか？（実行する場合は 'yes' と入力）: " answer
+if [ "$answer" != "yes" ]; then
+  echo "[ABORT] 中止しました。"
+  exit 1
+fi
+
+backup_dir="$HOME/podman-emergency-backup-$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$backup_dir"
+
+# 1. 全コンテナの停止（存在しない場合もあるため失敗しても継続）
 echo "1. 全コンテナ停止"
-podman stop -a -t 0
+podman stop --all --time 0 || true
 
-# 2. ネットワークのリセット
+# 2. ネットワークのリセット（注意: 未使用ネットワークが削除される）
 echo "2. ネットワークリセット"
-podman network prune -f
+podman network prune
 
-# 3. ストレージのリセット（注意：データ消失）
-echo "3. ストレージクリーンアップ"
-podman system reset --force
+# 3. ストレージのリセット（注意: データ消失）
+echo "3. ストレージクリーンアップ（データ消失）"
+podman system reset
 
-# 4. 設定の再初期化
-echo "4. 設定リセット"
-rm -rf ~/.config/containers
-rm -rf ~/.local/share/containers
+# 4. 設定の退避（必要なら後で削除する）
+echo "4. 設定の退避: $backup_dir"
+if [ -d "$HOME/.config/containers" ]; then
+  mv "$HOME/.config/containers" "$backup_dir/containers.config"
+fi
+if [ -d "$HOME/.local/share/containers" ]; then
+  mv "$HOME/.local/share/containers" "$backup_dir/containers.data"
+fi
 
-# 5. 再起動
-echo "5. システム再起動を推奨"
+# 5. 再起動（必要に応じて）
+echo "5. 必要に応じてシステム再起動を検討してください"
 ```
 
 ## まとめ

@@ -335,14 +335,25 @@ podman network create podman
 
 **3. ストレージ容量不足**
 ```bash
-# 不要なイメージの削除
-podman image prune -a
+# 現状確認（何が容量を使っているか）
+podman system df
+podman ps -a
+podman images
+podman volume ls
 
-# 停止中のコンテナの削除
+# 影響が小さい順に段階的にクリーンアップする
+# 停止中のコンテナの削除（必要ならログ/設定を退避してから）
 podman container prune
 
-# システム全体のクリーンアップ
-podman system prune -a
+# dangling なイメージの削除（影響が比較的小さい）
+podman image prune
+
+# 影響が大きい操作（未使用イメージも削除されるため注意）
+podman image prune --all
+
+# 影響が大きい操作（未使用のコンテナ/ネットワーク/イメージ等をまとめて削除）
+podman system prune
+podman system prune --all
 ```
 
 ## インストール後の検証チェックリスト

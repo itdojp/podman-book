@@ -137,7 +137,16 @@ podman run --rm hello-world
 # Ubuntu 22.04/24.04でのインストール（公式リポジトリ）
 sudo apt update
 sudo apt install -y podman
+
+# バージョン確認と動作テスト
+podman --version
+podman info
+podman run --rm hello-world
 ```
+
+![Podman セットアップ確認の出力例](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)
+
+_Ubuntu 24.04 / Podman 4.9.3 における `podman --version` / `podman info` / `podman run --rm hello-world` の出力例。表示内容は環境により異なります。_
 
 ### macOS
 

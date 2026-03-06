@@ -131,17 +131,22 @@ podman run --rm hello-world
 # コンテナが正常に実行され、メッセージが表示されることを確認
 ```
 
-出力例（バージョン/動作確認。出力は OS / Podman バージョンで異なります）:
-
-![podman --version / podman info / hello-world（例: Ubuntu 24.04, Podman 4.9.3）](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)
-
 ### Ubuntu
 
 ```bash
 # Ubuntu 22.04/24.04でのインストール（公式リポジトリ）
 sudo apt update
 sudo apt install -y podman
+
+# バージョン確認と動作テスト
+podman --version
+podman info
+podman run --rm hello-world
 ```
+
+![Podman セットアップ確認の出力例](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)
+
+_Ubuntu 24.04 / Podman 4.9.3 における `podman --version` / `podman info` / `podman run --rm hello-world` の出力例。表示内容は環境により異なります。_
 
 ### macOS
 

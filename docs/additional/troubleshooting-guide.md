@@ -758,7 +758,7 @@ podman run --rm --memory 100m --cpus 0.5 alpine sh -c '
 ## 緊急時の対処法
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # emergency-recovery.sh
 
 set -euo pipefail
@@ -792,22 +792,22 @@ mkdir -p "$backup_dir"
 echo "1. 全コンテナ停止"
 podman stop --all --time 0 || true
 
-# 2. ネットワークのリセット（注意: 未使用ネットワークが削除される）
-echo "2. ネットワークリセット"
-podman network prune
-
-# 3. ストレージのリセット（注意: データ消失）
-echo "3. ストレージクリーンアップ（データ消失）"
-podman system reset
-
-# 4. 設定の退避（必要なら後で削除する）
-echo "4. 設定の退避: $backup_dir"
+# 2. 設定とデータの退避（reset 前にコピーして保全）
+echo "2. 設定とデータの退避: $backup_dir"
 if [ -d "$HOME/.config/containers" ]; then
-  mv "$HOME/.config/containers" "$backup_dir/containers.config"
+  cp -a "$HOME/.config/containers" "$backup_dir/containers.config"
 fi
 if [ -d "$HOME/.local/share/containers" ]; then
-  mv "$HOME/.local/share/containers" "$backup_dir/containers.data"
+  cp -a "$HOME/.local/share/containers" "$backup_dir/containers.data"
 fi
+
+# 3. ネットワークのリセット（注意: 未使用ネットワークが削除される）
+echo "3. ネットワークリセット"
+podman network prune
+
+# 4. ストレージのリセット（注意: データ消失）
+echo "4. ストレージクリーンアップ（データ消失）"
+podman system reset
 
 # 5. 再起動（必要に応じて）
 echo "5. 必要に応じてシステム再起動を検討してください"

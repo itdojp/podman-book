@@ -426,7 +426,8 @@ podman volume prune
 
 # 未使用のコンテナ/ネットワーク/イメージ等をまとめて削除（影響が大きい）
 podman system prune
-podman system prune --all --volumes
+# （必要な場合のみ）未使用のコンテナ/ネットワーク/イメージ/ボリューム等をすべて削除（非常に影響が大きい）
+# podman system prune --all --volumes
 
 # マウント問題
 findmnt | grep podman

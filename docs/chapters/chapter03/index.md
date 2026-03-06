@@ -291,7 +291,9 @@ Containers     8       3       123MB   89MB (72%)
 Local Volumes  3       2       456MB   123MB (27%)
 
 # ガベージコレクション
-$ podman system prune -a --volumes
+$ podman system prune
+# 影響が大きい操作（未使用イメージ/ボリュームも削除される可能性があるため注意）
+# $ podman system prune --all --volumes
 ```
 
 **なぜストレージドライバーの選択が重要か**

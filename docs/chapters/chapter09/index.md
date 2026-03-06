@@ -340,27 +340,36 @@ fi
 ```bash
 # ボリュームバックアップスクリプト
 cat > backup-volumes.sh << 'EOF'
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 BACKUP_DIR="/backup/$(date +%Y%m%d_%H%M%S)"
-mkdir -p $BACKUP_DIR
+mkdir -p "$BACKUP_DIR"
 
 # 全ボリュームのバックアップ
-for volume in $(podman volume ls -q); do
+podman volume ls -q | while IFS= read -r volume; do
+    [ -n "$volume" ] || continue
     echo "Backing up volume: $volume"
     
     # 一時コンテナでボリュームをマウントしてバックアップ
     podman run --rm \
-        -v $volume:/data:ro \
-        -v $BACKUP_DIR:/backup \
-        alpine tar czf /backup/$volume.tar.gz -C /data .
+        -v "${volume}:/data:ro" \
+        -v "${BACKUP_DIR}:/backup" \
+        alpine tar czf "/backup/${volume}.tar.gz" -C /data .
 done
 
 # メタデータ保存
-podman volume ls --format json > $BACKUP_DIR/volumes-metadata.json
+podman volume ls --format json > "$BACKUP_DIR/volumes-metadata.json"
 
 # 古いバックアップの削除（7日以上）
-find /backup -type d -mtime +7 -exec rm -rf {} \;
+# 安全のため、削除はデフォルト無効（有効化する場合は PRUNE_OLD_BACKUPS=YES を指定）。
+if [ "${PRUNE_OLD_BACKUPS:-NO}" = "YES" ]; then
+    echo "Pruning old backups (older than 7 days) under /backup ..."
+    # /backup 配下の直下ディレクトリのみを対象にする（誤削除リスク低減）
+    find /backup -mindepth 1 -maxdepth 1 -type d -mtime +7 -exec rm -rf -- {} +
+else
+    echo "Skip pruning old backups. Set PRUNE_OLD_BACKUPS=YES to enable pruning."
+fi
 EOF
 
 chmod +x backup-volumes.sh
@@ -371,7 +380,8 @@ chmod +x backup-volumes.sh
 ```bash
 # リストアスクリプト
 cat > restore-volumes.sh << 'EOF'
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 BACKUP_DIR=$1
 if [ -z "$BACKUP_DIR" ]; then
@@ -379,20 +389,29 @@ if [ -z "$BACKUP_DIR" ]; then
     exit 1
 fi
 
+if [ ! -d "$BACKUP_DIR" ]; then
+    echo "[ERROR] Backup directory not found: $BACKUP_DIR" >&2
+    exit 1
+fi
+if [ ! -f "$BACKUP_DIR/volumes-metadata.json" ]; then
+    echo "[ERROR] volumes-metadata.json not found: $BACKUP_DIR/volumes-metadata.json" >&2
+    exit 1
+fi
+
 # メタデータ読み込み
-VOLUMES=$(jq -r '.[].Name' $BACKUP_DIR/volumes-metadata.json)
+VOLUMES=$(jq -r '.[].Name' "$BACKUP_DIR/volumes-metadata.json")
 
 for volume in $VOLUMES; do
     echo "Restoring volume: $volume"
     
     # ボリューム作成
-    podman volume create $volume
+    podman volume create "$volume"
     
     # データリストア
     podman run --rm \
-        -v $volume:/data \
-        -v $BACKUP_DIR:/backup:ro \
-        alpine tar xzf /backup/$volume.tar.gz -C /data
+        -v "${volume}:/data" \
+        -v "${BACKUP_DIR}:/backup:ro" \
+        alpine tar xzf "/backup/${volume}.tar.gz" -C /data
 done
 EOF
 

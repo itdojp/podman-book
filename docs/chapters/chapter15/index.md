@@ -315,7 +315,9 @@ RECLAIMABLE=$(podman system df --format json | jq '.Summary.Reclaimable')
 echo "Reclaimable space: $RECLAIMABLE"
 
 echo -e "\nTo free up space, run:"
-echo "podman system prune -a --volumes"
+echo "podman system prune"
+echo "# 影響が大きい操作（未使用イメージ/ボリュームも削除され得るため注意）"
+echo "# podman system prune --all --volumes"
 ```
 
 ### 15.3 高度なデバッグ技術

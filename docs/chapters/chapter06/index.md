@@ -420,9 +420,14 @@ podman exec mycontainer nslookup example.com
 podman system df
 podman volume ls -f dangling=true
 
-# クリーンアップ
-podman volume prune -f
-podman system prune -a --volumes
+# クリーンアップ（注意: 削除対象を理解した上で実行）
+# 未使用ボリュームの削除はデータ消失につながる可能性があるため注意してください。
+podman volume prune
+
+# 未使用のコンテナ/ネットワーク/イメージ等をまとめて削除（影響が大きい）
+podman system prune
+# （必要な場合のみ）未使用のコンテナ/ネットワーク/イメージ/ボリューム等をすべて削除（非常に影響が大きい）
+# podman system prune --all --volumes
 
 # マウント問題
 findmnt | grep podman

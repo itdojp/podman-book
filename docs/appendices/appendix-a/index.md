@@ -180,10 +180,13 @@ podman version
 # イベント監視
 podman events
 
-# システムプルーニング
-podman system prune -a
+# システムプルーニング（注意: 未使用リソースが削除される）
+podman system prune
 
-# リセット（全削除）
+# 影響が大きいプルーニング（未使用イメージも削除されるため注意）
+podman system prune --all
+
+# リセット（注意: データ消失。原則としてテスト環境でのみ実行）
 podman system reset
 
 # デバッグログ有効化

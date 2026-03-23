@@ -24,13 +24,13 @@ chapters:
   path: /chapters/chapter10/
 - title: 第11章：Kubernetesとの統合
   path: /chapters/chapter11/
-- title: 第12章：CI/CDパイプラインの構築
+- title: 第12章：パフォーマンスチューニング
   path: /chapters/chapter12/
-- title: 第13章：セキュリティとコンプライアンス
+- title: 第13章：マイクロサービスアーキテクチャ
   path: /chapters/chapter13/
-- title: 第14章：パフォーマンスチューニング
+- title: 第14章：エンタープライズ環境での活用
   path: /chapters/chapter14/
-- title: 第15章：エンタープライズ環境での運用
+- title: 第15章：トラブルシューティング完全ガイド
   path: /chapters/chapter15/
 appendices:
 - title: 付録A：コマンドリファレンス

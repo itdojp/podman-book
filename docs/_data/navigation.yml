@@ -20,7 +20,7 @@ chapters:
   path: /chapters/chapter08/
 - title: 第9章：レジストリとイメージ配布
   path: /chapters/chapter09/
-- title: 第10章：ログ管理とトラブルシューティング
+- title: 第10章：CI/CDパイプラインの実践
   path: /chapters/chapter10/
 - title: 第11章：Kubernetesとの統合
   path: /chapters/chapter11/

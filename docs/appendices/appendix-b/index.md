@@ -13,7 +13,7 @@ title: "付録B：トラブルシューティングガイド"
 - インストールや初期設定で詰まった場合: [第2章：Podmanのインストールと初期設定](../../chapters/chapter02/)
 - 起動失敗、権限エラー、ネットワーク、ストレージ容量などの日常運用トラブル: [Podman実践的トラブルシューティングガイド](../../additional/troubleshooting-guide/)
 - レジストリ認証やイメージ配布に起因する問題: [第9章：レジストリとイメージ配布](../../chapters/chapter09/)
-- systemd 管理や本番運用時の深掘り: [第15章：トラブルシューティング完全ガイド](../../chapters/chapter15/)
+- systemd 管理や本番運用時の深掘り: [第14章：エンタープライズ環境での活用](../../chapters/chapter14/)
 - コマンドの意味や引数を確認したい場合: [付録A：コマンドリファレンス](../appendix-a/)
 - Docker からの移行起因の差分確認: [Docker→Podman包括的移行ガイドライン](../../additional/migration-guide/)
 

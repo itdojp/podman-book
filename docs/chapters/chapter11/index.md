@@ -517,7 +517,7 @@ podman run -d -p 5000:5000 --name registry registry:2
 
 ## 次に読む
 
-- [第12章：CI/CDパイプラインの構築](../chapter12/)
+- [第12章：パフォーマンスチューニング](../chapter12/)
 - [目次に戻る](../../)
 
 ---

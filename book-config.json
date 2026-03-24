@@ -67,8 +67,8 @@
       },
       {
         "id": "chapter10",
-        "title": "第10章：ログ管理とトラブルシューティング",
-        "description": "ログ収集とデバッグ技法",
+        "title": "第10章：CI/CDパイプラインの実践",
+        "description": "Podmanを使ったコンテナCI/CDの設計と実装",
         "order": 11
       },
       {

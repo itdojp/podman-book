@@ -3,6 +3,12 @@
   "description": "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法",
   "author": "株式会社アイティードゥ",
   "version": "1.0.0",
+  "language": "ja",
+  "license": "CC-BY-NC-SA-4.0",
+  "repository": {
+    "url": "https://github.com/itdojp/podman-book.git",
+    "branch": "main"
+  },
   "structure": {
     "chapters": [
       {
@@ -133,12 +139,12 @@
     "profile": "B",
     "modules": {
       "quickStart": false,
-      "readingGuide": false,
+      "readingGuide": true,
       "checklistPack": true,
       "troubleshootingFlow": true,
       "conceptMap": false,
-      "figureIndex": true,
-      "legalNotice": false,
+      "figureIndex": false,
+      "legalNotice": true,
       "glossary": false
     }
   },

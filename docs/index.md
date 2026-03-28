@@ -92,8 +92,8 @@ order: 0
 - [第11章：Kubernetesとの統合](chapters/chapter11/)
 - [第12章：CI/CDパイプラインの構築](chapters/chapter12/)
 - [第13章：セキュリティとコンプライアンス](chapters/chapter13/)
-- [第14章：パフォーマンスチューニング](chapters/chapter14/)
-- [第15章：エンタープライズ環境での運用](chapters/chapter15/)
+- [第14章：エンタープライズ環境での活用](chapters/chapter14/)
+- [第15章：トラブルシューティング完全ガイド](chapters/chapter15/)
 
 ### 付録
 

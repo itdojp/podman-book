@@ -122,8 +122,7 @@ order: 0
 
 - 公開版: [GitHub Pages](https://itdojp.github.io/podman-book/)
 - リポジトリ: [GitHub Repository](https://github.com/itdojp/podman-book)
-- 版情報: `1.0.0`
-- 最終同期: `2026-02-04`
+- 版情報・最終同期: リポジトリの [book-config.json](https://github.com/itdojp/podman-book/blob/main/book-config.json) を参照
 - 版差確認: [コミット履歴](https://github.com/itdojp/podman-book/commits/main/) / [Pull Requests](https://github.com/itdojp/podman-book/pulls)
 - 参考資料: [付録C：リソース集]({{ '/appendices/appendix-c/' | relative_url }})
 

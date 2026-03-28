@@ -55,6 +55,38 @@ order: 0
 ### 第2部: 実践編（第6章〜第10章）
 実際の開発・運用で必要となる実践的な技術
 
+### 第3部: 応用編（第11章〜第15章）
+エンタープライズ環境での高度な活用方法
+
+## 前提知識
+- Linux の基本操作（ターミナル、権限、ファイル操作）
+- コンテナの基本概念（イメージ/コンテナ、ネットワーク/ボリュームの概要）
+- （推奨）Docker の利用経験（Docker と Podman の差分理解が進みやすい）
+
+## 所要時間
+- 通読: 約1.5〜2時間（本文量ベース概算。コードブロック除外、400〜600文字/分換算）
+- コマンドを実行しながら進める場合は、環境と演習範囲により変動します。
+
+## 目次
+
+- [はじめに](introduction/)
+
+### 第1部: 基礎編
+
+- [第1章：コンテナ技術の基礎](chapters/chapter01/)
+- [第2章：Podmanのインストールと初期設定](chapters/chapter02/)
+- [第3章：基本的なコンテナ操作](chapters/chapter03/)
+- [第4章：イメージの管理と作成](chapters/chapter04/)
+- [第5章：ストレージとボリューム管理](chapters/chapter05/)
+
+### 第2部: 実践編
+
+- [第6章：ネットワーキングとポート管理](chapters/chapter06/)
+- [第7章：Pod機能と複数コンテナ管理](chapters/chapter07/)
+- [第8章：Dockerfileの作成と最適化](chapters/chapter08/)
+- [第9章：レジストリとイメージ配布](chapters/chapter09/)
+- [第10章：CI/CDパイプラインの実践](chapters/chapter10/)
+
 ### 第3部: 応用編
 
 - [第11章：Kubernetesとの統合](chapters/chapter11/)
@@ -81,23 +113,23 @@ order: 0
 
 ## ライセンス
 
-本書は **Creative Commons BY-NC-SA 4.0** ライセンスで公開されています。  
+本書は **Creative Commons BY-NC-SA 4.0** ライセンスで公開されています。
 教育・研究・個人学習での利用は自由ですが、商用利用には事前許諾が必要です。
 
-[詳細なライセンス条件](https://github.com/itdojp/it-engineer-knowledge-architecture/blob/main/LICENSE.md)
+[詳細なライセンス条件](https://github.com/itdojp/podman-book/blob/main/LICENSE.md)
 
 ## 利用と更新情報
 
 - 公開版: [GitHub Pages](https://itdojp.github.io/podman-book/)
 - リポジトリ: [GitHub Repository](https://github.com/itdojp/podman-book)
-- 版情報・最終同期: リポジトリの [book-config.json](https://github.com/itdojp/podman-book/blob/main/book-config.json) を参照
-- 版差確認: [コミット履歴](https://github.com/itdojp/podman-book/commits/main/) / [Pull Requests](https://github.com/itdojp/podman-book/pulls)
+- 版情報と同期状況は [book-config.json](https://github.com/itdojp/podman-book/blob/main/book-config.json) と GitHub の最新履歴を正としてください。
+- 版差確認: [コミット履歴](https://github.com/itdojp/podman-book/commits/main/) / [PR 一覧](https://github.com/itdojp/podman-book/pulls)
 - 参考資料: [付録C：リソース集]({{ '/appendices/appendix-c/' | relative_url }})
 
 Podman、OCI ランタイム、Linux ディストリビューションのパッケージ、Kubernetes 連携周辺の仕様は更新されます。実務で適用するときは、本書の説明だけで完結させず、利用中の OS / Podman バージョンと公式ドキュメント、リポジトリの最新差分を確認してください。
 
-**お問い合わせ**  
-株式会社アイティードゥ（ITDO Inc.）  
+**お問い合わせ**
+株式会社アイティードゥ（ITDO Inc.）
 Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
 
 ---

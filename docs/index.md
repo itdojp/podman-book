@@ -47,6 +47,26 @@ order: 0
 - `sudo` や `--tls-verify=false` を含む例は、恒久設定ではなく切り分けや限定的な検証を想定しています。実運用では信頼済みレジストリ、証明書検証、監査可能な設定を優先してください。
 - `podman system prune` やストレージ削除系のコマンドは、未使用リソースだけでなく必要なイメージやキャッシュも失う可能性があります。実行前にバックアップ、影響範囲、ロールバック手順を確認してください。
 
+## 実務適用前の Podman 運用レビューゲート
+
+Podman の検証結果を本番運用へ移す前に、少なくとも以下の判断根拠を PR、ADR、Runbook、
+または変更管理チケットへ残します。
+
+- 実行モード: rootless / rootful の選択理由、`/etc/subuid`・`/etc/subgid`、SELinux、cgroup v2、linger の要否。
+- ネットワーク: rootless ネットワークの実装差、公開ポート、DNS、host network 利用、コンテナ間通信、ファイアウォール影響。
+- ストレージ: named volume / bind mount の所有権、SELinux ラベル、バックアップ、復旧手順、廃棄時のデータ削除範囲。
+- イメージとレジストリ: digest 固定、署名/検証、認証情報、`--tls-verify=false` の禁止または例外承認。
+- systemd 連携: 新規運用は Quadlet を優先し、既存の `podman generate systemd` 由来ユニットは移行計画を用意する。
+- 変更と復旧: `podman info`、`podman inspect`、Quadlet定義、unit状態、ロールバック対象イメージ、ログ取得先を保存する。
+
+2026年5月23日時点では、rootless の前提は
+[Podman rootless tutorial](https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md)、
+systemd 連携は
+[podman-systemd.unit / Quadlet](https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html)
+を一次情報として確認します。`podman generate systemd` は
+[公式リファレンス](https://docs.podman.io/en/latest/markdown/podman-generate-systemd.1.html)
+で deprecated と明記されているため、新規設計では互換・既存調査用途に限定して扱います。
+
 ## 本書の構成
 
 ### 第1部: 基礎編（第1章〜第5章）

@@ -122,10 +122,47 @@ podman network disconnect [OPTIONS] NETWORK CONTAINER
 
 ## systemd統合
 
-### ユニットファイルの生成
+### Quadletによるユニット定義（推奨）
+
+2026年5月23日時点の Podman 公式ドキュメントでは、systemd 配下でコンテナや Pod を管理する
+新規運用には Quadlet の利用が推奨されています。rootless 運用では、ユーザー単位の
+`~/.config/containers/systemd/` 配下へ定義ファイルを置き、`systemctl --user` で管理します。
 
 ```bash
-# 既存コンテナからユニットファイル生成
+# rootless ユーザーサービス用の Quadlet 定義
+mkdir -p ~/.config/containers/systemd
+cat > ~/.config/containers/systemd/myapp.container <<'EOF'
+[Unit]
+Description=My Podman application
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=registry.example.com/team/myapp:1.0.0
+ContainerName=myapp
+PublishPort=8080:8080
+Volume=myapp-data:/var/lib/myapp:Z
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
+EOF
+
+# systemd に Quadlet 定義を再読込させ、生成された myapp.service を起動
+# 自動起動は Quadlet の [Install] セクションを generator が適用する
+systemctl --user daemon-reload
+systemctl --user start myapp.service
+systemctl --user status myapp.service
+```
+
+### 既存ユニットの生成（互換・移行調査用）
+
+```bash
+# `podman generate systemd` は deprecated。新規運用は Quadlet を優先する。
+# 既存コンテナからユニットファイルを確認する場合
 podman generate systemd --name CONTAINER > container.service
 
 # 新規コンテナ用ユニットファイル生成

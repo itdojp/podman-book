@@ -685,8 +685,9 @@ systemctl --user list-unit-files | grep "${container_name}.service" || true
 # 3. 自動起動の設定
 echo -e "\n🚀 サービスの管理:"
 cat << EOF
-# サービスの起動（自動起動は Quadlet の [Install] を systemd generator が適用）
-systemctl --user start ${container_name}.service
+# サービスの有効化と起動
+# Quadlet の [Install] で有効化先を定義したうえで enable する
+systemctl --user enable --now ${container_name}.service
 
 # 状態確認
 systemctl --user status ${container_name}.service

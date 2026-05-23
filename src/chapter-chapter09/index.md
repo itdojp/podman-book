@@ -46,7 +46,7 @@ WantedBy=default.target
 
 ```bash
 systemctl --user daemon-reload
-systemctl --user start myapp.service
+systemctl --user enable --now myapp.service
 systemctl --user status myapp.service
 ```
 

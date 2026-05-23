@@ -149,10 +149,10 @@ TimeoutStartSec=900
 WantedBy=default.target
 EOF
 
-# systemd に Quadlet 定義を再読込させ、生成された myapp.service を起動
-# 自動起動は Quadlet の [Install] セクションを generator が適用する
+# systemd に Quadlet 定義を再読込させ、有効化して起動
+# [Install] の WantedBy= は enable 時のリンク先を定義する
 systemctl --user daemon-reload
-systemctl --user start myapp.service
+systemctl --user enable --now myapp.service
 systemctl --user status myapp.service
 ```
 

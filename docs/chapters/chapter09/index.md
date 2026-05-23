@@ -32,9 +32,48 @@ Dockerとは異なり、Podmanは最初からsystemdとの統合を前提に設�
 
 #### 9.1.1 systemdユニットの生成
 
+> 2026年5月23日時点の公式ドキュメントでは、`podman generate systemd` は deprecated です。
+> 既存ユニットの読み解きや移行調査では有用ですが、新規運用は Quadlet（`.container` / `.pod` /
+> `.volume` / `.network` など）を優先してください。Quadlet定義を使うと、コンテナ設定と
+> systemd の `[Service]` / `[Install]` 設定を同じ宣言ファイルでレビューできます。
+
+**新規運用の最小 Quadlet 例**
+
+```ini
+# ~/.config/containers/systemd/myapp.container
+[Unit]
+Description=My Podman application
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=registry.example.com/team/myapp:1.0.0
+ContainerName=myapp
+PublishPort=8080:8080
+Volume=myapp-data:/var/lib/myapp:Z
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now myapp.service
+systemctl --user status myapp.service
+```
+
+この例を実環境へ適用する前に、image digest、registry 認証、公開ポート、SELinux ラベル、
+volume のバックアップ、rollback 先イメージをレビューしてください。
+
 **なぜ手動でユニットファイルを書かないのか**
 
-Podmanの自動生成機能は、ベストプラクティスを含んだ最適なユニットファイルを生成します。
+既存の `podman generate systemd` は、ユニットファイルの構造を学ぶ、または生成済みユニットを
+移行するときの参考として扱います。生成結果は best effort であり、本番投入前には依存関係、
+再起動ポリシー、SELinux、ボリューム、イメージ更新手順を必ずレビューします。
 
 ```bash
 # コンテナ用ユニット生成

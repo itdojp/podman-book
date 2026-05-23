@@ -17,12 +17,45 @@ chapter: chapter09
 
 ## 内容
 
-（章の内容をここに記載してください）
+### systemd 連携の現行方針
+
+2026年5月23日時点の公式ドキュメントでは、`podman generate systemd` は deprecated です。
+既存ユニットの読み解きや移行調査では有用ですが、新規運用は Quadlet（`.container` / `.pod` /
+`.volume` / `.network` など）を優先してください。
+
+```ini
+# ~/.config/containers/systemd/myapp.container
+[Unit]
+Description=My Podman application
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=registry.example.com/team/myapp:1.0.0
+ContainerName=myapp
+PublishPort=8080:8080
+Volume=myapp-data:/var/lib/myapp:Z
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now myapp.service
+systemctl --user status myapp.service
+```
+
+適用前には、image digest、registry 認証、公開ポート、SELinux ラベル、volume のバックアップ、
+rollback 先イメージをレビューしてください。
 
 ## まとめ
 
 （章のまとめをここに記載してください）
 
 ---
-
 

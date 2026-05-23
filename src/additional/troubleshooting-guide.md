@@ -634,39 +634,66 @@ Failed to start podman-myapp.service: Unit not found.
 ```
 
 #### 診断と解決
+
+2026年5月23日時点では、`podman generate systemd` は deprecated です。既存の生成済み
+unit を調査する場合を除き、新規の systemd 連携は Quadlet 定義から確認します。
+
 ```bash
 #!/bin/bash
 # fix-systemd-integration.sh
 
 container_name=${1:-"myapp"}
+quadlet_dir="${XDG_CONFIG_HOME:-$HOME/.config}/containers/systemd"
+quadlet_file="$quadlet_dir/${container_name}.container"
 
 echo "systemd統合の診断..."
 
-# 1. systemdユニットファイルの生成
-echo -e "\n📝 systemdユニットファイル生成:"
-podman generate systemd --new --name $container_name > $container_name.service
+# 1. Quadlet 定義の確認
+echo -e "\n📝 Quadlet定義の確認:"
+mkdir -p "$quadlet_dir"
+if [ ! -f "$quadlet_file" ]; then
+    cat > "$quadlet_file" << EOF
+[Unit]
+Description=Podman container ${container_name}
+Wants=network-online.target
+After=network-online.target
 
-echo "生成されたユニットファイル:"
-cat $container_name.service
+[Container]
+Image=localhost/${container_name}:latest
+ContainerName=${container_name}
 
-# 2. ユニットファイルの配置
-echo -e "\n📁 ユニットファイルの配置:"
-mkdir -p ~/.config/systemd/user
-cp $container_name.service ~/.config/systemd/user/
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+EOF
+    echo "サンプル Quadlet を作成しました: $quadlet_file"
+    echo "Image= と PublishPort= / Volume= などは実環境に合わせてレビューしてください。"
+else
+    echo "既存 Quadlet を検出しました: $quadlet_file"
+fi
+
+echo "Quadlet定義:"
+cat "$quadlet_file"
+
+# 2. systemd への反映
+echo -e "\n📁 systemdへの反映:"
 systemctl --user daemon-reload
+systemctl --user list-unit-files | grep "${container_name}.service" || true
 
 # 3. 自動起動の設定
 echo -e "\n🚀 サービスの管理:"
 cat << EOF
 # サービスの有効化と起動
-systemctl --user enable $container_name.service
-systemctl --user start $container_name.service
+# Quadlet の [Install] で有効化先を定義したうえで enable する
+systemctl --user enable --now ${container_name}.service
 
 # 状態確認
-systemctl --user status $container_name.service
+systemctl --user status ${container_name}.service
 
 # ログ確認
-journalctl --user -u $container_name.service
+journalctl --user -u ${container_name}.service
 EOF
 
 # 4. トラブルシューティングチェックリスト
@@ -674,6 +701,8 @@ echo -e "\n✅ チェックリスト:"
 echo "- [ ] loginctl show-user でLinger=yes確認"
 echo "- [ ] XDG_RUNTIME_DIR が設定されている"
 echo "- [ ] systemd --user が実行されている"
+echo "- [ ] Quadlet定義が ${quadlet_dir} 配下にある"
+echo "- [ ] Image / PublishPort / Volume / Environment が実環境向けにレビュー済み"
 ```
 
 ### 2. cgroup v2関連の問題

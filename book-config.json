@@ -15,97 +15,113 @@
         "id": "introduction",
         "title": "はじめに",
         "description": "Podman完全ガイドの概要と読み進め方",
-        "order": 1
+        "order": 1,
+        "path": "/introduction/"
       },
       {
         "id": "chapter01",
         "title": "第1章：コンテナ技術の基礎",
         "description": "Linux名前空間とcgroupsによるプロセス分離の実装",
-        "order": 2
+        "order": 2,
+        "path": "/chapters/chapter01/"
       },
       {
         "id": "chapter02",
         "title": "第2章：Podmanのインストールと初期設定",
         "description": "各OS対応のインストール方法と基本設定",
-        "order": 3
+        "order": 3,
+        "path": "/chapters/chapter02/"
       },
       {
         "id": "chapter03",
         "title": "第3章：基本的なコンテナ操作",
         "description": "コンテナの作成、実行、管理の基本コマンド",
-        "order": 4
+        "order": 4,
+        "path": "/chapters/chapter03/"
       },
       {
         "id": "chapter04",
         "title": "第4章：イメージの管理と作成",
         "description": "イメージのビルド、プッシュ、プルの実践",
-        "order": 5
+        "order": 5,
+        "path": "/chapters/chapter04/"
       },
       {
         "id": "chapter05",
         "title": "第5章：ストレージとボリューム管理",
         "description": "永続化ストレージとボリューム操作",
-        "order": 6
+        "order": 6,
+        "path": "/chapters/chapter05/"
       },
       {
         "id": "chapter06",
         "title": "第6章：ネットワーキングとポート管理",
         "description": "コンテナネットワークの設定と管理",
-        "order": 7
+        "order": 7,
+        "path": "/chapters/chapter06/"
       },
       {
         "id": "chapter07",
         "title": "第7章：Pod機能と複数コンテナ管理",
         "description": "Kubernetes互換のPod機能活用",
-        "order": 8
+        "order": 8,
+        "path": "/chapters/chapter07/"
       },
       {
         "id": "chapter08",
         "title": "第8章：Dockerfileの作成と最適化",
         "description": "効率的なDockerfileの作成技法",
-        "order": 9
+        "order": 9,
+        "path": "/chapters/chapter08/"
       },
       {
         "id": "chapter09",
         "title": "第9章：レジストリとイメージ配布",
         "description": "イメージレジストリの構築と管理",
-        "order": 10
+        "order": 10,
+        "path": "/chapters/chapter09/"
       },
       {
         "id": "chapter10",
         "title": "第10章：CI/CDパイプラインの実践",
         "description": "Podmanを使ったコンテナCI/CDの設計と実装",
-        "order": 11
+        "order": 11,
+        "path": "/chapters/chapter10/"
       },
       {
         "id": "chapter11",
         "title": "第11章：Kubernetesとの統合",
         "description": "K8s環境でのPodman活用",
-        "order": 12
+        "order": 12,
+        "path": "/chapters/chapter11/"
       },
       {
         "id": "chapter12",
         "title": "第12章：パフォーマンスチューニング",
         "description": "Podmanコンテナの性能計測と最適化手法",
-        "order": 13
+        "order": 13,
+        "path": "/chapters/chapter12/"
       },
       {
         "id": "chapter13",
         "title": "第13章：マイクロサービスアーキテクチャ",
         "description": "マイクロサービス構成とサービス間連携の実践",
-        "order": 14
+        "order": 14,
+        "path": "/chapters/chapter13/"
       },
       {
         "id": "chapter14",
         "title": "第14章：エンタープライズ環境での活用",
         "description": "エンタープライズ要件を満たす運用設計とセキュリティ",
-        "order": 15
+        "order": 15,
+        "path": "/chapters/chapter14/"
       },
       {
         "id": "chapter15",
         "title": "第15章：トラブルシューティング完全ガイド",
         "description": "障害解析を体系化する診断フレームワーク",
-        "order": 16
+        "order": 16,
+        "path": "/chapters/chapter15/"
       }
     ],
     "appendices": [
@@ -113,26 +129,30 @@
         "id": "appendix-a",
         "title": "付録A：コマンドリファレンス",
         "description": "Podmanコマンドの完全リファレンス",
-        "order": 17
+        "order": 17,
+        "path": "/appendices/appendix-a/"
       },
       {
         "id": "appendix-b",
         "title": "付録B：トラブルシューティングガイド",
         "description": "よくある問題と解決方法",
-        "order": 18
+        "order": 18,
+        "path": "/appendices/appendix-b/"
       },
       {
         "id": "appendix-c",
         "title": "付録C：リソース集",
         "description": "参考資料とリンク集",
-        "order": 19
+        "order": 19,
+        "path": "/appendices/appendix-c/"
       }
     ],
     "afterword": {
       "id": "afterword",
       "title": "あとがき",
       "description": "書籍のまとめと今後の展望",
-      "order": 20
+      "order": 20,
+      "path": "/afterword/"
     }
   },
   "ux": {
@@ -151,5 +171,6 @@
   "shared": {
     "version": "3.2.2",
     "lastSync": "2026-02-04T23:00:48.959Z"
-  }
+  },
+  "homepage": "https://itdojp.github.io/podman-book/"
 }

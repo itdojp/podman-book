@@ -1,6 +1,10 @@
 ---
 layout: book
 title: "Podman完全ガイド"
+description: "コンテナ技術の理論と実践 - エンタープライズ環境でのPodman活用法"
+author: "株式会社アイティードゥ"
+version: "1.0.0"
+permalink: /
 order: 0
 ---
 

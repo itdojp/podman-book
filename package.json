@@ -11,7 +11,9 @@
     "deploy-setup": "gh-pages-clean",
     "validate-deploy": "node scripts/validate-github-pages.js",
     "pages-status": "node scripts/check-pages-status.js",
-    "dev": "npm run build && npm run serve"
+    "dev": "npm run build && npm run serve",
+    "check:metadata": "node scripts/check-metadata-consistency.js",
+    "test": "npm run check:metadata && npm run build"
   },
   "devDependencies": {
     "gh-pages": "^6.0.0"
@@ -20,5 +22,8 @@
     "type": "git",
     "url": "https://github.com/itdojp/podman-book.git"
   },
-  "homepage": "https://itdojp.github.io/podman-book"
+  "homepage": "https://itdojp.github.io/podman-book/",
+  "bugs": {
+    "url": "https://github.com/itdojp/podman-book/issues"
+  }
 }

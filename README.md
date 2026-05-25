@@ -18,6 +18,17 @@
 - リポジトリ内: `docs/index.md`
 - GitHub Pages を有効化している場合: `https://itdojp.github.io/podman-book/`
 
+## ローカル品質ゲート
+
+公開メタデータ、ナビゲーション、必須アセットのずれを防ぐため、PR前に次のチェックを実行してください。
+
+```bash
+npm ci
+npm test
+```
+
+`check:metadata` は `book-config.json`、`package.json`、`package-lock.json`、Jekyll設定、トップページfront matter、`docs/_data/navigation.yml`、設定済みページ、必須公開アセットの整合を検証します。
+
 ## フィードバック
 
 - Issue: `https://github.com/itdojp/podman-book/issues`

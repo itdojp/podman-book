@@ -33,6 +33,9 @@ jobs:
         
     - name: Install dependencies
       run: npm ci
+
+    - name: Metadata consistency check
+      run: npm run check:metadata
         
     - name: Build book
       run: npm run build

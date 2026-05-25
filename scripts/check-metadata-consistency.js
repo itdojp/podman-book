@@ -116,6 +116,16 @@ function isMalformedPath(value) {
   return /[\0\r\n\\]/.test(value);
 }
 
+function decodeConfiguredPath(value) {
+  if (/%(?![0-9A-Fa-f]{2})/.test(value)) return null;
+  if (/%(?:2f|5c)/i.test(value)) return null;
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return null;
+  }
+}
+
 function candidatesForPublicPath(publicPath) {
   if (typeof publicPath !== 'string' || !publicPath.trim()) {
     errors.push('configured path is missing');
@@ -127,17 +137,22 @@ function candidatesForPublicPath(publicPath) {
     errors.push(`configured path must start with '/': ${value}`);
     return [];
   }
-  if (value.includes('?') || value.includes('#') || isMalformedPath(value)) {
+  const decoded = decodeConfiguredPath(value);
+  if (!decoded) {
     errors.push(`configured path is malformed: ${JSON.stringify(value)}`);
     return [];
   }
-  const parts = value.split('/').filter(Boolean);
+  if (decoded.includes('?') || decoded.includes('#') || isMalformedPath(decoded)) {
+    errors.push(`configured path is malformed: ${JSON.stringify(value)}`);
+    return [];
+  }
+  const parts = decoded.split('/').filter(Boolean);
   if (parts.includes('..')) {
     errors.push(`configured path must not contain '..': ${value}`);
     return [];
   }
-  if (value === '/') return [path.join(docsRoot, 'index.md')];
-  const rel = value.replace(/^\//, '').replace(/\/$/, '');
+  if (decoded === '/') return [path.join(docsRoot, 'index.md')];
+  const rel = decoded.replace(/^\//, '').replace(/\/$/, '');
   if (/\.(md|html?|pdf|txt)$/i.test(rel)) return [path.join(docsRoot, rel)];
   return [path.join(docsRoot, `${rel}.md`), path.join(docsRoot, rel, 'index.md')];
 }

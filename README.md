@@ -24,7 +24,6 @@
 
 ```bash
 npm ci
-npm run check:metadata
 npm test
 ```
 

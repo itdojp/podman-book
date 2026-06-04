@@ -22,7 +22,19 @@ const requiredAssets = [
 const errors = [];
 
 function readJson(rel) {
-  return JSON.parse(fs.readFileSync(path.join(repoRoot, rel), 'utf8'));
+  const file = path.join(repoRoot, rel);
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      errors.push(`${rel} is missing`);
+    } else if (error instanceof SyntaxError) {
+      errors.push(`${rel} is not valid JSON: ${error.message}`);
+    } else {
+      errors.push(`${rel} could not be read: ${error?.message || error}`);
+    }
+    return {};
+  }
 }
 
 function parseScalar(value) {
@@ -205,6 +217,7 @@ expectEqual('package.json license', pkg.license, book.license);
 expectEqual('package.json repository.url', normalizeRepoUrl(pkg.repository?.url), expectedRepoUrl);
 expectEqual('package.json homepage', pkg.homepage, expectedHomepage);
 expectEqual('package.json bugs.url', pkg.bugs?.url, `${expectedRepoUrl}/issues`);
+expectEqual('package.json scripts.check:security', pkg.scripts?.['check:security'], 'npm audit');
 expectEqual('package-lock root name', lock.packages?.['']?.name, pkg.name);
 expectEqual('package-lock root version', lock.packages?.['']?.version, pkg.version);
 expectEqual('package-lock root license', lock.packages?.['']?.license, pkg.license);
@@ -236,6 +249,9 @@ for (const [key, expected] of Object.entries({
 
 if (!readme.includes(expectedHomepage)) errors.push(`README.md must include canonical Pages URL: ${expectedHomepage}`);
 if (!readme.includes(book.title)) errors.push('README.md must include canonical book title');
+for (const command of ['npm ci', 'npm run check:security', 'npm test']) {
+  if (!readme.includes(command)) errors.push(`README.md must document local quality command: ${command}`);
+}
 
 const structureEntries = flattenStructure(book.structure);
 const seenIds = new Map();

@@ -90,6 +90,15 @@ pids/
 # Documentation build
 docs/_build/
 docs/.vuepress/dist/
+_site/
+docs/_site/
+.jekyll-cache/
+docs/.jekyll-cache/
+.jekyll-metadata
+docs/.jekyll-metadata
+.bundle/
+vendor/bundle/
+Gemfile.lock
 
 # Misc
 .sass-cache/

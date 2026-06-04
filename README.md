@@ -24,9 +24,11 @@
 
 ```bash
 npm ci
+npm run check:security
 npm test
 ```
 
+`check:security` は `npm audit` を実行し、公開・デプロイ関連の npm 依存関係に既知脆弱性がないことを確認します。
 `check:metadata` は `book-config.json`、`package.json`、`package-lock.json`、Jekyll設定、トップページfront matter、`docs/_data/navigation.yml`、設定済みページ、必須公開アセットの整合を検証します。
 
 ## フィードバック

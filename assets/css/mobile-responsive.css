@@ -97,25 +97,29 @@ html {
   }
 
   /* Show sidebar when toggled */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar {
     transform: translateX(0) !important;
     visibility: visible;
     transition: transform 0.3s ease;
   }
   
   /* Ensure sidebar content is interactive */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar .toc-link {
     color: var(--text-secondary) !important;
     pointer-events: auto !important;
     cursor: pointer !important;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar .toc-link:hover {
     background: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar .toc-link.active {
     background: var(--bg-tertiary) !important;
     color: var(--primary-color) !important;
   }
@@ -132,7 +136,8 @@ html {
     pointer-events: none;
   }
 
-  .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay {
+  .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay,
+  body:has(.book-layout .sidebar-toggle-checkbox:checked) .book-sidebar-overlay {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;

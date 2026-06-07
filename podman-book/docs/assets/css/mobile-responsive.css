@@ -6,8 +6,19 @@
 /* Hidden checkbox for state management */
 .sidebar-toggle-checkbox {
   position: absolute;
-  left: -9999px;
+  top: 0;
+  left: 0;
   opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
 }
 
 /* Prevent page jumping and unwanted focus */
@@ -25,12 +36,28 @@ html {
   .book-layout .book-main {
     margin-left: 0 !important;
     width: 100% !important;
+    /* Constrain page-wide overflow; scroll should be inside dedicated containers. */
+    overflow-x: hidden;
   }
   
   .book-layout .book-main .book-content {
     margin: 0 !important;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+  }
+
+  /* Keep wide tables scrollable without expanding the whole page width. */
+  .book-content .table-wrapper {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .book-content .table-wrapper table {
+    min-width: 100%;
+    width: max-content;
+    table-layout: auto;
   }
   
   /* Show hamburger menu */
@@ -48,29 +75,51 @@ html {
     background: var(--bg-primary);
     border-right: 1px solid var(--border-color);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    /*
+     * Keep the mobile drawer above the backdrop (`.book-sidebar-overlay` is
+     * 950) but below the fixed header (`.book-header` is 1000). This also
+     * needs to stay important so the later desktop `.book-sidebar` z-index in
+     * main.css cannot drop the mobile drawer behind the overlay.
+     */
+    z-index: 999 !important;
+    /*
+     * main.css imports this file before declaring the default desktop sidebar
+     * transform. Keep the closed drawer state important so the later desktop
+     * `transform: translateX(0)` rule cannot leave the TOC covering content
+     * on mobile and tablet widths. The checked/open rule below is more
+     * specific and also important, so the menu button still opens it.
+     */
+    transform: translateX(-100%) !important;
+    visibility: hidden;
+    transition:
+      transform 0.3s ease,
+      visibility 0s linear 0.3s !important;
   }
 
   /* Show sidebar when toggled */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar {
     transform: translateX(0) !important;
+    visibility: visible;
+    transition: transform 0.3s ease !important;
   }
   
   /* Ensure sidebar content is interactive */
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar .toc-link {
     color: var(--text-secondary) !important;
     pointer-events: auto !important;
     cursor: pointer !important;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link:hover,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar .toc-link:hover {
     background: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
   }
   
-  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active {
+  .sidebar-toggle-checkbox:checked ~ .book-layout .book-sidebar .toc-link.active,
+  .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar .toc-link.active {
     background: var(--bg-tertiary) !important;
     color: var(--primary-color) !important;
   }
@@ -87,7 +136,8 @@ html {
     pointer-events: none;
   }
 
-  .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay {
+  .sidebar-toggle-checkbox:checked ~ .book-sidebar-overlay,
+  body:has(.book-layout .sidebar-toggle-checkbox:checked) .book-sidebar-overlay {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;

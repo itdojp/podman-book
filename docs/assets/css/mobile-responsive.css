@@ -93,7 +93,7 @@ html {
     visibility: hidden;
     transition:
       transform 0.3s ease,
-      visibility 0s linear 0.3s;
+      visibility 0s linear 0.3s !important;
   }
 
   /* Show sidebar when toggled */
@@ -101,7 +101,7 @@ html {
   .book-layout .sidebar-toggle-checkbox:checked ~ .book-sidebar {
     transform: translateX(0) !important;
     visibility: visible;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease !important;
   }
   
   /* Ensure sidebar content is interactive */

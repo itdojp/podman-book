@@ -233,6 +233,24 @@ for (const key of ['title', 'description', 'version', 'author', 'license']) {
 
 const bookStructureEntries = flattenStructure(book.structure);
 const formatterStructureEntries = flattenStructure(formatter.structure);
+for (const [label, entries] of [
+  ['book-config', bookStructureEntries],
+  ['book-formatter-config', formatterStructureEntries]
+]) {
+  const seenIds = new Set();
+  const seenOrders = new Set();
+  for (const item of entries) {
+    if (seenIds.has(item.id)) errors.push(`${label} has duplicate structure id: ${item.id}`);
+    if (seenOrders.has(item.order)) errors.push(`${label} has duplicate structure order: ${item.order}`);
+    seenIds.add(item.id);
+    seenOrders.add(item.order);
+  }
+}
+const bookStructureIds = bookStructureEntries.map((item) => item.id);
+const formatterStructureIds = formatterStructureEntries.map((item) => item.id);
+if (JSON.stringify(formatterStructureIds) !== JSON.stringify(bookStructureIds)) {
+  errors.push(`book-formatter-config structure order differs from book-config: ${formatterStructureIds.join(', ')}`);
+}
 const formatterById = new Map(formatterStructureEntries.map((item) => [item.id, item]));
 for (const item of bookStructureEntries) {
   const formatted = formatterById.get(item.id);

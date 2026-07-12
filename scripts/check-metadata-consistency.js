@@ -258,7 +258,7 @@ for (const item of bookStructureEntries) {
     errors.push(`book-formatter-config is missing ${item.section} entry: ${item.id}`);
     continue;
   }
-  for (const key of ['id', 'title', 'description', 'order']) {
+  for (const key of ['section', 'id', 'title', 'description', 'order']) {
     expectEqual(`book-formatter-config ${item.id} ${key}`, formatted[key], item[key]);
   }
 }

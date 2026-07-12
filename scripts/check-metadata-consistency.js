@@ -227,9 +227,15 @@ expectEqual('book-config repository.url', normalizeRepoUrl(book.repository?.url)
 expectEqual('book-config repository.branch', book.repository?.branch, 'main');
 expectEqual('book-config homepage', book.homepage, expectedHomepage);
 
-for (const key of ['title', 'description', 'version', 'author', 'license']) {
+for (const key of ['title', 'description', 'version', 'author', 'license', 'language']) {
   expectEqual(`book-formatter-config ${key}`, formatter[key], book[key]);
 }
+expectEqual(
+  'book-formatter-config repository.url',
+  normalizeRepoUrl(formatter.repository?.url),
+  normalizeRepoUrl(book.repository?.url)
+);
+expectEqual('book-formatter-config repository.branch', formatter.repository?.branch, book.repository?.branch);
 
 const bookStructureEntries = flattenStructure(book.structure);
 const formatterStructureEntries = flattenStructure(formatter.structure);

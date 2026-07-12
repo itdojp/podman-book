@@ -164,7 +164,7 @@
       "troubleshootingFlow": true,
       "conceptMap": false,
       "figureIndex": false,
-      "legalNotice": true,
+      "legalNotice": false,
       "glossary": false
     }
   },

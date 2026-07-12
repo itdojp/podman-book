@@ -201,6 +201,7 @@ function flattenStructure(structure) {
 }
 
 const book = readJson('book-config.json');
+const formatter = readJson('book-formatter-config.json');
 const pkg = readJson('package.json');
 const lock = readJson('package-lock.json');
 const rootConfig = parseSimpleYaml(path.join(repoRoot, '_config.yml'));
@@ -225,6 +226,53 @@ expectEqual('package-lock root license', lock.packages?.['']?.license, pkg.licen
 expectEqual('book-config repository.url', normalizeRepoUrl(book.repository?.url), expectedRepoUrl);
 expectEqual('book-config repository.branch', book.repository?.branch, 'main');
 expectEqual('book-config homepage', book.homepage, expectedHomepage);
+
+for (const key of ['title', 'description', 'version', 'author', 'license', 'language']) {
+  expectEqual(`book-formatter-config ${key}`, formatter[key], book[key]);
+}
+expectEqual(
+  'book-formatter-config repository.url',
+  normalizeRepoUrl(formatter.repository?.url),
+  normalizeRepoUrl(book.repository?.url)
+);
+expectEqual('book-formatter-config repository.branch', formatter.repository?.branch, book.repository?.branch);
+
+const bookStructureEntries = flattenStructure(book.structure);
+const formatterStructureEntries = flattenStructure(formatter.structure);
+for (const [label, entries] of [
+  ['book-config', bookStructureEntries],
+  ['book-formatter-config', formatterStructureEntries]
+]) {
+  const seenIds = new Set();
+  const seenOrders = new Set();
+  for (const item of entries) {
+    if (seenIds.has(item.id)) errors.push(`${label} has duplicate structure id: ${item.id}`);
+    if (seenOrders.has(item.order)) errors.push(`${label} has duplicate structure order: ${item.order}`);
+    seenIds.add(item.id);
+    seenOrders.add(item.order);
+  }
+}
+const bookStructureIds = bookStructureEntries.map((item) => item.id);
+const formatterStructureIds = formatterStructureEntries.map((item) => item.id);
+if (JSON.stringify(formatterStructureIds) !== JSON.stringify(bookStructureIds)) {
+  errors.push(`book-formatter-config structure order differs from book-config: ${formatterStructureIds.join(', ')}`);
+}
+const formatterById = new Map(formatterStructureEntries.map((item) => [item.id, item]));
+for (const item of bookStructureEntries) {
+  const formatted = formatterById.get(item.id);
+  if (!formatted) {
+    errors.push(`book-formatter-config is missing ${item.section} entry: ${item.id}`);
+    continue;
+  }
+  for (const key of ['section', 'id', 'title', 'description', 'order']) {
+    expectEqual(`book-formatter-config ${item.id} ${key}`, formatted[key], item[key]);
+  }
+}
+for (const item of formatterStructureEntries) {
+  if (!bookStructureEntries.some((bookItem) => bookItem.id === item.id)) {
+    errors.push(`book-config is missing formatter entry: ${item.id}`);
+  }
+}
 
 for (const [label, cfg] of [['root _config.yml', rootConfig], ['docs/_config.yml', docsConfig]]) {
   expectEqual(`${label} title`, cfg.title, book.title);

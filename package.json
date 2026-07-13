@@ -14,7 +14,8 @@
     "dev": "npm run build && npm run serve",
     "check:metadata": "node scripts/check-metadata-consistency.js",
     "check:security": "npm audit",
-    "test": "npm run check:metadata && npm run build"
+    "check:figure-index": "node scripts/check-figure-index.js",
+    "test": "npm run check:metadata && npm run check:figure-index && npm run build"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0"

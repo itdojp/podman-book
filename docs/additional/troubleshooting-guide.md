@@ -10,6 +10,8 @@ title: "Podman実践的トラブルシューティングガイド"
 
 ### 診断フローチャート
 
+<a id="figure-troubleshooting-flow"></a>
+
 ```mermaid
 graph TD
     A[問題発生] --> B{コンテナ起動?}

@@ -32,6 +32,9 @@ chapters:
   path: /chapters/chapter14/
 - title: 第15章：トラブルシューティング完全ガイド
   path: /chapters/chapter15/
+additional:
+- title: 図表索引
+  path: /additional/figure-index/
 appendices:
 - title: 付録A：コマンドリファレンス
   path: /appendices/appendix-a/

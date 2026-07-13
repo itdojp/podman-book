@@ -40,6 +40,9 @@ jobs:
 
     - name: Metadata consistency check
       run: npm run check:metadata
+
+    - name: Figure index contract check
+      run: npm run check:figure-index
         
     - name: Build book
       run: npm run build

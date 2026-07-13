@@ -30,6 +30,8 @@ title: "第4章：イメージの管理と作成"
 
 #### 4.1.1 基本的なライフサイクル
 
+<a id="figure-container-lifecycle"></a>
+
 ![Container Lifecycle States](../../assets/images/diagrams/chapter04-container-lifecycle-states.svg)
 
 **各状態の意味と実務での使い分け**

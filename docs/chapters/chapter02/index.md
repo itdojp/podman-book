@@ -146,6 +146,8 @@ podman info
 podman run --rm hello-world
 ```
 
+<a id="figure-podman-verification-screen"></a>
+
 ![Podman セットアップ確認の出力例](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)
 
 _Ubuntu 24.04 / Podman 4.9.3 における `podman --version` / `podman info` / `podman run --rm hello-world` の出力例。表示内容は環境により異なります。_

@@ -56,6 +56,8 @@ Podmanは従来のDockerとは大きく異なるアーキテクチャを採用�
 
 ### アーキテクチャの詳細比較
 
+<a id="figure-container-technology-concepts"></a>
+
 ```mermaid
 graph TB
     subgraph "従来のDocker"

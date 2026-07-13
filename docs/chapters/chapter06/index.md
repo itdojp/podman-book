@@ -62,6 +62,8 @@ podman network ls
 
 各ネットワークドライバーの動作を視覚的に理解しましょう。
 
+<a id="figure-podman-network"></a>
+
 ![Podman Network Architecture](../../assets/images/diagrams/chapter06-podman-network-architecture.svg)
 
 **ネットワークドライバー比較表：**

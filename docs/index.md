@@ -43,6 +43,7 @@ order: 0
 - **Docker からの移行を先に確認したい場合**: [Docker→Podman包括的移行ガイドライン]({{ '/additional/migration-guide/' | relative_url }}) → [第7章：Pod機能と複数コンテナ管理]({{ '/chapters/chapter07/' | relative_url }}) → [第10章：CI/CDパイプラインの実践]({{ '/chapters/chapter10/' | relative_url }})
 - **障害対応を優先したい場合**: [付録B：トラブルシューティングガイド]({{ '/appendices/appendix-b/' | relative_url }}) → [Podman実践的トラブルシューティングガイド]({{ '/additional/troubleshooting-guide/' | relative_url }}) → [第15章：トラブルシューティング完全ガイド]({{ '/chapters/chapter15/' | relative_url }})
 - **企業導入の論点を先に確認したい場合**: [エンタープライズ環境でのPodman要件詳細]({{ '/additional/enterprise-requirements/' | relative_url }}) → [第14章：エンタープライズ環境での活用]({{ '/chapters/chapter14/' | relative_url }}) → [付録C：リソース集]({{ '/appendices/appendix-c/' | relative_url }})
+- **図表を横断して確認したい場合**: [図表索引]({{ '/additional/figure-index/' | relative_url }})
 
 ## 安全に使うための注意
 

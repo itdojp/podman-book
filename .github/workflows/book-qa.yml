@@ -37,6 +37,9 @@ jobs:
       - name: Metadata consistency check
         run: npm run check:metadata
 
+      - name: Figure index contract check
+        run: npm run check:figure-index
+
       - name: Checkout book-formatter (pinned)
         uses: actions/checkout@v6
         with:

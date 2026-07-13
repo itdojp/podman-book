@@ -74,6 +74,36 @@ function listPublishedMarkdown(dir) {
   });
 }
 
+function parseNavigation(text) {
+  const entries = [];
+  let section = null;
+  let current = null;
+  const unquote = (value) => value.trim().replace(/^(['"])(.*)\1$/, '$2');
+  const flush = () => {
+    if (current?.title && current?.path) entries.push({ section, ...current });
+    current = null;
+  };
+
+  for (const line of text.split(/\r?\n/)) {
+    const sectionMatch = line.match(/^([A-Za-z0-9_-]+):\s*$/);
+    if (sectionMatch) {
+      flush();
+      section = sectionMatch[1];
+      continue;
+    }
+    const titleMatch = line.match(/^\s*-\s*title:\s*(.+?)\s*$/);
+    if (titleMatch) {
+      flush();
+      current = { title: unquote(titleMatch[1]) };
+      continue;
+    }
+    const pathMatch = line.match(/^\s+path:\s*(\S+)\s*$/);
+    if (pathMatch && current) current.path = unquote(pathMatch[1]);
+  }
+  flush();
+  return entries;
+}
+
 function validateFigureIndex({ overrides = new Map() } = {}) {
   const errors = [];
   const read = (relativePath) => {
@@ -82,8 +112,12 @@ function validateFigureIndex({ overrides = new Map() } = {}) {
   };
   const fileExists = (relativePath) => {
     if (overrides.has(relativePath)) return overrides.get(relativePath).length > 0;
-    const file = path.join(repoRoot, relativePath);
-    return fs.existsSync(file) && fs.statSync(file).isFile() && fs.statSync(file).size > 0;
+    try {
+      const stat = fs.statSync(path.join(repoRoot, relativePath));
+      return stat.isFile() && stat.size > 0;
+    } catch {
+      return false;
+    }
   };
 
   let book;
@@ -121,12 +155,16 @@ function validateFigureIndex({ overrides = new Map() } = {}) {
   }
 
   const navigationText = read('docs/_data/navigation.yml');
-  if (!navigationText.includes('additional:\n- title: 図表索引\n  path: /additional/figure-index/')) {
+  const navigation = parseNavigation(navigationText);
+  const figureIndexEntries = navigation.filter(({ section, title, path: route }) => (
+    section === 'additional' && title === '図表索引' && route === figureIndexRoute
+  ));
+  if (figureIndexEntries.length !== 1) {
     errors.push('docs/_data/navigation.yml must register the figure index in additional');
   }
-  const chapter15Position = navigationText.indexOf('path: /chapters/chapter15/');
-  const figureIndexPosition = navigationText.indexOf(`path: ${figureIndexRoute}`);
-  const appendixAPosition = navigationText.indexOf('path: /appendices/appendix-a/');
+  const chapter15Position = navigation.findIndex(({ path: route }) => route === '/chapters/chapter15/');
+  const figureIndexPosition = navigation.findIndex(({ path: route }) => route === figureIndexRoute);
+  const appendixAPosition = navigation.findIndex(({ path: route }) => route === '/appendices/appendix-a/');
   if (!(chapter15Position >= 0 && figureIndexPosition > chapter15Position && appendixAPosition > figureIndexPosition)) {
     errors.push('figure index must be between chapter15 and appendix-a in navigation for prev/next');
   }
@@ -192,7 +230,7 @@ function validateFigureIndex({ overrides = new Map() } = {}) {
   const actualAssets = publishedTexts
     .flatMap(({ file, text }) => [...text.matchAll(/!\[[^\]]*\]\(([^)]+\.(?:png|svg))\)/gi)].map((match) => {
       const resolved = path.normalize(path.join(path.dirname(path.join(repoRoot, file)), match[1]));
-      return path.relative(repoRoot, resolved);
+      return path.relative(repoRoot, resolved).split(path.sep).join('/');
     }))
     .sort();
   if (JSON.stringify(actualAssets) !== JSON.stringify(expectedAssets)) {

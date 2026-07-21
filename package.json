@@ -18,7 +18,8 @@
     "check:podman-backends": "node scripts/check-podman-backend-contract.js && node scripts/check-podman-backend-contract-regression.js",
     "check:podman-machine-paths": "node scripts/check-podman-machine-path-contract.js && node scripts/check-podman-machine-path-contract-regression.js",
     "check:docker-rootless-comparison": "node scripts/check-docker-rootless-comparison.js && node scripts/check-docker-rootless-comparison-regression.js",
-    "test": "npm run check:metadata && npm run check:figure-index && npm run check:podman-backends && npm run check:podman-machine-paths && npm run check:docker-rootless-comparison && npm run build"
+    "check:literal-templates": "node scripts/check-literal-template-rendering.js && node scripts/check-literal-template-rendering-regression.js",
+    "test": "npm run check:metadata && npm run check:figure-index && npm run check:podman-backends && npm run check:podman-machine-paths && npm run check:docker-rootless-comparison && npm run check:literal-templates && npm run build"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0"

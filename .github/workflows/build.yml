@@ -52,6 +52,9 @@ jobs:
 
     - name: Docker rootless comparison contract check
       run: npm run check:docker-rootless-comparison
+
+    - name: Literal template source contract check
+      run: npm run check:literal-templates
         
     - name: Build book
       run: npm run build

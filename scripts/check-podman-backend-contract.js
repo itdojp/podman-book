@@ -24,7 +24,7 @@ const contracts = {
     path: 'docs/chapters/chapter03/index.md',
     required: [
       'podman info --format json',
-      "{% raw %}$ podman info --format '{{.Host.NetworkBackend}}'{% endraw %}",
+      "$ podman info --format '{{.Host.NetworkBackend}}'",
       'podman network inspect',
       '/etc/containers/networks',
       '$graphroot/networks',

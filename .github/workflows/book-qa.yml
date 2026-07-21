@@ -49,6 +49,9 @@ jobs:
       - name: Docker rootless comparison contract check
         run: npm run check:docker-rootless-comparison
 
+      - name: Literal template source contract check
+        run: npm run check:literal-templates
+
       - name: Checkout book-formatter (pinned)
         uses: actions/checkout@v6
         with:
@@ -115,6 +118,9 @@ jobs:
         with:
           source: ./${{ steps.scan.outputs.dir }}
           destination: ./_site
+
+      - name: Literal template rendered-site check
+        run: node scripts/check-literal-template-rendering.js --site _site
 
       - name: Smoke check built site (top + navigation + assets)
         shell: bash

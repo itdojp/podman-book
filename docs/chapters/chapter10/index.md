@@ -249,6 +249,7 @@ GitHub Actionsは、以下の理由で多くの開発チームに選ばれてい
 
 **実践的なワークフローとその解説**
 
+<!-- {% raw %} -->
 ```yaml
 # .github/workflows/ci-cd.yml
 name: Build and Deploy
@@ -352,6 +353,7 @@ jobs:
           # ロールアウト待機（タイムアウト付き）
           kubectl rollout status deployment/app --timeout=300s
 ```
+<!-- {% endraw %} -->
 
 **このワークフローが実現する価値**
 
@@ -710,6 +712,7 @@ describe('E2E Tests', () => {
 - 即座のロールバック可能
 - 本番環境での検証
 
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # blue-green-deploy.sh
@@ -724,7 +727,7 @@ NEW_VERSION=$1
 # - 視覚的な状態管理
 
 # 現在の環境を確認
-CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "\{\{.Labels.environment\}\}")
+CURRENT_ENV=$(podman ps --filter "label=app=$APP_NAME" --format "{{.Labels.environment}}")
 if [ "$CURRENT_ENV" = "blue" ]; then
     NEW_ENV="green"
 else
@@ -760,7 +763,7 @@ done
 
 # スモークテスト - 基本機能の確認
 echo "Running smoke tests..."
-CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '\{\{.NetworkSettings.IPAddress\}\}')
+CONTAINER_IP=$(podman inspect ${APP_NAME}-${NEW_ENV} --format '{{.NetworkSettings.IPAddress}}')
 ./smoke-tests.sh $CONTAINER_IP || {
     echo "Smoke tests failed"
     podman stop ${APP_NAME}-${NEW_ENV}
@@ -798,6 +801,7 @@ podman rm ${APP_NAME}-${CURRENT_ENV}
 
 echo "Deployment completed successfully"
 ```
+<!-- {% endraw %} -->
 
 #### 10.6.2 Canary Deployment
 
@@ -865,6 +869,7 @@ data:
 
 **カナリーデプロイメントの自動化**
 
+<!-- {% raw %} -->
 ```python
 # canary-controller.py
 import time
@@ -885,13 +890,13 @@ class CanaryController:
         - ユーザー影響の定量化
         - 自動判断の基準
         """
-        query = f'rate(http_requests_total\{\{app="{self.app_name}",version="{version}",status=~"5.."\}\}[5m])'
+        query = f'rate(http_requests_total{{app="{self.app_name}",version="{version}",status=~"5.."}}[5m])'
         response = requests.get(f'{self.prometheus_url}/api/v1/query', params={'query': query})
         # ... パース処理
         
     def get_latency(self, version):
         """レイテンシを取得"""
-        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket\{\{app="{self.app_name}",version="{version}"\}\}[5m]))'
+        query = f'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{{app="{self.app_name}",version="{version}"}}[5m]))'
         # ... 
         
     def adjust_traffic(self, new_weight):
@@ -904,10 +909,10 @@ class CanaryController:
         """
         # Nginxの設定を更新
         config = f"""
-        upstream myapp \{\{
+        upstream myapp {{
             server myapp-stable weight={int((1-new_weight)*10)};
             server myapp-canary weight={int(new_weight*10)};
-        \}\}
+        }}
         """
         # ... 設定適用
         
@@ -941,6 +946,7 @@ class CanaryController:
         print("Canary deployment successful")
         return True
 ```
+<!-- {% endraw %} -->
 
 ### 演習問題
 

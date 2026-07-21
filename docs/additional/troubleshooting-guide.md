@@ -31,6 +31,7 @@ graph TD
 
 ### 基本診断コマンド
 
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # podman-diagnose.sh - Podman環境の基本診断
@@ -61,7 +62,7 @@ podman info --format json | jq '{
 
 # 3. 実行中のコンテナ
 echo -e "\n[INFO] 実行中のコンテナ:"
-podman ps --format "table \{\{.Names\}\}\t\{\{.Status\}\}\t\{\{.State\}\}"
+podman ps --format "table {{.Names}}\t{{.Status}}\t{{.State}}"
 
 # 4. システムリソース
 echo -e "\n[INFO] システムリソース:"
@@ -75,6 +76,7 @@ podman network ls
 echo -e "\n[INFO] 最近のイベント (エラーのみ):"
 podman events --since 1h --filter event=died --format json | jq '.'
 ```
+<!-- {% endraw %} -->
 
 ## 起動エラーの解決
 
@@ -241,6 +243,7 @@ Error: writing blob: write /var/tmp/storage123/layer.tar: no space left on devic
 ```
 
 #### 診断と解決
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # fix-storage-issues.sh
@@ -257,10 +260,10 @@ podman system df -v
 
 # 3. 大きなイメージ/コンテナの特定
 echo -e "\n大きなイメージ (上位10):"
-podman images --format "table \{\{.Repository\}\}:\{\{.Tag\}\}\t\{\{.Size\}\}" | sort -k2 -hr | head -10
+podman images --format "table {{.Repository}}:{{.Tag}}\t{{.Size}}" | sort -k2 -hr | head -10
 
 echo -e "\n大きなコンテナ (上位10):"
-podman ps -a --format "table \{\{.Names\}\}\t\{\{.Size\}\}" | sort -k2 -hr | head -10
+podman ps -a --format "table {{.Names}}\t{{.Size}}" | sort -k2 -hr | head -10
 
 # 4. クリーンアップ提案
 echo -e "\nクリーンアップオプション:"
@@ -317,6 +320,7 @@ if [ "${PRUNE_VOLUMES:-NO}" = "YES" ]; then
 fi
 EOF
 ```
+<!-- {% endraw %} -->
 
 ## ネットワーク問題の解決
 
@@ -456,6 +460,7 @@ EOF
 ### 1. コンテナの起動が遅い
 
 #### 診断と解決
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # analyze-slow-startup.sh
@@ -476,7 +481,7 @@ podman --log-level=debug run --rm $image true 2>&1 | grep -E "time=|duration=" |
 
 # 3. ストレージドライバーの確認
 echo -e "\nストレージドライバー:"
-storage_driver=$(podman info --format '\{\{.Store.GraphDriverName\}\}')
+storage_driver=$(podman info --format '{{.Store.GraphDriverName}}')
 echo "現在のドライバー: $storage_driver"
 
 if [ "$storage_driver" != "overlay" ]; then
@@ -486,7 +491,7 @@ fi
 
 # 4. イメージレイヤーの分析
 echo -e "\nイメージレイヤー分析:"
-podman history --format "table \{\{.ID\}\}\t\{\{.Size\}\}\t\{\{.CreatedBy\}\}" $image | head -10
+podman history --format "table {{.ID}}\t{{.Size}}\t{{.CreatedBy}}" $image | head -10
 
 # 5. 最適化の提案
 echo -e "\nパフォーマンス改善方法:"
@@ -507,10 +512,12 @@ cat << EOF
    - cgroup v2の使用
 EOF
 ```
+<!-- {% endraw %} -->
 
 ### 2. メモリ使用量が多い
 
 #### 診断と解決
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # analyze-memory-usage.sh
@@ -523,11 +530,11 @@ free -h
 
 # 2. コンテナごとのメモリ使用量
 echo -e "\nコンテナメモリ使用量:"
-podman stats --no-stream --format "table \{\{.Name\}\}\t\{\{.MemUsage\}\}\t\{\{.MemPerc\}\}\t\{\{.PIDs\}\}"
+podman stats --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.PIDs}}"
 
 # 3. 詳細なメモリ分析
 echo -e "\nメモリ詳細分析:"
-for container in $(podman ps --format "\{\{.Names\}\}"); do
+for container in $(podman ps --format "{{.Names}}"); do
     echo -e "\n--- $container ---"
     
     # cgroupメモリ情報
@@ -555,7 +562,7 @@ duration=${2:-60}
 echo "メモリ使用量を${duration}秒間監視..."
 
 for i in $(seq 1 $duration); do
-    mem=$(podman stats --no-stream --format "\{\{.MemUsage\}\}" $container | cut -d'/' -f1)
+    mem=$(podman stats --no-stream --format "{{.MemUsage}}" $container | cut -d'/' -f1)
     echo "$(date +%H:%M:%S) - $mem"
     sleep 1
 done | tee memory-trend.log
@@ -636,6 +643,7 @@ echo "1. メモリ制限の設定: podman run -m 512m"
 echo "2. スワップ制限: podman run -m 512m --memory-swap 512m"
 echo "3. OOMキラーの調整: podman run --oom-kill-disable=false"
 ```
+<!-- {% endraw %} -->
 
 ## 高度なトラブルシューティング
 

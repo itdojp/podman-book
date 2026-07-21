@@ -243,13 +243,17 @@ if command -v iptables >/dev/null 2>&1; then
     sudo iptables -t nat -L POSTROUTING -n | grep -E "MASQUERADE|podman"
 fi
 
-# 5. CNIプラグイン確認
-echo -e "\nCNI configuration:"
-if [ -d /etc/cni/net.d ]; then
-    ls -la /etc/cni/net.d/
-    cat /etc/cni/net.d/87-podman*.conflist 2>/dev/null | jq '.plugins[].type' | sort | uniq
-fi
+# 5. Netavark backendとnetwork定義の確認
+echo -e "\nNetwork backend:"
+podman info --format json |
+    jq '.host | {networkBackend, networkBackendInfo}'
+
+echo -e "\nDefined networks:"
+podman network ls --format json |
+    jq '.[] | {name, driver, network_interface, dns_enabled, subnets}'
 ```
+
+この診断はPodman v6.0.1を基準に2026-07-21に確認しています。現行環境ではCNI directoryやpluginの有無を正常性条件にせず、Netavark backend、aardvark-dns情報、`podman network`の公開出力を確認します。rootful containerの通信がfirewalld reload後に失われた場合は、[`podman network reload`](https://docs.podman.io/en/stable/markdown/podman-network-reload.1.html)で当該containerまたは全containerのruleを復旧します。
 
 **一般的なネットワーク問題の解決**
 
@@ -809,20 +813,32 @@ check_podman_config() {
 check_network() {
     echo -n "Checking network configuration... "
     
-    # CNIプラグイン
-    if [ -d /usr/libexec/cni ] || [ -d /opt/cni/bin ]; then
-        DIAGNOSTICS["cni"]="OK"
+    # 現行backendとDNS component
+    NETWORK_BACKEND=$(podman info --format json | jq -r '.host.networkBackend // empty')
+    DNS_BACKEND=$(podman info --format json | jq -r '.host.networkBackendInfo.dns.version // empty')
+    if [ "$NETWORK_BACKEND" = "netavark" ]; then
+        DIAGNOSTICS["network_backend"]="OK: netavark"
     else
-        DIAGNOSTICS["cni"]="FAIL: CNI plugins not found"
+        DIAGNOSTICS["network_backend"]="FAIL: Expected netavark, got ${NETWORK_BACKEND:-unknown}"
+    fi
+
+    if [ -n "$DNS_BACKEND" ]; then
+        DIAGNOSTICS["network_dns"]="OK: $DNS_BACKEND"
+    else
+        DIAGNOSTICS["network_dns"]="WARN: DNS backend information is unavailable"
+    fi
+
+    if podman network ls --format json | jq -e 'type == "array"' >/dev/null; then
+        DIAGNOSTICS["network_list"]="OK"
+    else
+        DIAGNOSTICS["network_list"]="FAIL: podman network ls failed"
     fi
     
     # ファイアウォール
-    if command -v firewall-cmd >/dev/null 2>&1; then
-        if firewall-cmd --get-active-zones | grep -q "trusted"; then
-            DIAGNOSTICS["firewall"]="OK"
-        else
-            DIAGNOSTICS["firewall"]="WARN: Firewall may block container traffic"
-        fi
+    if command -v firewall-cmd >/dev/null 2>&1 && firewall-cmd --state >/dev/null 2>&1; then
+        DIAGNOSTICS["firewall"]="OK: firewalld active; reload後はrootful networkを再確認"
+    else
+        DIAGNOSTICS["firewall"]="OK: active firewalld not detected"
     fi
     
     echo "Done"
@@ -841,10 +857,6 @@ auto_fix() {
                     echo "Enabling user namespaces..."
                     echo "user.max_user_namespaces=28633" | sudo tee /etc/sysctl.d/userns.conf
                     sudo sysctl -p /etc/sysctl.d/userns.conf
-                    ;;
-                "cni")
-                    echo "Installing CNI plugins..."
-                    # プラットフォーム依存のインストールコマンド
                     ;;
             esac
         fi

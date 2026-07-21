@@ -28,6 +28,19 @@ const fixtures = [
     'chapter03',
     baseline.chapter03.replaceAll('podman network inspect', 'removed network inspection command'),
   ],
+  ['chapter06-legacy-cni-conflist', 'chapter06', baseline.chapter06 + '\n/etc/cni/net.d/87-podman.conflist\n'],
+  ['chapter15-cni-plugin-directory', 'chapter15', baseline.chapter15 + '\n/usr/libexec/cni\n'],
+  ['chapter15-cni-install-repair', 'chapter15', baseline.chapter15 + '\nInstalling CNI plugins...\n'],
+  [
+    'chapter06-missing-network-reload',
+    'chapter06',
+    baseline.chapter06.replaceAll('sudo podman network reload --all', 'removed network reload command'),
+  ],
+  [
+    'chapter15-missing-backend-diagnostic',
+    'chapter15',
+    baseline.chapter15.replaceAll('DIAGNOSTICS["network_backend"]="OK: netavark"', 'removed backend result'),
+  ],
 ];
 
 for (const [label, contractName, text] of fixtures) {

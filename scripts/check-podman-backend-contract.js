@@ -35,6 +35,35 @@ const contracts = {
       'https://github.com/podman-container-tools/container-libs/blob/main/storage/docs/containers-storage.conf.5.md',
     ],
   },
+  chapter06: {
+    path: 'docs/chapters/chapter06/index.md',
+    required: [
+      '以下はPodman v6.0.1を基準に2026-07-21に確認した手順です',
+      'podman info --format json',
+      'podman network create',
+      '--driver bridge',
+      'podman network inspect application-net',
+      'sudo podman network reload --all',
+      'https://github.com/containers/podman/releases/tag/v6.0.0',
+      'https://github.com/containers/podman/releases/tag/v6.0.1',
+      'https://docs.podman.io/en/stable/markdown/podman-network-create.1.html',
+      'https://docs.podman.io/en/stable/markdown/podman-network-reload.1.html',
+    ],
+  },
+  chapter15: {
+    path: 'docs/chapters/chapter15/index.md',
+    required: [
+      '# 5. Netavark backendとnetwork定義の確認',
+      'podman info --format json',
+      'podman network ls --format json',
+      'NETWORK_BACKEND=$(podman info --format json',
+      'DNS_BACKEND=$(podman info --format json',
+      'DIAGNOSTICS["network_backend"]="OK: netavark"',
+      'https://docs.podman.io/en/stable/markdown/podman-network-reload.1.html',
+      '現行環境ではCNI directoryやpluginの有無を正常性条件にせず',
+      'この診断はPodman v6.0.1を基準に2026-07-21に確認しています',
+    ],
+  },
 };
 
 const forbidden = [
@@ -46,6 +75,9 @@ const forbidden = [
   { label: 'active CNI backend setting', pattern: /network_backend\s*=\s*["']cni["']/i },
   { label: 'legacy rootless CNI config path', pattern: /~\/\.config\/cni\/net\.d/i },
   { label: 'legacy rootful CNI config path', pattern: /\/etc\/cni\/net\.d/i },
+  { label: 'legacy CNI plugin directory', pattern: /\/(?:usr\/libexec|opt)\/cni(?:\/bin)?/i },
+  { label: 'CNI plugin installation repair', pattern: /Install(?:ing)?\s+CNI\s+plugins?/i },
+  { label: 'CNI diagnostic result key', pattern: /DIAGNOSTICS\[["']cni["']\]/i },
   { label: 'active CNI plugin section', pattern: /^#{2,6}\s+.*CNIプラグイン/im },
   { label: 'active CNI exercise', pattern: /カスタムCNI設定/ },
   { label: 'active rootless CNI procedure', pattern: /Rootless\s*CNI/ },

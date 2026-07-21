@@ -172,7 +172,7 @@ $ podman info --format json | jq '{
 
 ```bash
 # 現在のbackendを確認。現行Podmanの通常buildではNetavark
-$ podman info --format '\{\{.Host.NetworkBackend\}\}'
+{% raw %}$ podman info --format '{{.Host.NetworkBackend}}'{% endraw %}
 netavark
 
 # 公開CLIでnetworkを作成

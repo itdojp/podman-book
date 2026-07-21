@@ -52,7 +52,7 @@ function validateText(text, sourceLabel = contract.path) {
   const section = comparisonSection(text);
   if (!section) {
     errors.push(`${sourceLabel}: comparison section boundary is missing`);
-  } else if (/[◎△]/.test(section)) {
+  } else if (/[◎○◯〇△▲×✕]/u.test(section)) {
     errors.push(`${sourceLabel}: comparison section contains score symbols instead of concrete axes`);
   }
   return errors;

@@ -28,6 +28,13 @@ const fixtures = [
     'missing-comparison-date',
     baseline.replace('### DockerとPodmanの比較（確認日: 2026-07-21）', '### DockerとPodmanの比較'),
   ],
+  [
+    'alternate-score-symbols',
+    baseline.replace(
+      '| **Swarm mode** | built-in Swarm modeはない | Docker Engineにbuilt-in | 既存Swarm workloadの有無 |',
+      '| **Swarm mode** | × なし | ○ built-in | 既存Swarm workloadの有無 |',
+    ),
+  ],
 ];
 
 for (const [label, text] of fixtures) {

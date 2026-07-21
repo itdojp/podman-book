@@ -19,6 +19,13 @@ const fixtures = [
       "{% raw %}podman inspect --format '{{.Name}}'{% endraw %}"
     ),
   ],
+  [
+    'embedded-comment-boundary',
+    validGo.replace(
+      "podman inspect --format '{{.Name}}'",
+      `${rawOpen}\npodman inspect --format '{{.Name}}'`
+    ),
+  ],
   ['orphan-opening-boundary', `${rawOpen}\nnot a fence\n`],
 ];
 

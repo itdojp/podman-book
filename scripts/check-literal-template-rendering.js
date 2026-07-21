@@ -83,8 +83,7 @@ function validateMarkdown(text, sourceLabel = 'markdown') {
         errors.push(`${sourceLabel}:${line}: literal template block is missing the closing Liquid raw boundary`);
       }
     }
-    const withoutCommentBoundaries = block.text.replaceAll(rawOpen, '').replaceAll(rawClose, '');
-    if (withoutCommentBoundaries.includes('{% raw %}') || withoutCommentBoundaries.includes('{% endraw %}')) {
+    if (block.text.includes('{% raw %}') || block.text.includes('{% endraw %}')) {
       errors.push(`${sourceLabel}:${line}: raw tag is embedded in copyable code instead of an HTML comment boundary`);
     }
   }

@@ -117,19 +117,19 @@ struct uid_gid_extent {
 
 ### 動作環境要件
 
-**カーネル要件**：
-- Linux 4.18以上（cgroup v2フルサポート）
-- 有効化必須のカーネル機能：
-  - `CONFIG_USER_NS=y`
-  - `CONFIG_SECCOMP=y`
-  - `CONFIG_CGROUPS=y`
-  - `CONFIG_CGROUP_FREEZER=y`
-  - `CONFIG_CGROUP_DEVICE=y`
+**カーネル・ユーザー空間の要件**：
+- 単一のkernel versionだけを動作保証条件にはしません。利用するディストリビューションが対象Podman版をサポートしていることを先に確認します。
+- Rootless運用ではuser namespaceと`/etc/subuid`・`/etc/subgid`の割り当てが必要です。リソース制御を使う場合は、cgroup v2とsystemd user sessionへのdelegationも確認します。
+- native rootless OverlayFSの境界はLinux 5.12.9です。これより古いkernel、またはrootless OverlayFSを利用できないbacking filesystemでは、`fuse-overlayfs`か`vfs`を選びます。
+- NFSなどuser namespaceを扱えない分散filesystemはrootlessの`graphroot`にせず、local storageを使用します。
 
-**ファイルシステム要件**：
-- overlay2: 推奨、copy-on-writeによる高速化
-- fuse-overlayfs: rootless環境でのフォールバック
-- VFS: 互換性重視だが性能劣化
+**storage driverの要件**：
+- `overlay`: Podman / containers-storageでのdriver名です。Dockerのdriver名`overlay2`とは区別します。
+- native `overlay`: kernelとbacking filesystemが対応する場合の第一候補です。
+- `fuse-overlayfs`: native rootless OverlayFSを利用できない場合の`mount_program`です。既存の`$HOME/.config/containers/storage.conf`がある場合は自動選択されないことがあるため、実設定を`podman info`で確認します。
+- `vfs`: overlayを利用できない環境の互換手段ですが、copy-on-writeを使わないため容量と性能への影響を評価します。
+
+判定基準は[Podmanのrootless mode](https://docs.podman.io/en/stable/markdown/podman.1.html#rootless-mode)と、導入ディストリビューションのsupport policyを正本にします。
 
 ### 実装アーキテクチャ
 
@@ -149,8 +149,8 @@ struct uid_gid_extent {
             ┌──────────────┼──────────────┐
             │              │              │
      ┌──────▼──────┐┌──────▼──────┐┌─────▼──────┐
-     │    conmon   ││     CNI     ││    crun    │
-     │ (監視/ログ) ││(ネットワーク)││ (OCI実装) │
+     │    conmon   ││  Netavark   ││    crun    │
+     │ (監視/ログ) ││+aardvark-dns││ (OCI実装) │
      └─────────────┘└─────────────┘└────────────┘
                            │
                     ┌──────▼──────┐
@@ -162,6 +162,7 @@ struct uid_gid_extent {
 - **libpod**: Podmanコア、コンテナライフサイクル管理
 - **conmon**: コンテナモニター、stdio/ログ処理、終了コード取得
 - **crun**: OCI仕様準拠の軽量ランタイム（C実装、runcより50%高速）
-- **CNI**: プラグイン形式のネットワーク管理
+- **Netavark**: 現行Podmanのnetwork backend。bridge、port forwarding、network設定を管理
+- **aardvark-dns**: Netavark network内のcontainer名・aliasのname解決を担当
 
 本書では、これらの実装詳細と、プロダクション環境での最適な構成方法を解説します。

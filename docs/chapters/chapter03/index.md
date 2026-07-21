@@ -145,89 +145,51 @@ $ ls -ln /tmp/test/file
 ### ストレージドライバーの選択
 
 ```bash
-# 現在のストレージドライバー確認
-$ podman info --format '\{\{.Store.GraphDriverName\}\}'
-overlay
+# rootless状態、kernel、storage driver、driver optionを同時に確認
+$ podman info --format json | jq '{
+    rootless: .host.security.rootless,
+    kernel: .host.kernel,
+    graphDriver: .store.graphDriverName,
+    graphRoot: .store.graphRoot,
+    graphOptions: .store.graphOptions
+  }'
 
-$ podman info --format '\{\{.Store.GraphOptions\}\}'
-overlay.mount_program=/usr/bin/fuse-overlayfs
-
-# パフォーマンス測定
-$ time podman pull docker.io/library/ubuntu:22.04
-
-# native overlay (カーネル5.11以降)
-real    0m8.234s
-
-# fuse-overlayfs
-real    0m12.456s
-
-# vfs (互換性重視)
-real    0m25.789s
+# 期待するdriver名はDockerのoverlay2ではなくoverlay
+{
+  "rootless": true,
+  "kernel": "<running-kernel>",
+  "graphDriver": "overlay",
+  "graphRoot": "/home/user/.local/share/containers/storage",
+  "graphOptions": {}
+}
 ```
 
-### ネットワーク設定の最適化
+`graphDriver`が`overlay`で、`graphOptions`に`overlay.mount_program`がなければnative overlayを使用しています。`overlay.mount_program`に`fuse-overlayfs`が記録されていればFUSE経由です。native rootless OverlayFSはLinux 5.12.9以降が前提ですが、kernel番号だけで決めず、backing filesystemとディストリビューションのsupport policyも確認します。
+
+`fuse-overlayfs`を導入しても、既存の`$HOME/.config/containers/storage.conf`があると自動選択されない場合があります。設定変更前に既存container/imageを退避し、変更後は`podman info`で実際に選択されたdriverとoptionを再確認してください。
+
+### network backendと設定の確認
 
 ```bash
-# Rootless CNIの設定
-$ cat ~/.config/containers/containers.conf
-[network]
-# CNIプラグインディレクトリ
-network_config_dir = "/home/user/.config/cni/net.d"
-cni_plugin_dirs = ["/usr/libexec/cni", "/usr/lib/cni"]
+# 現在のbackendを確認。現行Podmanの通常buildではNetavark
+{% raw %}$ podman info --format '{{.Host.NetworkBackend}}'{% endraw %}
+netavark
 
-# デフォルトネットワーク
-default_network = "podman"
-
-# ネットワークバックエンド
-network_backend = "cni"  # または "netavark" (Podman 4.0+)
-
-# カスタムネットワークの作成
+# 公開CLIでnetworkを作成
 $ podman network create \
   --subnet 172.20.0.0/16 \
   --gateway 172.20.0.1 \
-  --ip-range 172.20.1.0/24 \
   custom-net
 
-# ネットワーク設定の確認
-$ cat ~/.config/cni/net.d/custom-net.conflist | jq .
-{
-  "cniVersion": "0.4.0",
-  "name": "custom-net",
-  "plugins": [
-    {
-      "type": "bridge",
-      "bridge": "cni-podman1",
-      "isGateway": true,
-      "ipMasq": true,
-      "hairpinMode": true,
-      "ipam": {
-        "type": "host-local",
-        "routes": [{"dst": "0.0.0.0/0"}],
-        "ranges": [[
-          {
-            "subnet": "172.20.0.0/16",
-            "gateway": "172.20.0.1",
-            "rangeStart": "172.20.1.1",
-            "rangeEnd": "172.20.1.254"
-          }
-        ]]
-      }
-    },
-    {
-      "type": "portmap",
-      "capabilities": {
-        "portMappings": true
-      }
-    },
-    {
-      "type": "firewall"
-    },
-    {
-      "type": "tuning"
-    }
-  ]
-}
+# generated fileを直接読むのではなく、公開CLIで結果を確認
+$ podman network inspect custom-net | jq '.[0] | {
+    name, driver, network_interface, subnets, dns_enabled
+  }'
 ```
+
+Netavarkのnetwork config directoryは、rootfulでは`/etc/containers/networks`、rootlessでは`$graphroot/networks`です。`graphroot`の既定値は`$HOME/.local/share/containers/storage`ですが、固定pathを仮定せず`podman info`で確認します。generated JSONは内部実装として扱い、作成・変更・確認には`podman network` commandを使用します。
+
+Podman 4以前のCNI環境から移行する場合、CNIの`.conflist`をNetavark directoryへcopyしません。旧networkの接続containerと設定を記録し、現行Podman上でnetworkを再作成してから切り替えます。Podman 5.0ではCNI supportが通常buildで無効化され、Podman 6.0で削除されました。現行Podmanの新規設定でCNI backendを選択する手順は対象外です。
 
 ### cgroups v2の詳細設定
 
@@ -264,26 +226,34 @@ $ systemctl --user set-property user@1000.service \
 
 ### ストレージ最適化設定
 
-```bash
-# ストレージ設定ファイル
-$ cat ~/.config/containers/storage.conf
+native rootless OverlayFSを利用できる環境では、`mount_program`を設定しません。
+
+```toml
+# ~/.config/containers/storage.conf（native overlay）
 [storage]
 driver = "overlay"
 runroot = "/run/user/1000/containers"
 graphroot = "/home/user/.local/share/containers/storage"
 
-[storage.options]
-# マウントオプション
+[storage.options.overlay]
+mountopt = "nodev"
+```
+
+kernelまたはbacking filesystemの制約でnative overlayを利用できない場合だけ、fallbackとして次を追加します。
+
+```toml
+# ~/.config/containers/storage.conf（fuse-overlayfs fallback）
+[storage.options.overlay]
 mount_program = "/usr/bin/fuse-overlayfs"
-mountopt = "nodev,metacopy=on"
+mountopt = "nodev"
+```
 
-# イメージストアのサイズ制限
-size = "10G"
-
-# パフォーマンスオプション
-# skip_mount_home = "true"  # ホームディレクトリマウントをスキップ
-
-# ストレージ使用状況の確認
+```bash
+# 選択結果とストレージ使用状況の確認
+$ podman info --format json | jq '{
+    graphDriver: .store.graphDriverName,
+    graphOptions: .store.graphOptions
+  }'
 $ podman system df
 TYPE           TOTAL   ACTIVE  SIZE    RECLAIMABLE
 Images         15      5       2.45GB  1.23GB (50%)
@@ -302,38 +272,27 @@ $ podman system prune
 
 **各ドライバーの特性と用途**
 
-```bash
+```toml
 # ~/.config/containers/storage.conf
 [storage]
-driver = "overlay"  # なぜoverlayを選ぶのか
+driver = "overlay"  # Podman / containers-storageでのdriver名
+graphroot = "/home/user/.local/share/containers/storage"
+runroot = "/run/user/1000/containers"
 
-# overlay: 最高のパフォーマンス、本番環境推奨
+# overlay: copy-on-writeによるlayer管理
 # - Copy-on-Write により効率的なレイヤー管理
 # - ハードリンクによる容量節約
 # - 高速な起動とビルド
 
 [storage.options.overlay]
-# Rootlessの場合はfuse-overlayfsが必要（なぜか）
-mount_program = "/usr/bin/fuse-overlayfs"
-# → カーネルのoverlayfsはroot権限が必要
-# → fuseにより、ユーザー空間で同等機能を実現
-
-# ストレージパスの意味
-graphroot = "$HOME/.local/share/containers/storage"  # イメージとレイヤー保存先
-runroot = "$XDG_RUNTIME_DIR/containers"  # 実行時の一時データ（高速なtmpfs推奨）
+mountopt = "nodev"
 ```
 
-**ストレージクォータ設定の必要性**
+上記はnative overlayの例です。fallbackが必要な環境だけ、別途`mount_program = "/usr/bin/fuse-overlayfs"`を`[storage.options.overlay]`へ追加します。native overlayの設定例へ`mount_program`をcopyしないでください。
 
-```bash
-# なぜクォータが必要か
-# - ディスク容量の枯渇を防ぐ
-# - マルチユーザー環境での公平性確保
-# - 暴走したビルドプロセスからの保護
+**storage quotaの適用境界**
 
-[storage.options.vfs]
-size = "10G"  # ユーザーごとの上限設定
-```
+`size = "10G"`を`[storage.options.vfs]`へ置く方法は現行schemaにありません。quota optionはdriverごとに異なり、backing filesystem側のproject quotaなど追加要件もあります。設定前に[containers-storage.conf](https://github.com/podman-container-tools/container-libs/blob/main/storage/docs/containers-storage.conf.5.md)の対象driver節を確認し、`podman info`と実際の書き込み上限で検証します。
 
 #### 3.2.3 レジストリ設定
 
@@ -369,44 +328,33 @@ location = "mirror.gcr.io"  # 地理的に近いミラーで高速化
 
 ### 3.3 ネットワーク設定
 
-#### 3.3.1 CNIプラグイン
+#### 3.3.1 Netavarkとaardvark-dns
 
-**基本的なCNI設定**
-```json
-{
-  "cniVersion": "0.4.0",
-  "name": "podman",
-  "plugins": [
-    {
-      "type": "bridge",
-      "bridge": "cni-podman0",
-      "isGateway": true,
-      "ipMasq": true,
-      "hairpinMode": true,
-      "ipam": {
-        "type": "host-local",
-        "routes": [{ "dst": "0.0.0.0/0" }],
-        "ranges": [
-          [
-            {
-              "subnet": "10.88.0.0/16",
-              "gateway": "10.88.0.1"
-            }
-          ]
-        ]
-      }
-    },
-    {
-      "type": "portmap",
-      "capabilities": {
-        "portMappings": true
-      }
-    },
-    {
-      "type": "firewall"
-    }
-  ]
-}
+Netavarkは現行Podmanのnetwork backendです。DNSが有効なnetworkではaardvark-dnsがcontainer名とnetwork aliasを登録します。rootless containerをdefault network modeで実行するときはpastaが使われます。
+
+```bash
+# backendとrootless network toolを確認
+$ podman info --format json | jq '{
+    backend: .host.networkBackend,
+    backendInfo: .host.networkBackendInfo,
+    rootless: .host.security.rootless,
+    pasta: .host.pasta
+  }'
+
+# bridge networkを作成し、driver / subnet / DNSを確認
+$ podman network create --subnet 10.89.10.0/24 app-net
+$ podman network inspect app-net | jq '.[0] | {
+    name, driver, network_interface, subnets, dns_enabled
+  }'
+
+# container名とaliasによるname解決を確認
+$ podman run -d --name web --network app-net docker.io/library/nginx:1.28.0-alpine
+$ podman run --rm --network app-net docker.io/library/busybox:1.37.0 \
+    nslookup web
+
+# 演習後のcleanup
+$ podman rm -f web
+$ podman network rm app-net
 ```
 
 #### 3.3.2 ファイアウォール統合
@@ -497,11 +445,18 @@ force_mask = "0700"
 
 1. Rootless Podmanをセットアップし、動作確認してください
 2. プライベートレジストリを設定し、イメージをプッシュしてください
-3. カスタムCNI設定を作成し、特定のIPレンジを使用してください
+3. `podman network create`でNetavarkのcustom networkを作成し、`podman network inspect`でsubnetとDNS設定を確認してください
 
 ### 参考資料
 
 エンタープライズ環境での詳細な要件については、[エンタープライズ要件詳細ガイド](../../additional/enterprise-requirements/)を参照してください。
+
+- [Podman rootless mode / storage](https://docs.podman.io/en/stable/markdown/podman.1.html#rootless-mode)
+- [podman network](https://docs.podman.io/en/stable/markdown/podman-network.1.html)
+- [podman info](https://docs.podman.io/en/stable/markdown/podman-info.1.html)
+- [Podman v5.0.0 release notes（CNI supportの通常build無効化）](https://github.com/podman-container-tools/podman/releases/tag/v5.0.0)
+- [Podman v6.0.0 release notes（CNI networkingの削除）](https://github.com/podman-container-tools/podman/releases/tag/v6.0.0)
+- [containers-storage.conf](https://github.com/podman-container-tools/container-libs/blob/main/storage/docs/containers-storage.conf.5.md)
 
 ## まとめ
 

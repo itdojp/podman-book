@@ -6,10 +6,12 @@ title: "第2章：Podmanのインストールと初期設定"
 
 # 第2章：Podmanのインストールと初期設定
 
-## 対象バージョン
-- **Podman**: 5.0.x（2024年3月リリース）
-- **動作確認OS**: RHEL 9.3、Ubuntu 22.04 LTS、CentOS Stream 9、Fedora 39
-- **前提条件**: Linux Kernel 4.18+、cgroup v2対応、systemd 239+（rootless時）
+## 検証基準と環境
+
+- **platform導入手順**: Podman stable文書とv6.0.1（2026-07-08公開）で確認（2026-07-21）
+- **Linux実行例**: Ubuntu 24.04 / Podman 4.9.3で確認。distribution packageのversionはOS releaseごとに異なるため、固定値を期待せず`podman --version`で記録します。
+- **desktop前提**: macOS / Windowsではhost側CLIがPodman machine内のLinux Podmanへremote接続します。Windows向け現行公式guideはWindows 11以降を前提とします。
+- **rootless前提**: 一般userで実行する本章のLinux例とmachine guestはrootlessを基準にします。`sudo podman`やmachineをrootfulへ切り替えた場合は、storage、image、containerの表示範囲がrootless側と分かれることを確認します。
 
 ## 2.1 自動インストールスクリプト
 
@@ -118,7 +120,7 @@ echo "  podman run -it alpine sh"
 ### RHEL/CentOS/Fedora
 
 ```bash
-# DNFを使用したインストール（Podman 5.0.x）
+# DNFを使用したインストール
 sudo dnf install -y podman
 
 # 関連ツールのインストール
@@ -126,7 +128,7 @@ sudo dnf install -y buildah skopeo podman-compose
 
 # バージョン確認と動作テスト
 podman --version
-# 期待される出力: podman version 5.0.x
+# distributionが提供するversionを記録
 
 # 基本的な動作確認
 podman run --rm hello-world
@@ -154,28 +156,74 @@ _Ubuntu 24.04 / Podman 4.9.3 における `podman --version` / `podman info` / `
 
 ### macOS
 
+macOSではhost側の`podman` CLIから、Podman machineが管理するLinux VMへ接続する経路を標準とします。公式installerを使用し、利用するreleaseとchecksumを記録してください。Homebrew版はcommunity-maintainedであり、Podman公式の推奨導入経路ではありません。
+
 ```bash
-# Homebrewを使用
-brew install podman
+# 公式installerを導入した新しいterminalで確認
+podman --version
 
-# Podman machineの初期化
-podman machine init
-podman machine start
+# Podman machine（標準経路）を作成して起動
+podman machine init --now
 
-# 接続確認
-podman info
+# host側machineとremote接続先を確認
+podman machine list
+podman machine inspect
+podman system connection list
+podman info --format json
 ```
+
+`podman machine inspect`の`State`が`running`、`Rootful`が`false`であることを確認します。`podman info --format json`ではguest側の情報と`serviceIsRemote`を確認します。machine providerはPodman versionとhost architectureで変わり得るため、固定値を仮定せず`podman machine info`と[podman-machine公式文書](https://docs.podman.io/en/stable/markdown/podman-machine.1.html)で確認します。
 
 ### Windows
 
-```powershell
-# WSL2が必要
-# PowerShellを管理者として実行
-wsl --install
+Windowsでは、PowerShellまたはCMDのnative `podman.exe`からPodman machineへ接続する経路を標準とします。Podman v6.0以降の現行guideはWindows 11以降、hardware virtualization、およびWSL2またはHyper-V providerを前提とします。公式MSIのuser-scope installは管理者権限を必要としませんが、provider自体の有効化条件は別途満たす必要があります。
 
-# WSL2内でLinuxディストリビューションをインストール後、
-# 上記のLinux用手順に従ってインストール
+```powershell
+# 公式MSIを導入した新しいPowerShellで確認
+podman --version
+
+# default provider（現行WindowsではWSL）でmachineを作成して起動
+podman machine init --now
+
+# Windows host側CLI、Podman-managed guest、接続先を確認
+podman machine list
+podman machine inspect
+podman system connection list
+podman info --format json
 ```
+
+Hyper-Vを明示的に選択する場合は、Windows edition、Hyper-V Administrators group、provider準備を確認してから`podman machine init --provider hyperv`を使用します。WSL providerとHyper-V providerのmachineは同時に起動しません。WSLの有効化やHyper-V準備は[Podman for Windows](https://github.com/podman-container-tools/podman/blob/main/docs/tutorials/podman-for-windows.md)を正本とし、本書ではWindows機能の導入手順を重複掲載しません。
+
+#### WSL2 distribution内でLinux版Podmanを直接実行する経路（任意）
+
+既存のUbuntuなどのWSL2 distribution内でLinux版Podmanを直接実行する構成は、Windows host側のPodman machineとは別経路です。この場合、CLIとPodman engineは同じWSL distribution内で動作し、`podman machine init`やmachine用remote connectionは使用しません。
+
+```bash
+# 既存WSL2 distributionのLinux shell内で実行
+sudo apt update
+sudo apt install -y podman
+
+podman --version
+podman info --format json
+podman system connection list
+```
+
+`podman info --format json`の`serviceIsRemote`が`false`であることを確認します。rootless運用では通常のLinuxと同様に`/etc/subuid`、`/etc/subgid`、user namespace、storage driverを確認します。Windows側のPodman machineとdirect WSL2のimage、container、volume、connection設定は共有されない前提で管理してください。
+
+#### 経路の選択と切り分け
+
+| 経路 | CLIを実行する場所 | Linux実行環境 | CLIの接続先 | rootlessと状態 |
+|---|---|---|---|---|
+| macOS標準 | macOS terminalの`podman` | Podman-managed Linux VM | machineが登録するremote connection | guestはrootless既定。machine単位で状態を管理 |
+| Windows標準 | PowerShell / CMDの`podman.exe` | Podman-managed WSL distributionまたはHyper-V VM | machineが登録するremote connection | guestはrootless既定。rootfulとはstorageを分離 |
+| WSL2 direct（任意） | 既存WSL2 distributionのLinux shell | そのWSL2 distribution | local Podman（`serviceIsRemote: false`） | Linux側userのrootless設定とstorageを使用 |
+
+切り分け時は、まずCLIを実行しているshellを確認します。host側の標準経路では`podman machine list`、`podman machine inspect`、`podman system connection list`を確認します。WSL2 direct経路では`command -v podman`と`podman info --format json`を確認し、machine側のcontainerが見えないことを障害と誤認しないでください。
+
+- [Podman installation](https://podman.io/docs/installation)
+- [podman-machine](https://docs.podman.io/en/stable/markdown/podman-machine.1.html)
+- [podman-machine-inspect](https://docs.podman.io/en/stable/markdown/podman-machine-inspect.1.html)
+- [Podman for Windows](https://github.com/podman-container-tools/podman/blob/main/docs/tutorials/podman-for-windows.md)
 
 ## 2.3 初期設定
 

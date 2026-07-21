@@ -16,7 +16,8 @@
     "check:security": "npm audit",
     "check:figure-index": "node scripts/check-figure-index.js",
     "check:podman-backends": "node scripts/check-podman-backend-contract.js && node scripts/check-podman-backend-contract-regression.js",
-    "test": "npm run check:metadata && npm run check:figure-index && npm run check:podman-backends && npm run build"
+    "check:podman-machine-paths": "node scripts/check-podman-machine-path-contract.js && node scripts/check-podman-machine-path-contract-regression.js",
+    "test": "npm run check:metadata && npm run check:figure-index && npm run check:podman-backends && npm run check:podman-machine-paths && npm run build"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0"

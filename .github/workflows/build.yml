@@ -46,6 +46,9 @@ jobs:
 
     - name: Podman backend contract check
       run: npm run check:podman-backends
+
+    - name: Podman machine path contract check
+      run: npm run check:podman-machine-paths
         
     - name: Build book
       run: npm run build

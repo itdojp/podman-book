@@ -41,4 +41,6 @@ for (const [name, text] of Object.entries(baseline)) {
   if (errors.length) throw new Error(`valid baseline was rejected: ${errors.join('; ')}`);
 }
 
-console.log(`Podman backend regression fixtures: OK (${fixtures.length} negative, 2 positive)`);
+console.log(
+  `Podman backend regression fixtures: OK (${fixtures.length} negative, ${Object.keys(baseline).length} positive)`
+);

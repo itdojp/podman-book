@@ -40,6 +40,9 @@ jobs:
       - name: Figure index contract check
         run: npm run check:figure-index
 
+      - name: Podman backend contract check
+        run: npm run check:podman-backends
+
       - name: Checkout book-formatter (pinned)
         uses: actions/checkout@v6
         with:

@@ -226,20 +226,34 @@ $ systemctl --user set-property user@1000.service \
 
 ### ストレージ最適化設定
 
-```bash
-# ストレージ設定ファイル
-$ cat ~/.config/containers/storage.conf
+native rootless OverlayFSを利用できる環境では、`mount_program`を設定しません。
+
+```toml
+# ~/.config/containers/storage.conf（native overlay）
 [storage]
 driver = "overlay"
 runroot = "/run/user/1000/containers"
 graphroot = "/home/user/.local/share/containers/storage"
 
 [storage.options.overlay]
-# native rootless OverlayFSを利用できない場合だけ指定
+mountopt = "nodev"
+```
+
+kernelまたはbacking filesystemの制約でnative overlayを利用できない場合だけ、fallbackとして次を追加します。
+
+```toml
+# ~/.config/containers/storage.conf（fuse-overlayfs fallback）
+[storage.options.overlay]
 mount_program = "/usr/bin/fuse-overlayfs"
 mountopt = "nodev"
+```
 
-# ストレージ使用状況の確認
+```bash
+# 選択結果とストレージ使用状況の確認
+$ podman info --format json | jq '{
+    graphDriver: .store.graphDriverName,
+    graphOptions: .store.graphOptions
+  }'
 $ podman system df
 TYPE           TOTAL   ACTIVE  SIZE    RECLAIMABLE
 Images         15      5       2.45GB  1.23GB (50%)
@@ -258,7 +272,7 @@ $ podman system prune
 
 **各ドライバーの特性と用途**
 
-```bash
+```toml
 # ~/.config/containers/storage.conf
 [storage]
 driver = "overlay"  # Podman / containers-storageでのdriver名
@@ -271,11 +285,10 @@ runroot = "/run/user/1000/containers"
 # - 高速な起動とビルド
 
 [storage.options.overlay]
-# native rootless OverlayFSを使える環境ではmount_programを指定しない
-# kernel / backing filesystemの制約でnative overlayを使えない場合だけ指定
-mount_program = "/usr/bin/fuse-overlayfs"
-# → fuseにより、user spaceでoverlay機能を提供
+mountopt = "nodev"
 ```
+
+上記はnative overlayの例です。fallbackが必要な環境だけ、別途`mount_program = "/usr/bin/fuse-overlayfs"`を`[storage.options.overlay]`へ追加します。native overlayの設定例へ`mount_program`をcopyしないでください。
 
 **storage quotaの適用境界**
 

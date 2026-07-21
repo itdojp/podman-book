@@ -258,6 +258,7 @@ podman export mycontainer > container-backup.tar
 
 #### 4.4.1 ログ管理
 
+<!-- {% raw %} -->
 ```bash
 # ログ表示
 podman logs mycontainer
@@ -278,12 +279,14 @@ podman logs --since 2024-01-01T00:00:00 mycontainer
 podman run -d \
   --name logged-container \
   --log-driver journald \
-  --log-opt tag="\{\{.Name\}\}" \
+  --log-opt tag="{{.Name}}" \
   nginx:alpine
 ```
+<!-- {% endraw %} -->
 
 #### 4.4.2 リソースモニタリング
 
+<!-- {% raw %} -->
 ```bash
 # リアルタイム統計
 podman stats
@@ -295,7 +298,7 @@ podman stats mycontainer
 podman stats --no-stream
 
 # フォーマット指定
-podman stats --format "table \{\{.Container\}\}\t\{\{.CPUPerc\}\}\t\{\{.MemUsage\}\}"
+podman stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}"
 
 # プロセス一覧
 podman top mycontainer
@@ -303,6 +306,7 @@ podman top mycontainer
 # カスタムフォーマット
 podman top mycontainer pid,user,args
 ```
+<!-- {% endraw %} -->
 
 ### 4.5 トラブルシューティング
 

@@ -75,6 +75,7 @@ echo "- podman unshare: namespace操作"
 
 **問題パターン1: コンテナが即座に終了する**
 
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # diagnose-container-exit.sh
@@ -84,7 +85,7 @@ CONTAINER=$1
 echo "Diagnosing container exit: $CONTAINER"
 
 # 1. 終了コード確認
-EXIT_CODE=$(podman inspect $CONTAINER --format '\{\{.State.ExitCode\}\}')
+EXIT_CODE=$(podman inspect $CONTAINER --format '{{.State.ExitCode}}')
 echo "Exit code: $EXIT_CODE"
 
 case $EXIT_CODE in
@@ -129,20 +130,22 @@ podman logs --tail 20 $CONTAINER
 # 3. リソース制限確認
 echo -e "\nリソース制限:"
 podman inspect $CONTAINER --format '
-Memory Limit: \{\{.HostConfig.Memory\}\}
-CPU Limit: \{\{.HostConfig.CpuQuota\}\}
+Memory Limit: {{.HostConfig.Memory}}
+CPU Limit: {{.HostConfig.CpuQuota}}
 '
 
 # 4. ヘルスチェック結果
-if podman inspect $CONTAINER --format '\{\{.Config.Healthcheck\}\}' | grep -q "map"; then
+if podman inspect $CONTAINER --format '{{.Config.Healthcheck}}' | grep -q "map"; then
     echo -e "\nヘルスチェック結果:"
-    podman inspect $CONTAINER --format '\{\{.State.Health.Status\}\}'
-    podman inspect $CONTAINER --format '\{\{range .State.Health.Log\}\}\{\{.Output\}\}\{\{end\}\}'
+    podman inspect $CONTAINER --format '{{.State.Health.Status}}'
+    podman inspect $CONTAINER --format '{{range .State.Health.Log}}{{.Output}}{{end}}'
 fi
 ```
+<!-- {% endraw %} -->
 
 **問題パターン2: Permission Denied エラー**
 
+<!-- {% raw %} -->
 ```bash
 # fix-permission-issues.sh
 
@@ -167,7 +170,7 @@ fi
 
 # 2. ユーザー名前空間確認
 echo -e "\n=== User Namespace Check ==="
-if podman info --format '\{\{.Host.Security.Rootless\}\}' | grep -q true; then
+if podman info --format '{{.Host.Security.Rootless}}' | grep -q true; then
     echo "Running in rootless mode"
     
     # UID/GIDマッピング確認
@@ -190,10 +193,12 @@ echo "マウントポイントの権限確認方法:"
 echo "ls -la /host/path"
 echo "podman exec <container> ls -la /container/path"
 ```
+<!-- {% endraw %} -->
 
 #### 15.2.2 ネットワーク関連の問題
 
 **診断スクリプト**
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # network-diagnostics.sh
@@ -205,10 +210,10 @@ echo "=== Network Diagnostics for $CONTAINER ==="
 # 1. ネットワーク設定確認
 echo "Network configuration:"
 podman inspect $CONTAINER --format '
-Network Mode: \{\{.HostConfig.NetworkMode\}\}
-IP Address: \{\{.NetworkSettings.IPAddress\}\}
-Gateway: \{\{.NetworkSettings.Gateway\}\}
-DNS: \{\{.HostConfig.Dns\}\}
+Network Mode: {{.HostConfig.NetworkMode}}
+IP Address: {{.NetworkSettings.IPAddress}}
+Gateway: {{.NetworkSettings.Gateway}}
+DNS: {{.HostConfig.Dns}}
 '
 
 # 2. ポートマッピング確認
@@ -252,6 +257,7 @@ echo -e "\nDefined networks:"
 podman network ls --format json |
     jq '.[] | {name, driver, network_interface, dns_enabled, subnets}'
 ```
+<!-- {% endraw %} -->
 
 この診断はPodman v6.0.1を基準に2026-07-21に確認しています。現行環境ではCNI directoryやpluginの有無を正常性条件にせず、Netavark backend、aardvark-dns情報、`podman network`の公開出力を確認します。rootful containerの通信がfirewalld reload後に失われた場合は、[`podman network reload`](https://docs.podman.io/en/stable/markdown/podman-network-reload.1.html)で当該containerまたは全containerのruleを復旧します。
 
@@ -277,6 +283,7 @@ sudo sysctl -p /etc/sysctl.d/99-ipforward.conf
 #### 15.2.3 ストレージ関連の問題
 
 **ストレージ診断スクリプト**
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # storage-diagnostics.sh
@@ -290,11 +297,11 @@ podman system df
 # 2. 詳細な使用量分析
 echo -e "\nDetailed usage:"
 echo "Images:"
-podman images --format "table \{\{.Repository\}\}:\{\{.Tag\}\}\t\{\{.Size\}\}" | sort -k2 -hr | head -10
+podman images --format "table {{.Repository}}:{{.Tag}}\t{{.Size}}" | sort -k2 -hr | head -10
 
 echo -e "\nVolumes:"
 for vol in $(podman volume ls -q); do
-    size=$(podman volume inspect $vol --format '\{\{.Mountpoint\}\}' | xargs du -sh 2>/dev/null | cut -f1)
+    size=$(podman volume inspect $vol --format '{{.Mountpoint}}' | xargs du -sh 2>/dev/null | cut -f1)
     echo "$vol: $size"
 done
 
@@ -307,10 +314,10 @@ echo "Unused volumes: $(podman volume ls -f dangling=true -q | wc -l)"
 # 4. ストレージドライバー情報
 echo -e "\nStorage driver info:"
 podman info --format '
-Storage Driver: \{\{.Store.GraphDriverName\}\}
-Graph Root: \{\{.Store.GraphRoot\}\}
-Run Root: \{\{.Store.RunRoot\}\}
-Volume Path: \{\{.Store.VolumePath\}\}
+Storage Driver: {{.Store.GraphDriverName}}
+Graph Root: {{.Store.GraphRoot}}
+Run Root: {{.Store.RunRoot}}
+Volume Path: {{.Store.VolumePath}}
 '
 
 # 5. クリーンアップ推奨事項
@@ -323,6 +330,7 @@ echo "podman system prune"
 echo "# 影響が大きい操作（未使用イメージ/ボリュームも削除され得るため注意）"
 echo "# podman system prune --all --volumes"
 ```
+<!-- {% endraw %} -->
 
 ### 15.3 高度なデバッグ技術
 
@@ -527,6 +535,7 @@ if __name__ == "__main__":
 
 #### 15.4.1 権限昇格の防止
 
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # security-hardening.sh
@@ -536,8 +545,8 @@ echo "=== Security Hardening Check ==="
 # 1. 特権コンテナの検出
 echo "Checking for privileged containers:"
 for container in $(podman ps -q); do
-    name=$(podman inspect $container --format '\{\{.Name\}\}')
-    privileged=$(podman inspect $container --format '\{\{.HostConfig.Privileged\}\}')
+    name=$(podman inspect $container --format '{{.Name}}')
+    privileged=$(podman inspect $container --format '{{.HostConfig.Privileged}}')
     
     if [ "$privileged" = "true" ]; then
         echo "[WARN] $name is running in privileged mode"
@@ -551,8 +560,8 @@ done
 # 2. 過剰なケーパビリティの検出
 echo -e "\nChecking capabilities:"
 for container in $(podman ps -q); do
-    name=$(podman inspect $container --format '\{\{.Name\}\}')
-    caps=$(podman inspect $container --format '\{\{.EffectiveCaps\}\}')
+    name=$(podman inspect $container --format '{{.Name}}')
+    caps=$(podman inspect $container --format '{{.EffectiveCaps}}')
     
     if [ "$caps" != "[]" ] && [ "$caps" != "null" ]; then
         echo "Container: $name"
@@ -571,7 +580,7 @@ done
 # 3. ユーザー権限の確認
 echo -e "\nChecking user permissions:"
 for container in $(podman ps -q); do
-    name=$(podman inspect $container --format '\{\{.Name\}\}')
+    name=$(podman inspect $container --format '{{.Name}}')
     user=$(podman exec $container whoami 2>/dev/null || echo "unknown")
     
     if [ "$user" = "root" ]; then
@@ -580,6 +589,7 @@ for container in $(podman ps -q); do
     fi
 done
 ```
+<!-- {% endraw %} -->
 
 #### 15.4.2 セキュリティポリシー違反の検出
 

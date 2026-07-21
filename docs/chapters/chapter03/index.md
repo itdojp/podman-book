@@ -170,9 +170,10 @@ $ podman info --format json | jq '{
 
 ### network backendと設定の確認
 
+<!-- {% raw %} -->
 ```bash
 # 現在のbackendを確認。現行Podmanの通常buildではNetavark
-{% raw %}$ podman info --format '{{.Host.NetworkBackend}}'{% endraw %}
+$ podman info --format '{{.Host.NetworkBackend}}'
 netavark
 
 # 公開CLIでnetworkを作成
@@ -186,6 +187,7 @@ $ podman network inspect custom-net | jq '.[0] | {
     name, driver, network_interface, subnets, dns_enabled
   }'
 ```
+<!-- {% endraw %} -->
 
 Netavarkのnetwork config directoryは、rootfulでは`/etc/containers/networks`、rootlessでは`$graphroot/networks`です。`graphroot`の既定値は`$HOME/.local/share/containers/storage`ですが、固定pathを仮定せず`podman info`で確認します。generated JSONは内部実装として扱い、作成・変更・確認には`podman network` commandを使用します。
 

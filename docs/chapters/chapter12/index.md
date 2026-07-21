@@ -28,16 +28,18 @@ title: "第12章：パフォーマンスチューニング"
 「測定できないものは改善できない」という原則に基づき、適切なメトリクス収集は最適化の第一歩です。
 
 **基本的なメトリクス収集**
+<!-- {% raw %} -->
 ```bash
 # リアルタイムモニタリング
 podman stats
 
 # 特定コンテナの詳細統計
-podman stats --format "table \{\{.Container\}\}\t\{\{.CPUPerc\}\}\t\{\{.MemUsage\}\}\t\{\{.NetIO\}\}\t\{\{.BlockIO\}\}"
+podman stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
 
 # JSON形式での出力（自動化用）
 podman stats --no-stream --format json > metrics.json
 ```
+<!-- {% endraw %} -->
 
 **高度なメトリクス収集スクリプト**
 ```bash
@@ -313,6 +315,7 @@ podman run -d \
 
 #### 12.7.1 パフォーマンステストフレームワーク
 
+<!-- {% raw %} -->
 ```python
 #!/usr/bin/env python3
 # performance_test_framework.py
@@ -341,7 +344,7 @@ class PerformanceTestFramework:
             # 起動完了を待つ
             while True:
                 result = subprocess.run(
-                    ['podman', 'inspect', container, '--format', '\{\{.State.Status\}\}'],
+                    ['podman', 'inspect', container, '--format', '{{.State.Status}}'],
                     capture_output=True, text=True
                 )
                 if result.stdout.strip() == 'running':
@@ -409,6 +412,7 @@ class PerformanceTestFramework:
             for metric, value in results.items():
                 print(f"  {metric}: {value}")
 ```
+<!-- {% endraw %} -->
 
 #### 12.7.2 継続的パフォーマンス改善
 

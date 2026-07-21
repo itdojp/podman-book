@@ -28,6 +28,7 @@ Podmanは、これらの要件に対して以下の価値を提供します：
 #### 14.1.1 コンプライアンス対応
 
 **セキュリティポリシーの実装**
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # security-compliance-check.sh
@@ -61,17 +62,17 @@ check() {
 }
 
 # 1. ホスト設定
-check "1.1" "Rootlessモードの確認" "podman info --format '\{\{.Host.Security.Rootless\}\}'" "true"
+check "1.1" "Rootlessモードの確認" "podman info --format '{{.Host.Security.Rootless}}'" "true"
 check "1.2" "SELinuxの有効化" "getenforce" "Enforcing"
 check "1.3" "監査ログの有効化" "auditctl -l | grep -c podman" "1"
 
 # 2. Podman設定
 check "2.1" "ユーザー名前空間の有効化" "sysctl user.max_user_namespaces" "0"
-check "2.2" "seccompプロファイルの使用" "podman info --format '\{\{.Host.Security.SECCOMPEnabled\}\}'" "true"
+check "2.2" "seccompプロファイルの使用" "podman info --format '{{.Host.Security.SECCOMPEnabled}}'" "true"
 
 # 3. イメージセキュリティ
 echo -e "\n[3.x] イメージセキュリティチェック"
-for image in $(podman images --format "\{\{.Repository\}\}:\{\{.Tag\}\}" | grep -v "localhost/"); do
+for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v "localhost/"); do
     echo "  Checking image: $image"
     
     # ルートユーザーチェック
@@ -89,17 +90,17 @@ done
 # 4. コンテナランタイムセキュリティ
 echo -e "\n[4.x] ランタイムセキュリティチェック"
 for container in $(podman ps -q); do
-    name=$(podman inspect $container --format '\{\{.Name\}\}')
+    name=$(podman inspect $container --format '{{.Name}}')
     echo "  Checking container: $name"
     
     # 特権モードチェック
-    privileged=$(podman inspect $container --format '\{\{.HostConfig.Privileged\}\}')
+    privileged=$(podman inspect $container --format '{{.HostConfig.Privileged}}')
     if [ "$privileged" = "true" ]; then
         failed+=("Container $name is running in privileged mode")
     fi
     
     # ケーパビリティチェック
-    caps=$(podman inspect $container --format '\{\{.EffectiveCaps\}\}')
+    caps=$(podman inspect $container --format '{{.EffectiveCaps}}')
     if [ "$caps" != "[]" ] && [ "$caps" != "null" ]; then
         warnings+=("Container $name has additional capabilities: $caps")
     fi
@@ -130,6 +131,7 @@ EOF
 
 echo "Report saved to compliance-report-*.json"
 ```
+<!-- {% endraw %} -->
 
 #### 14.1.2 監査ログの実装
 
@@ -299,6 +301,7 @@ if __name__ == "__main__":
 
 #### 14.2.1 アクティブ-スタンバイ構成
 
+<!-- {% raw %} -->
 ```bash
 #!/bin/bash
 # ha-setup.sh
@@ -426,7 +429,7 @@ rsync -avz --delete \
     ${STANDBY}:/var/lib/containers/storage/volumes/
 
 # イメージ同期
-for image in $(ssh $ACTIVE podman images --format "\{\{.Repository\}\}:\{\{.Tag\}\}"); do
+for image in $(ssh $ACTIVE podman images --format "{{.Repository}}:{{.Tag}}"); do
     ssh $ACTIVE podman save $image | ssh $STANDBY podman load
 done
 EOF
@@ -470,6 +473,7 @@ setup_data_replication
 
 echo "HA setup completed!"
 ```
+<!-- {% endraw %} -->
 
 ### 14.3 既存システムとの統合
 

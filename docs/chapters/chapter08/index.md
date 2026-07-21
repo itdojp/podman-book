@@ -362,6 +362,7 @@ sudo podman run \
 
 #### 8.6.1 CIS Dockerベンチマーク準拠
 
+<!-- {% raw %} -->
 ```bash
 # 監査スクリプト
 cat > audit-containers.sh << 'EOF'
@@ -371,7 +372,7 @@ echo "=== Container Security Audit ==="
 
 # 実行中のコンテナ確認
 echo -e "\n[Running Containers]"
-podman ps --format "table \{\{.Names\}\}\t\{\{.Status\}\}\t\{\{.Ports\}\}"
+podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
 # 特権コンテナの確認
 echo -e "\n[Privileged Containers]"
@@ -396,6 +397,7 @@ EOF
 
 chmod +x audit-containers.sh
 ```
+<!-- {% endraw %} -->
 
 #### 8.6.2 セキュリティポリシーの実装
 

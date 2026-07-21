@@ -310,33 +310,33 @@ volumes:
 
 #### 6.3.1 ファイアウォール統合
 
+以下はPodman v6.0.1を基準に2026-07-21に確認した手順です。現行PodmanはNetavarkをnetwork backendとして使用し、managed bridgeの作成時にmasqueradeとport forwardingに必要なhost firewall ruleを管理します。CNIの`.conflist`を作成したり、CNI firewall pluginを追加したりしません。
+
 ```bash
-# CNIファイアウォールプラグイン設定
-cat > /etc/cni/net.d/87-podman-bridge.conflist << EOF
-{
-  "cniVersion": "0.4.0",
-  "name": "podman",
-  "plugins": [
-    {
-      "type": "bridge",
-      "bridge": "cni-podman0",
-      "isGateway": true,
-      "ipMasq": true,
-      "ipam": {
-        "type": "host-local",
-        "routes": [{"dst": "0.0.0.0/0"}],
-        "ranges": [[{"subnet": "10.88.0.0/16"}]]
-      }
-    },
-    {
-      "type": "firewall",
-      "backend": "iptables",
-      "ingressPolicy": "same-bridge"
-    }
-  ]
-}
-EOF
+# backendとDNS componentを公開APIで確認
+podman info --format json |
+  jq '{backend: .host.networkBackend, dns: .host.networkBackendInfo.dns.version}'
+
+# managed bridgeを作成。NetavarkがNATとport forwardingのruleを管理する
+podman network create \
+  --driver bridge \
+  --subnet 10.89.0.0/24 \
+  application-net
+
+# generated fileを直接編集せず、公開CLIで設定を確認
+podman network inspect application-net |
+  jq '.[0] | {name, driver, network_interface, subnets, dns_enabled}'
+
+# host運用でfirewalldをreloadした後、rootful containerのruleを復旧
+sudo podman network reload --all
 ```
+
+`podman network reload`は、firewall ruleが削除されたrootful containerのnetwork設定を復旧するcommandです。通常のnetwork作成ごとに実行するものではなく、rootless環境やPodman remote clientでは同じ前提になりません。host firewall policyを独自管理する場合も、generated Netavark ruleを直接書き換えず、変更責任と復旧手順を運用設計に記録します。
+
+- [Podman 6.0.0 release notes（CNI networking削除）](https://github.com/containers/podman/releases/tag/v6.0.0)
+- [Podman v6.0.1 release notes（確認対象version）](https://github.com/containers/podman/releases/tag/v6.0.1)
+- [`podman network create`（managed bridgeとfirewallの責務）](https://docs.podman.io/en/stable/markdown/podman-network-create.1.html)
+- [`podman network reload`（firewall reload後の復旧）](https://docs.podman.io/en/stable/markdown/podman-network-reload.1.html)
 
 #### 6.3.2 ネットワーク分離
 
@@ -400,7 +400,9 @@ podman run \
 
 ```bash
 # ネットワーク診断
-podman network inspect podman | jq '.[] | .plugins'
+podman info --format json | jq '.host | {networkBackend, networkBackendInfo}'
+podman network inspect podman |
+  jq '.[0] | {name, driver, network_interface, subnets, dns_enabled}'
 
 # ポート確認
 podman port mycontainer

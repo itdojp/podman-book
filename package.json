@@ -15,7 +15,8 @@
     "check:metadata": "node scripts/check-metadata-consistency.js",
     "check:security": "npm audit",
     "check:figure-index": "node scripts/check-figure-index.js",
-    "test": "npm run check:metadata && npm run check:figure-index && npm run build"
+    "check:podman-backends": "node scripts/check-podman-backend-contract.js && node scripts/check-podman-backend-contract-regression.js",
+    "test": "npm run check:metadata && npm run check:figure-index && npm run check:podman-backends && npm run build"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0"

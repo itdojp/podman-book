@@ -30,8 +30,8 @@ Podmanは従来のDockerとは大きく異なるアーキテクチャを採用�
 | **Pod機能** | ◎ Kubernetes互換 | × なし | K8s移行予定→Podman |
 | **systemd統合** | ◎ ネイティブ | △ 外部ツール必要 | RHEL/CentOS環境→Podman |
 | **SELinux統合** | ◎ 完全対応 | △ 追加設定要 | セキュリティ要件高→Podman |
-| **Windows対応** | △ WSL2経由 | ◎ ネイティブ | Windows中心→Docker |
-| **macOS対応** | △ VM経由 | ◎ Docker Desktop | macOS開発→Docker |
+| **Windows対応** | ○ native CLI + Podman machine（WSL / Hyper-V guest） | ◎ Docker Desktop | providerと既存toolchainで選択 |
+| **macOS対応** | ○ native CLI + Podman machine（Linux VM） | ◎ Docker Desktop | どちらもLinux VMを使用 |
 | **イメージ互換性** | ◎ OCI準拠 | ◎ OCI準拠 | 両者で相互利用可能 |
 | **docker compose** | ○ podman-compose | ◎ ネイティブ | 既存compose資産→Docker |
 | **Swarmモード** | × なし | ◎ 内蔵 | Swarm利用中→Docker |

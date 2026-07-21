@@ -43,6 +43,9 @@ jobs:
       - name: Podman backend contract check
         run: npm run check:podman-backends
 
+      - name: Podman machine path contract check
+        run: npm run check:podman-machine-paths
+
       - name: Checkout book-formatter (pinned)
         uses: actions/checkout@v6
         with:

@@ -8,10 +8,10 @@ title: "第2章：Podmanのインストールと初期設定"
 
 ## 検証基準と環境
 
-- **platform導入手順**: Podman stable文書とv6.0.1（2026-07-08公開）で確認（2026-07-21）
-- **Linux実行例**: Ubuntu 24.04 / Podman 4.9.3で確認。distribution packageのversionはOS releaseごとに異なるため、固定値を期待せず`podman --version`で記録します。
-- **desktop前提**: macOS / Windowsではhost側CLIがPodman machine内のLinux Podmanへremote接続します。Windows向け現行公式guideはWindows 11以降を前提とします。
-- **rootless前提**: 一般userで実行する本章のLinux例とmachine guestはrootlessを基準にします。`sudo podman`やmachineをrootfulへ切り替えた場合は、storage、image、containerの表示範囲がrootless側と分かれることを確認します。
+- **プラットフォーム導入手順**: Podman stable文書とv6.0.1（2026-07-08公開）で確認（2026-07-21）
+- **Linux実行例**: Ubuntu 24.04 / Podman 4.9.3で確認。ディストリビューションが提供するパッケージのバージョンはOSリリースごとに異なるため、固定値を期待せず`podman --version`で記録します。
+- **デスクトップ前提**: macOS / Windowsではホスト側CLIがPodman machine内のLinux Podmanへリモート接続します。Windows向け現行公式ガイドはWindows 11以降を前提とします。
+- **rootless前提**: 一般ユーザーで実行する本章のLinux例とmachineのLinuxゲストはrootlessを基準にします。`sudo podman`やmachineをrootfulへ切り替えた場合は、storage、image、containerの表示範囲がrootless側と分かれることを確認します。
 
 ## 2.1 自動インストールスクリプト
 

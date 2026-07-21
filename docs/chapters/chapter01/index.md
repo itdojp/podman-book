@@ -17,42 +17,36 @@ title: "第1章：コンテナ技術の基礎"
 
 ## Podmanアーキテクチャ概要
 
-Podmanは従来のDockerとは大きく異なるアーキテクチャを採用しています。まず、両者の詳細な比較から見ていきましょう。
+PodmanとDocker EngineはいずれもOCI containerを扱えますが、local Linuxでのprocess model、API endpoint、rootlessの有効化方法が異なります。製品名だけで優劣を決めず、運用するmodeと前提条件を揃えて比較します。
 
-### DockerとPodmanの包括的比較（2024年最新版）
+### DockerとPodmanの比較（確認日: 2026-07-21）
 
 #### 技術的特徴の比較
 
-| 機能 | Podman (v5.0.x) | Docker (v25.x) | 選択指針 |
-|------|-----------------|----------------|----------|
-| **アーキテクチャ** | デーモンレス | デーモン必須（dockerd） | セキュリティ要件高・Linux環境→Podman |
-| **rootless実行** | ◎ ネイティブ対応 | △ 実験的機能 | 一般ユーザー権限実行→Podman |
-| **Pod機能** | ◎ Kubernetes互換 | × なし | K8s移行予定→Podman |
-| **systemd統合** | ◎ ネイティブ | △ 外部ツール必要 | RHEL/CentOS環境→Podman |
-| **SELinux統合** | ◎ 完全対応 | △ 追加設定要 | セキュリティ要件高→Podman |
-| **Windows対応** | ○ native CLI + Podman machine（WSL / Hyper-V guest） | ◎ Docker Desktop | providerと既存toolchainで選択 |
-| **macOS対応** | ○ native CLI + Podman machine（Linux VM） | ◎ Docker Desktop | どちらもLinux VMを使用 |
-| **イメージ互換性** | ◎ OCI準拠 | ◎ OCI準拠 | 両者で相互利用可能 |
-| **docker compose** | ○ podman-compose | ◎ ネイティブ | 既存compose資産→Docker |
-| **Swarmモード** | × なし | ◎ 内蔵 | Swarm利用中→Docker |
+| 比較軸 | Podman | Docker Engine | 判断時に確認すること |
+|---|---|---|---|
+| **local Linuxのprocess model** | 通常のCLI操作では中央daemonを常駐させない。APIが必要な場合は`podman system service`を明示的に使用 | CLIが長時間稼働する`dockerd`へ接続。rootless modeでもuser所有のdaemonを使用 | daemon lifecycle、socket権限、API互換性 |
+| **rootlessのstatus** | non-root userが直接containerを起動できるsupported mode | Docker Engine 20.10でexperimentalを卒業したsupported mode。daemonとcontainerをuser namespace内で実行 | どちらもsupportedであり、「対応済み対実験的」という比較をしない |
+| **rootlessの有効化** | 一般userで実行し、`subuid` / `subgid`、user namespace、storage、networkを確認 | `dockerd-rootless-setuptool.sh install`でuser serviceと`rootless` contextを設定 | system-wide rootful daemonとの併存、CLI context、socket path |
+| **resource制御** | rootlessで利用できるcontrollerはcgroup v2とsystemd user serviceへのdelegationに依存 | cgroup関連optionはcgroup v2とsystemdを満たす場合にsupported。条件外では一部optionが無視される | 対象hostでCPU / memory / PIDs制限を実測 |
+| **API endpoint** | local CLIはdaemonless。Docker API互換endpointはoptional serviceとして公開 | CLIとtoolはDocker daemon socketへ接続 | IDE、CI、Compose等が必要とするAPIとsocket ownership |
+| **Pod** | 複数containerをまとめるPod objectを提供 | Docker Engineに同一のPod objectはない | Kubernetes互換性ではなく、必要なlifecycle単位で判断 |
+| **Compose** | `podman compose`はexternal Compose providerを呼び出す | Docker Compose pluginをDocker Engineと組み合わせる | 実際のCompose file、provider、CIで互換性を検証 |
+| **systemd運用** | Quadletでcontainer / pod / volume等をunitへ宣言可能 | rootless daemonはsystemd user service、system-wide daemonはsystem serviceとして管理 | daemon有無ではなく、再起動・依存・権限の運用契約 |
+| **Windows対応** | native CLI + Podman machine（WSL / Hyper-V guest） | Docker Desktop | providerと既存toolchainで選択 |
+| **macOS対応** | native CLI + Podman machine（Linux VM） | Docker Desktop | どちらもLinux VMを使用 |
+| **image format** | OCI / Docker imageを扱う | OCI / Docker imageを扱う | registry、manifest、build機能の差を別途検証 |
+| **Swarm mode** | built-in Swarm modeはない | Docker Engineにbuilt-in | 既存Swarm workloadの有無 |
 
-#### パフォーマンス特性
+Docker rootlessはcontainer processだけをnon-rootにする設定や`userns-remap`とは異なり、Docker daemon自体もnon-root user namespace内で動作させます。rootless modeは[Docker Engine rootless](https://docs.docker.com/engine/security/rootless/)を正本とし、[Docker Engine 20.10 release notes](https://docs.docker.com/engine/release-notes/20.10/)でexperimental卒業を確認できます。resource制御とprivileged port等の条件は[Rootless tips](https://docs.docker.com/engine/security/rootless/tips/)で対象hostごとに確認します。
 
-| 項目 | Podman | Docker | 実測値 |
-|------|--------|--------|--------|
-| **起動時間** | ◎ 高速（デーモンレス） | ○ 通常 | Podman: 0.38s vs Docker: 0.52s |
-| **メモリ使用量** | ◎ 低い | △ デーモン分増加 | デーモンなし vs 約30MB常駐 |
-| **同時コンテナ数** | ◎ 制限なし | ○ デーモン依存 | 1000コンテナ起動で差が顕著 |
-| **ビルド速度** | ○ 同等 | ○ 同等 | BuildKit使用時は同等 |
+Podmanのdaemonless説明とrootless前提は[Podman stable documentation](https://docs.podman.io/en/stable/)および[Podman rootless mode](https://docs.podman.io/en/stable/markdown/podman.1.html#rootless-mode)を正本とします。macOS / Windowsのmachine経路は第2章の導入経路と合わせてください。
 
-#### エンタープライズ機能
+#### performanceとenterprise要件の比較方針
 
-| 機能 | Podman | Docker | 推奨環境 |
-|------|--------|--------|----------|
-| **監査ログ** | ◎ systemd統合 | △ 別途設定 | コンプライアンス重視→Podman |
-| **RBAC** | ◎ ネイティブ | △ EE版のみ | 権限管理重視→Podman |
-| **FIPS 140-2** | ◎ 対応 | △ 限定的 | 政府・金融→Podman |
-| **商用サポート** | ◎ Red Hat | ◎ Docker Inc. | 既存契約に依存 |
+起動時間、常駐memory、同時container数、build速度は、engine version、runtime、storage、network、image cache、host負荷で変わります。本書では出典と再現条件のない単一値を製品の一般的な優劣へ拡張せず、対象workloadの同一条件で測定します。新しいbenchmarkを掲載する場合は、command、sample数、host、version、cache条件、raw resultを同時に記録します。
+
+監査、SELinux、FIPS、RBAC、商用supportもengine名だけでは決まりません。利用するdistribution、Desktop / Engine edition、vendor contract、host policyを要件表へ落とし込み、提供元のsupport matrixで確認します。
 
 ### アーキテクチャの詳細比較
 
@@ -60,7 +54,7 @@ Podmanは従来のDockerとは大きく異なるアーキテクチャを採用�
 
 ```mermaid
 graph TB
-    subgraph "従来のDocker"
+    subgraph "Docker Engine（system-wide rootful構成の例）"
         D1[Docker CLI] --> D2[Docker Daemon<br/>dockerd]
         D2 --> D3[containerd]
         D3 --> D4[runc]
@@ -82,10 +76,12 @@ graph TB
     style P6 fill:#ccffcc
 ```
 
+この図のDocker側はsystem-wide rootful daemonの例です。Docker rootlessでも`dockerd`を使用しますが、daemonとcontainerの双方をuser namespace内で実行します。Podman側もAPI serviceやmacOS / Windowsのremote machineを使う場合があるため、「Podmanには常にserviceがない」と一般化しません。
+
 **主な差異点：**
-- **デーモンレス実行**: Podmanは常駐プロセスを持たない
-- **ユーザー権限実行**: rootless containerが標準
-- **プロセス分離**: 各コンテナが独立したプロセス
+- **process model**: local LinuxのPodman CLIは中央daemonを必須とせず、Docker CLIは選択したDocker daemonへ接続
+- **rootless mode**: 両者ともsupported。Podmanはnon-root userが直接実行し、Dockerはrootless daemonとCLI contextを構成
+- **運用境界**: socket、systemd unit、storage、rootful / rootlessの状態分離を構成ごとに確認
 
 ### パフォーマンス特性の実測値
 
@@ -331,8 +327,8 @@ CPU speed:
 
 3. **Podman**: デーモンレス実装
    - 各コンテナが独立プロセス
-   - rootlessモードのネイティブサポート
-   - systemdとの深い統合
+   - non-root userから直接実行できるrootless mode
+   - Quadletとsystemd unitによるservice lifecycle管理
 
 ## 1.5 コンテナエコシステムの全体像
 
@@ -361,10 +357,10 @@ CPU speed:
 
 ### Podman採用が推奨されるケース
 
-1. **セキュリティ要件が高い環境**
-   - 金融機関、政府機関、医療機関
-   - rootless実行が必須
-   - SELinux/FIPS準拠が必要
+1. **中央daemonを必須にしないLinux運用が要件**
+   - container操作を実行userの権限境界へ直接対応させたい
+   - Docker互換API socketを常時公開しない
+   - rootlessに加えてSELinuxやdistribution supportを組み合わせて評価する
 
 2. **Red Hat系Linux環境**
    - RHEL 8/9、CentOS Stream
@@ -387,6 +383,7 @@ CPU speed:
    - 大量のComposeファイル（docker-compose.yml）
    - Dockerfileの複雑な依存関係
    - Docker専用ツールの利用
+   - non-root要件はsupportedなDocker rootless modeで満たせるかを先に検証
 
 2. **開発チームの習熟度**
    - Dockerに精通したチーム
@@ -395,28 +392,23 @@ CPU speed:
 
 3. **Windows/macOS中心の開発**
    - Docker Desktopの利便性
-   - ネイティブ対応の重要性
-   - GUI管理ツールの必要性
+   - 既存のDocker API連携toolとGUI workflow
+   - 現行のsupport contractとteam内の運用実績
 
 4. **Docker Swarm利用中**
    - 既存のSwarmクラスター
    - Swarm固有機能の利用
    - 移行コストが高い
 
-## 対象バージョンと前提条件
+## 比較の検証基準
 
-本書は以下のバージョンを対象としています。
+- **Podman**: v6.0.1（2026-07-08公開）とstable文書を2026-07-21に確認
+- **Docker rootless**: 現行公式文書と、Docker Engine 20.10でexperimentalを卒業した履歴を2026-07-21に確認
+- **Linux実行例**: Chapter 2に記載した実行環境と、利用distributionが提供するversionを個別に記録
+- **rootless前提**: `subuid` / `subgid`、user namespace、storage、network、cgroup v2、systemd delegationを、使用するmodeとhostで確認
+- **desktop前提**: macOS / Windowsは第2章で分離したPodman machine経路とWSL2 direct経路を混同しない
 
-- **Podman**: 5.0.x（2024年3月リリース）
-- **動作確認OS**: 
-  - RHEL 9.3
-  - Ubuntu 22.04 LTS
-  - CentOS Stream 9
-  - Fedora 39
-- **前提条件**: 
-  - Linux Kernel 4.18以上
-  - cgroup v2対応
-  - systemd 239以上（rootless実行時）
+この比較はversion番号だけで優劣を決めるものではありません。公開前に上記一次情報を再確認し、利用するdistributionまたはvendorがsupportするversionへ読み替えます。
 
 ## まとめ
 

@@ -46,6 +46,9 @@ jobs:
       - name: Podman machine path contract check
         run: npm run check:podman-machine-paths
 
+      - name: Docker rootless comparison contract check
+        run: npm run check:docker-rootless-comparison
+
       - name: Checkout book-formatter (pinned)
         uses: actions/checkout@v6
         with:

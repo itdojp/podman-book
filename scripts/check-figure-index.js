@@ -30,7 +30,7 @@ const expectedFigures = [
     source: 'docs/chapters/chapter02/index.md',
     route: '/chapters/chapter02/',
     kind: 'PNG',
-    marker: '![Podman セットアップ確認の出力例](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)',
+    marker: '![Podmanのversion・rootless・cgroup・network backendと実行成功を判断する出力](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)',
     asset: 'docs/assets/images/screenshots/chapter02/01-podman-verify-setup.png',
   },
   {
@@ -59,6 +59,132 @@ const expectedFigures = [
     kind: 'SVG',
     marker: '![Container Security Layer Architecture](../../assets/images/diagrams/chapter08-security-layer-architecture.svg)',
     asset: 'docs/assets/images/diagrams/chapter08-security-layer-architecture.svg',
+  },
+  {
+    id: 'figure-daemonless-process-audit',
+    title: '図7：daemonless実行境界',
+    source: 'docs/chapters/chapter01/index.md',
+    route: '/chapters/chapter01/',
+    kind: 'PNG',
+    marker: '![Podmanのdaemon常駐有無とrootless実行境界を判断する出力](../../assets/images/screenshots/chapter01/01-daemonless-process-audit.png)',
+    asset: 'docs/assets/images/screenshots/chapter01/01-daemonless-process-audit.png',
+  },
+  {
+    id: 'figure-rootless-uid-mapping',
+    title: '図8：rootless UID mapping',
+    source: 'docs/chapters/chapter03/index.md',
+    route: '/chapters/chapter03/',
+    kind: 'PNG',
+    marker: '![rootless Podmanでhost UIDとcontainer UIDの対応を判断する出力](../../assets/images/screenshots/chapter03/01-rootless-uid-mapping.png)',
+    asset: 'docs/assets/images/screenshots/chapter03/01-rootless-uid-mapping.png',
+  },
+  {
+    id: 'figure-image-pull-inventory',
+    title: '図9：image pull inventory',
+    source: 'docs/chapters/chapter04/index.md',
+    route: '/chapters/chapter04/',
+    kind: 'PNG',
+    marker: '![pullしたimageのtag・ID・sizeがinventoryへ反映されたか判断する出力](../../assets/images/screenshots/chapter04/01-image-pull-inventory.png)',
+    asset: 'docs/assets/images/screenshots/chapter04/01-image-pull-inventory.png',
+  },
+  {
+    id: 'figure-containerfile-build',
+    title: '図10：Containerfile build',
+    source: 'docs/chapters/chapter05/index.md',
+    route: '/chapters/chapter05/',
+    kind: 'PNG',
+    marker: '![Containerfileのstageとbuild成功・生成tagの対応を判断する出力](../../assets/images/screenshots/chapter05/01-containerfile-build.png)',
+    asset: 'docs/assets/images/screenshots/chapter05/01-containerfile-build.png',
+  },
+  {
+    id: 'figure-port-volume-verification',
+    title: '図11：port・volume verification',
+    source: 'docs/chapters/chapter06/index.md',
+    route: '/chapters/chapter06/',
+    kind: 'PNG',
+    marker: '![公開portのHTTP疎通とvolume再作成後の永続性を判断する出力](../../assets/images/screenshots/chapter06/01-port-volume-verification.png)',
+    asset: 'docs/assets/images/screenshots/chapter06/01-port-volume-verification.png',
+  },
+  {
+    id: 'figure-pod-membership',
+    title: '図12：Pod membership',
+    source: 'docs/chapters/chapter07/index.md',
+    route: '/chapters/chapter07/',
+    kind: 'PNG',
+    marker: '![Podの名前・状態と配下containerの所属を判断する出力](../../assets/images/screenshots/chapter07/01-pod-membership.png)',
+    asset: 'docs/assets/images/screenshots/chapter07/01-pod-membership.png',
+  },
+  {
+    id: 'figure-rootless-capability-boundary',
+    title: '図13：rootless capability boundary',
+    source: 'docs/chapters/chapter08/index.md',
+    route: '/chapters/chapter08/',
+    kind: 'PNG',
+    marker: '![rootless・seccomp・capability削除の実行境界を判断する出力](../../assets/images/screenshots/chapter08/01-rootless-capability-boundary.png)',
+    asset: 'docs/assets/images/screenshots/chapter08/01-rootless-capability-boundary.png',
+  },
+  {
+    id: 'figure-quadlet-generated-unit',
+    title: '図14：Quadlet generated unit',
+    source: 'docs/chapters/chapter09/index.md',
+    route: '/chapters/chapter09/',
+    kind: 'PNG',
+    marker: '![Quadlet定義が期待するsystemd unitへ変換されるか判断するdry-run出力](../../assets/images/screenshots/chapter09/01-quadlet-generated-unit.png)',
+    asset: 'docs/assets/images/screenshots/chapter09/01-quadlet-generated-unit.png',
+  },
+  {
+    id: 'figure-actions-workflow-summary',
+    title: '図15：GitHub Actions summary',
+    source: 'docs/chapters/chapter10/index.md',
+    route: '/chapters/chapter10/',
+    kind: 'PNG',
+    marker: '![GitHub Actionsでcommit・job・artifactが同じ成功runへ対応するか判断する画面](../../assets/images/screenshots/chapter10/01-actions-workflow-summary.png)',
+    asset: 'docs/assets/images/screenshots/chapter10/01-actions-workflow-summary.png',
+  },
+  {
+    id: 'figure-kube-round-trip',
+    title: '図16：Kubernetes YAML round trip',
+    source: 'docs/chapters/chapter11/index.md',
+    route: '/chapters/chapter11/',
+    kind: 'PNG',
+    marker: '![Podから生成したKubernetes YAMLとdown・play後のPod状態を判断する出力](../../assets/images/screenshots/chapter11/01-kube-round-trip.png)',
+    asset: 'docs/assets/images/screenshots/chapter11/01-kube-round-trip.png',
+  },
+  {
+    id: 'figure-performance-baseline',
+    title: '図17：performance baseline',
+    source: 'docs/chapters/chapter12/index.md',
+    route: '/chapters/chapter12/',
+    kind: 'PNG',
+    marker: '![起動時間・image size・storage使用量を変更前baselineとして判断する出力](../../assets/images/screenshots/chapter12/01-performance-baseline.png)',
+    asset: 'docs/assets/images/screenshots/chapter12/01-performance-baseline.png',
+  },
+  {
+    id: 'figure-service-network-health',
+    title: '図18：service network health',
+    source: 'docs/chapters/chapter13/index.md',
+    route: '/chapters/chapter13/',
+    kind: 'PNG',
+    marker: '![複数serviceのcontainer・network・health対応を判断する出力](../../assets/images/screenshots/chapter13/01-service-network-health.png)',
+    asset: 'docs/assets/images/screenshots/chapter13/01-service-network-health.png',
+  },
+  {
+    id: 'figure-compliance-availability',
+    title: '図19：compliance・availability',
+    source: 'docs/chapters/chapter14/index.md',
+    route: '/chapters/chapter14/',
+    kind: 'PNG',
+    marker: '![2 replicaのhealth・read-only・capability・no-new-privileges合否を判断する出力](../../assets/images/screenshots/chapter14/01-compliance-availability.png)',
+    asset: 'docs/assets/images/screenshots/chapter14/01-compliance-availability.png',
+  },
+  {
+    id: 'figure-failure-diagnosis-recovery',
+    title: '図20：failure diagnosis・recovery',
+    source: 'docs/chapters/chapter15/index.md',
+    route: '/chapters/chapter15/',
+    kind: 'PNG',
+    marker: '![port競合の失敗・event・inspect根拠から復旧を判断する出力](../../assets/images/screenshots/chapter15/01-failure-diagnosis-recovery.png)',
+    asset: 'docs/assets/images/screenshots/chapter15/01-failure-diagnosis-recovery.png',
   },
 ];
 
@@ -182,10 +308,10 @@ function validateFigureIndex({ overrides = new Map() } = {}) {
     .map((match) => match[1]);
   const expectedLinks = expectedFigures.map((figure) => `${figure.route}#${figure.id}`);
   if (JSON.stringify(indexedLinks) !== JSON.stringify(expectedLinks)) {
-    errors.push(`figure index links must be the exact six-item inventory: expected ${expectedLinks.join(', ')}, got ${indexedLinks.join(', ')}`);
+    errors.push(`figure index links must be the exact ${expectedFigures.length}-item inventory: expected ${expectedLinks.join(', ')}, got ${indexedLinks.join(', ')}`);
   }
   if (indexText.match(/\]\(\{\{\s*'[^']+#figure-/g)?.length !== expectedFigures.length) {
-    errors.push('figure index must contain exactly six stable-anchor links');
+    errors.push(`figure index must contain exactly ${expectedFigures.length} stable-anchor links`);
   }
   if (/assets\/images\/.+\.(?:png|svg)/i.test(indexText)) {
     errors.push('figure index must link to reader-facing pages, not assets directly');
@@ -271,7 +397,7 @@ if (require.main === module) {
       {
         name: 'inventory',
         overrides: new Map([[figureIndexPath, readFixture(figureIndexPath).replace('#figure-security-layers', '#figure-unplanned')]]),
-        expectedError: 'exact six-item inventory',
+        expectedError: `exact ${expectedFigures.length}-item inventory`,
       },
       {
         name: 'anchor',
@@ -293,7 +419,7 @@ if (require.main === module) {
     console.log('✅ Figure index negative fixtures passed (flag, route, page, inventory, anchor, and asset drift were rejected).');
   }
 
-  console.log(`✅ Figure index check passed (${expectedFigures.length} figures: Mermaid 2, PNG 1, SVG 3).`);
+  console.log(`✅ Figure index check passed (${expectedFigures.length} figures: Mermaid 2, PNG 15, SVG 3).`);
 }
 
 module.exports = { expectedFigures, validateFigureIndex };

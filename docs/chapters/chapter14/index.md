@@ -27,6 +27,12 @@ Podmanは、これらの要件に対して以下の価値を提供します：
 
 #### 14.1.1 コンプライアンス対応
 
+<a id="figure-compliance-availability"></a>
+
+![2 replicaのhealth・read-only・capability・no-new-privileges合否を判断する出力](../../assets/images/screenshots/chapter14/01-compliance-availability.png)
+
+_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。2 replicaがrunningかつhealthyで、read-only root filesystem、effective capability 0、no-new-privilegesを満たすことを確認します。これは検証用policyの実例であり、組織の正式なcompliance認証を意味しません。_
+
 **セキュリティポリシーの実装**
 <!-- {% raw %} -->
 ```bash

@@ -66,6 +66,12 @@ systemctl --user enable --now myapp.service
 systemctl --user status myapp.service
 ```
 
+<a id="figure-quadlet-generated-unit"></a>
+
+![Quadlet定義が期待するsystemd unitへ変換されるか判断するdry-run出力](../../assets/images/screenshots/chapter09/01-quadlet-generated-unit.png)
+
+_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ Podman・Quadlet 4.9.3 / systemd 255。`.container`のimage・name・port・restartが生成unitへ反映されることをdry-runで確認します。撮影環境ではuser systemd busがofflineのため、稼働状態の証跡ではありません。workspace pathはマスクしています。_
+
 この例を実環境へ適用する前に、image digest、registry 認証、公開ポート、SELinux ラベル、
 volume のバックアップ、rollback 先イメージをレビューしてください。
 

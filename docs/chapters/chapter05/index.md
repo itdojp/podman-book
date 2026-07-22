@@ -166,6 +166,12 @@ CMD ["node", "dist/index.js"]
 # - 高速な配布 = デプロイ時間短縮
 ```
 
+<a id="figure-containerfile-build"></a>
+
+![Containerfileのstageとbuild成功・生成tagの対応を判断する出力](../../assets/images/screenshots/chapter05/01-containerfile-build.png)
+
+_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。2 stageの命令、commit、`localhost/book-qa-image:issue189`のtag、実行結果を対応付けます。container IDとorganization labelはマスクしています。_
+
 **ビルドキャッシュ最適化**
 ```dockerfile
 # 悪い例：キャッシュが効きにくい

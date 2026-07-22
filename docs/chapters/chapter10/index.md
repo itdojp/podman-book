@@ -245,6 +245,12 @@ GitHub Actionsは、以下の理由で多くの開発チームに選ばれてい
 - **マーケットプレイス**: 豊富な再利用可能アクション
 - **セキュリティ**: GitHub のセキュリティ機能との統合
 
+<a id="figure-actions-workflow-summary"></a>
+
+![GitHub Actionsでcommit・job・artifactが同じ成功runへ対応するか判断する画面](../../assets/images/screenshots/chapter10/01-actions-workflow-summary.png)
+
+_2026-07-23、GitHub Actions Web UI。公開main commit `4a7955d`のBook QA runで、status、`qa` job、2 artifactが同じ成功runに属することを確認します。accountとorganizationはマスクしています。この画面はbook QAの実例であり、後続のPodman image build例はworkflow定義とrun logを併せて検証してください。_
+
 #### 10.3.1 GitHub Actions設定
 
 **実践的なワークフローとその解説**

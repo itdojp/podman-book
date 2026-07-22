@@ -93,6 +93,12 @@ podman run -d \
   api-gateway:latest
 ```
 
+<a id="figure-service-network-health"></a>
+
+![複数serviceのcontainer・network・health対応を判断する出力](../../assets/images/screenshots/chapter13/01-service-network-health.png)
+
+_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine・Alpine 3.20。database processとhealthyなAPIが同じprivate bridge network上でrunningであることを、service単位で確認します。_
+
 #### 13.2.2 サービス間通信パターン
 
 **同期通信（REST）**

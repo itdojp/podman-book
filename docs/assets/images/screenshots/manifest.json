@@ -347,15 +347,15 @@
       "sourceKind": "terminal-output",
       "sourceCommands": [
         "podman network inspect book-qa-services --format 'name={{.Name}} driver={{.Driver}}'",
-        "podman inspect book-qa-db book-qa-api | jq -r '.[] | \"service=\\(.Name) network=book-qa-services status=\\(.State.Status) health=\\(if (.State.Health.Status // \\\"\\\") == \\\"\\\" then \\\"not-configured\\\" else .State.Health.Status end)\"'"
+        "podman inspect book-qa-db book-qa-api | jq -r '.[] | \"service=\\(.Name) networks=\\(.NetworkSettings.Networks | keys | join(\",\")) status=\\(.State.Status) health=\\(if (.State.Health.Status // \"\") == \"\" then \"not-configured\" else .State.Health.Status end)\"'"
       ],
       "maskedFields": [
         "organization label"
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 63793,
-      "sha256": "b934d885a58efb34b6f743b7b394b3915862de1aab8792251e52029202f65367",
+      "bytes": 64438,
+      "sha256": "3c697c7cfb6dd37eb28173549ffed99901f56d493c01c845a9a337f5574f855d",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },

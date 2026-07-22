@@ -7,6 +7,7 @@ const zlib = require('zlib');
 
 const EXPECTED_CHAPTERS = Array.from({ length: 15 }, (_, index) => `chapter${String(index + 1).padStart(2, '0')}`);
 const MAX_BYTES = 500 * 1024;
+const MAX_DECODED_BYTES = 32 * 1024 * 1024;
 const MIN_WIDTH = 1200;
 const MIN_HEIGHT = 400;
 const FORBIDDEN = [
@@ -104,14 +105,18 @@ function decodePng(buffer) {
   if (!color || !color.depths.includes(header.bitDepth) || (header.colorType === 3 && !sawPalette)) {
     return { error: 'invalid color type, bit depth, or palette' };
   }
+  const bitsPerRow = BigInt(header.width) * BigInt(color.channels) * BigInt(header.bitDepth);
+  const rowBytesBig = (bitsPerRow + 7n) / 8n;
+  const expectedBytesBig = BigInt(header.height) * (rowBytesBig + 1n);
+  if (expectedBytesBig > BigInt(MAX_DECODED_BYTES)) return { error: 'decoded image exceeds the safety limit' };
+  const rowBytes = Number(rowBytesBig);
+  const expectedBytes = Number(expectedBytesBig);
   let pixels;
   try {
-    pixels = zlib.inflateSync(Buffer.concat(imageData));
+    pixels = zlib.inflateSync(Buffer.concat(imageData), { maxOutputLength: expectedBytes });
   } catch (error) {
     return { error: `IDAT cannot be inflated: ${error.message}` };
   }
-  const rowBytes = Math.ceil((header.width * color.channels * header.bitDepth) / 8);
-  const expectedBytes = header.height * (rowBytes + 1);
   if (pixels.length !== expectedBytes) return { error: 'inflated scanline length is invalid' };
   for (let row = 0; row < header.height; row += 1) {
     if (pixels[row * (rowBytes + 1)] > 4) return { error: 'scanline filter type is invalid' };
@@ -218,6 +223,10 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
       errors.push(`${label}: image is missing: ${entry.file}`);
       continue;
     }
+    if (buffer.length >= MAX_BYTES) {
+      errors.push(`${label}: image is ${buffer.length} bytes; must be below ${MAX_BYTES}`);
+      continue;
+    }
     const dimensions = decodePng(buffer);
     if (dimensions.error) {
       errors.push(`${label}: image is not a valid PNG with complete decodable payload (${dimensions.error})`);
@@ -226,7 +235,6 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
     if (dimensions.width < MIN_WIDTH || dimensions.height < MIN_HEIGHT) {
       errors.push(`${label}: image dimensions ${dimensions.width}x${dimensions.height} are below ${MIN_WIDTH}x${MIN_HEIGHT}`);
     }
-    if (buffer.length >= MAX_BYTES) errors.push(`${label}: image is ${buffer.length} bytes; must be below ${MAX_BYTES}`);
     if (entry.width !== dimensions.width || entry.height !== dimensions.height || entry.bytes !== buffer.length) {
       errors.push(`${label}: manifest dimensions/bytes do not match the PNG`);
     }
@@ -295,4 +303,4 @@ if (require.main === module) {
   console.log(`Screenshot contract passed: ${EXPECTED_CHAPTERS.length} chapters, unique PNG/hash/reference, sanitized provenance.`);
 }
 
-module.exports = { validateScreenshotContract };
+module.exports = { crc32, validateScreenshotContract };

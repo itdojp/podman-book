@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { validateScreenshotContract } = require('./check-screenshot-contract');
+const { crc32, validateScreenshotContract } = require('./check-screenshot-contract');
 
 const repoRoot = path.resolve(__dirname, '..');
 const cacheRoot = path.join(repoRoot, 'node_modules', '.cache');
@@ -201,6 +201,29 @@ try {
       const manifest = readManifest();
       manifest.entries[0].bytes = truncated.length;
       manifest.entries[0].sha256 = crypto.createHash('sha256').update(truncated).digest('hex');
+      writeManifest(manifest);
+    },
+    () => {
+      fs.writeFileSync(imageFile, baselineImage);
+      fs.writeFileSync(path.join(fixtureRoot, 'docs/assets/images/screenshots/manifest.json'), baselineManifest);
+    },
+  );
+  passed += 1;
+
+  expectFailure(
+    'oversized decoded PNG with synchronized metadata',
+    'decoded image exceeds the safety limit',
+    () => {
+      const oversized = Buffer.from(baselineImage);
+      oversized.writeUInt32BE(100000, 16);
+      oversized.writeUInt32BE(100000, 20);
+      oversized.writeUInt32BE(crc32(oversized.subarray(12, 29)), 29);
+      fs.writeFileSync(imageFile, oversized);
+      const manifest = readManifest();
+      manifest.entries[0].width = 100000;
+      manifest.entries[0].height = 100000;
+      manifest.entries[0].bytes = oversized.length;
+      manifest.entries[0].sha256 = crypto.createHash('sha256').update(oversized).digest('hex');
       writeManifest(manifest);
     },
     () => {

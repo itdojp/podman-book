@@ -170,16 +170,18 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
     if (!Array.isArray(entry.maskedFields)) errors.push(`${label}: maskedFields must be an array`);
 
     const chapterFile = path.join(repoRoot, 'docs', 'chapters', entry.chapter, 'index.md');
-    let chapterText = '';
+    let chapterText;
     try {
       chapterText = fs.readFileSync(chapterFile, 'utf8');
     } catch (error) {
       errors.push(`${label}: chapter source is missing`);
     }
-    const relativeReference = `../../assets/images/screenshots/${entry.chapter}/${path.basename(entry.file)}`;
-    const marker = `![${entry.alt}](${relativeReference})\n\n_${entry.caption}_`;
-    if (count(chapterText, relativeReference) !== 1) errors.push(`${label}: chapter must reference the image exactly once`);
-    if (count(chapterText, marker) !== 1) errors.push(`${label}: alt and immediate caption must match the manifest`);
+    if (chapterText !== undefined) {
+      const relativeReference = `../../assets/images/screenshots/${entry.chapter}/${path.basename(entry.file)}`;
+      const marker = `![${entry.alt}](${relativeReference})\n\n_${entry.caption}_`;
+      if (count(chapterText, relativeReference) !== 1) errors.push(`${label}: chapter must reference the image exactly once`);
+      if (count(chapterText, marker) !== 1) errors.push(`${label}: alt and immediate caption must match the manifest`);
+    }
 
     const sensitiveText = JSON.stringify(entry);
     for (const forbidden of FORBIDDEN) {

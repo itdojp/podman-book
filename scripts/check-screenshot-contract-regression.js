@@ -43,8 +43,10 @@ function expectDirectFailureOnly(name, evidence, derivedEvidence, mutate, restor
     if (!errors.some((error) => error.includes(evidence))) {
       throw new Error(`${name}: expected ${JSON.stringify(evidence)}, got:\n${errors.join('\n')}`);
     }
-    if (errors.some((error) => error.includes(derivedEvidence))) {
-      throw new Error(`${name}: unexpected derived diagnostic ${JSON.stringify(derivedEvidence)}:\n${errors.join('\n')}`);
+    const derivedEvidences = Array.isArray(derivedEvidence) ? derivedEvidence : [derivedEvidence];
+    const emittedDerivedEvidence = derivedEvidences.find((candidate) => errors.some((error) => error.includes(candidate)));
+    if (emittedDerivedEvidence) {
+      throw new Error(`${name}: unexpected derived diagnostic ${JSON.stringify(emittedDerivedEvidence)}:\n${errors.join('\n')}`);
     }
   } finally {
     restore();
@@ -129,6 +131,15 @@ try {
 
   const chapterFile = path.join(fixtureRoot, 'docs/chapters/chapter01/index.md');
   const baselineChapter = fs.readFileSync(chapterFile, 'utf8');
+  expectDirectFailureOnly(
+    'missing chapter reports one actionable cause',
+    'chapter source is missing',
+    ['chapter must reference the image exactly once', 'alt and immediate caption must match the manifest'],
+    () => fs.rmSync(chapterFile, { force: true }),
+    () => fs.writeFileSync(chapterFile, baselineChapter),
+  );
+  passed += 1;
+
   expectFailure(
     'missing chapter reference',
     'chapter must reference the image exactly once',

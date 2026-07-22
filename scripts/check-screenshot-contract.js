@@ -66,31 +66,33 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
     errors.push('package.json test must run check:screenshots');
   }
   for (const workflow of ['.github/workflows/build.yml', '.github/workflows/book-qa.yml']) {
-    let text = '';
+    let text;
     try {
       text = fs.readFileSync(path.join(repoRoot, workflow), 'utf8');
     } catch (error) {
       errors.push(`${workflow} is missing`);
+      continue;
     }
     if (!text.includes('name: Screenshot provenance contract check') || !text.includes('run: npm run check:screenshots')) {
       errors.push(`${workflow} must run the screenshot provenance contract`);
     }
   }
-  let responsiveCss = '';
+  let responsiveCss;
   try {
     responsiveCss = fs.readFileSync(path.join(repoRoot, 'docs/assets/css/responsive-images.css'), 'utf8');
   } catch (error) {
     errors.push('responsive image CSS is missing');
   }
-  if (!/img\s*\{[^}]*max-width:\s*100%[^}]*height:\s*auto/s.test(responsiveCss)) {
+  if (responsiveCss !== undefined && !/img\s*\{[^}]*max-width:\s*100%[^}]*height:\s*auto/s.test(responsiveCss)) {
     errors.push('responsive image CSS must constrain images to the content width');
   }
   for (const layout of ['docs/_layouts/book.html', 'docs/_layouts/default.html']) {
-    let text = '';
+    let text;
     try {
       text = fs.readFileSync(path.join(repoRoot, layout), 'utf8');
     } catch (error) {
       errors.push(`${layout} is missing`);
+      continue;
     }
     if (!text.includes("'/assets/css/responsive-images.css' | relative_url")) {
       errors.push(`${layout} must load responsive-images.css`);

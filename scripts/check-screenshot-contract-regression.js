@@ -36,6 +36,21 @@ function expectFailure(name, evidence, mutate, restore) {
   }
 }
 
+function expectDirectFailureOnly(name, evidence, derivedEvidence, mutate, restore) {
+  mutate();
+  try {
+    const errors = validateScreenshotContract(fixtureRoot);
+    if (!errors.some((error) => error.includes(evidence))) {
+      throw new Error(`${name}: expected ${JSON.stringify(evidence)}, got:\n${errors.join('\n')}`);
+    }
+    if (errors.some((error) => error.includes(derivedEvidence))) {
+      throw new Error(`${name}: unexpected derived diagnostic ${JSON.stringify(derivedEvidence)}:\n${errors.join('\n')}`);
+    }
+  } finally {
+    restore();
+  }
+}
+
 copy('docs/assets/images/screenshots');
 copy('docs/chapters');
 copy('package.json');
@@ -81,6 +96,36 @@ try {
     expectFailure(name, evidence, mutate, restore);
     passed += 1;
   }
+
+  const buildWorkflow = path.join(fixtureRoot, '.github/workflows/build.yml');
+  expectDirectFailureOnly(
+    'missing workflow reports one actionable cause',
+    '.github/workflows/build.yml is missing',
+    '.github/workflows/build.yml must run the screenshot provenance contract',
+    () => fs.rmSync(buildWorkflow, { force: true }),
+    () => fs.copyFileSync(path.join(repoRoot, '.github/workflows/build.yml'), buildWorkflow),
+  );
+  passed += 1;
+
+  const responsiveCss = path.join(fixtureRoot, 'docs/assets/css/responsive-images.css');
+  expectDirectFailureOnly(
+    'missing responsive CSS reports one actionable cause',
+    'responsive image CSS is missing',
+    'responsive image CSS must constrain images to the content width',
+    () => fs.rmSync(responsiveCss, { force: true }),
+    () => fs.copyFileSync(path.join(repoRoot, 'docs/assets/css/responsive-images.css'), responsiveCss),
+  );
+  passed += 1;
+
+  const bookLayout = path.join(fixtureRoot, 'docs/_layouts/book.html');
+  expectDirectFailureOnly(
+    'missing layout reports one actionable cause',
+    'docs/_layouts/book.html is missing',
+    'docs/_layouts/book.html must load responsive-images.css',
+    () => fs.rmSync(bookLayout, { force: true }),
+    () => fs.copyFileSync(path.join(repoRoot, 'docs/_layouts/book.html'), bookLayout),
+  );
+  passed += 1;
 
   const chapterFile = path.join(fixtureRoot, 'docs/chapters/chapter01/index.md');
   const baselineChapter = fs.readFileSync(chapterFile, 'utf8');

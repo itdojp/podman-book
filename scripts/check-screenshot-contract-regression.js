@@ -73,8 +73,8 @@ try {
     ['capture timezone drift', 'capture timezone must be explicit',
       () => { const m = readManifest(); m.entries[0].captureTimezone = 'UTC'; writeManifest(m); },
       () => fs.writeFileSync(path.join(fixtureRoot, 'docs/assets/images/screenshots/manifest.json'), baselineManifest)],
-    ['sensitive metadata', 'organization identity remains',
-      () => { const m = readManifest(); m.entries[0].environment = 'itdojp lab'; writeManifest(m); },
+    ['sensitive version metadata', 'organization identity remains',
+      () => { const m = readManifest(); m.entries[0].versions.build = 'itdojp-internal'; writeManifest(m); },
       () => fs.writeFileSync(path.join(fixtureRoot, 'docs/assets/images/screenshots/manifest.json'), baselineManifest)],
   ];
   for (const [name, evidence, mutate, restore] of cases) {

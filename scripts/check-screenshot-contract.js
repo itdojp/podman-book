@@ -179,15 +179,7 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
     if (count(chapterText, relativeReference) !== 1) errors.push(`${label}: chapter must reference the image exactly once`);
     if (count(chapterText, marker) !== 1) errors.push(`${label}: alt and immediate caption must match the manifest`);
 
-    const sensitiveText = JSON.stringify({
-      alt: entry.alt,
-      caption: entry.caption,
-      environment: entry.environment,
-      captureTimezone: entry.captureTimezone,
-      dateBasis: entry.dateBasis,
-      sourceCommands: entry.sourceCommands,
-      maskedFields: entry.maskedFields,
-    });
+    const sensitiveText = JSON.stringify(entry);
     for (const forbidden of FORBIDDEN) {
       if (forbidden.pattern.test(sensitiveText)) errors.push(`${label}: ${forbidden.label} remains in published metadata`);
     }

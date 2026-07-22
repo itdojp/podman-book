@@ -398,6 +398,8 @@
         "podman start book-qa-conflict",
         "podman events",
         "podman inspect",
+        "podman stop book-qa-owner",
+        "podman start book-qa-conflict",
         "curl http://localhost:18085/"
       ],
       "maskedFields": [
@@ -407,8 +409,8 @@
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 72766,
-      "sha256": "7b684112f456f50e9bdb6719ad7c0a5328fccdc4e2328f5a57e1df7e9b96c666",
+      "bytes": 84717,
+      "sha256": "f39054afc731c6d2f25ece3b8d5dd3d7a57ca4ba20608e5e70611b47e9c2cc31",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     }

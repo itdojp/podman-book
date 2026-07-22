@@ -486,7 +486,7 @@ chmod +x healthcheck.sh
 
 ## 次に読む
 
-- [第8章：Dockerfileの作成と最適化](../chapter08/)
+- [第8章：コンテナセキュリティとRootless運用](../chapter08/)
 - [目次に戻る](../../)
 
 ---

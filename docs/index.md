@@ -39,7 +39,7 @@ order: 0
 
 ## 目的別の入口
 
-- **初学者向けの最短ルート**: [はじめに]({{ '/introduction/' | relative_url }}) → [第1章：コンテナ技術の基礎]({{ '/chapters/chapter01/' | relative_url }}) → [第3章：基本的なコンテナ操作]({{ '/chapters/chapter03/' | relative_url }}) → [付録A：コマンドリファレンス]({{ '/appendices/appendix-a/' | relative_url }})
+- **初学者向けの最短ルート**: [はじめに]({{ '/introduction/' | relative_url }}) → [第1章：コンテナ技術の基礎]({{ '/chapters/chapter01/' | relative_url }}) → [第2章：Podmanのインストールと初期設定]({{ '/chapters/chapter02/' | relative_url }}) → [第4章：コンテナの基本操作とイメージ管理]({{ '/chapters/chapter04/' | relative_url }}) → [付録A：コマンドリファレンス]({{ '/appendices/appendix-a/' | relative_url }})
 - **Docker からの移行を先に確認したい場合**: [Docker→Podman包括的移行ガイドライン]({{ '/additional/migration-guide/' | relative_url }}) → [第7章：Pod機能と複数コンテナ管理]({{ '/chapters/chapter07/' | relative_url }}) → [第10章：CI/CDパイプラインの実践]({{ '/chapters/chapter10/' | relative_url }})
 - **障害対応を優先したい場合**: [付録B：トラブルシューティングガイド]({{ '/appendices/appendix-b/' | relative_url }}) → [Podman実践的トラブルシューティングガイド]({{ '/additional/troubleshooting-guide/' | relative_url }}) → [第15章：トラブルシューティング完全ガイド]({{ '/chapters/chapter15/' | relative_url }})
 - **企業導入の論点を先に確認したい場合**: [エンタープライズ環境でのPodman要件詳細]({{ '/additional/enterprise-requirements/' | relative_url }}) → [第14章：エンタープライズ環境での活用]({{ '/chapters/chapter14/' | relative_url }}) → [付録C：リソース集]({{ '/appendices/appendix-c/' | relative_url }})
@@ -100,16 +100,16 @@ systemd 連携は
 
 - [第1章：コンテナ技術の基礎](chapters/chapter01/)
 - [第2章：Podmanのインストールと初期設定](chapters/chapter02/)
-- [第3章：基本的なコンテナ操作](chapters/chapter03/)
-- [第4章：イメージの管理と作成](chapters/chapter04/)
-- [第5章：ストレージとボリューム管理](chapters/chapter05/)
+- [第3章：ホスト設定とRootless環境の最適化](chapters/chapter03/)
+- [第4章：コンテナの基本操作とイメージ管理](chapters/chapter04/)
+- [第5章：Containerfileとイメージビルド・配布](chapters/chapter05/)
 
 ### 第2部: 実践編
 
-- [第6章：ネットワーキングとポート管理](chapters/chapter06/)
+- [第6章：ネットワークとストレージ管理](chapters/chapter06/)
 - [第7章：Pod機能と複数コンテナ管理](chapters/chapter07/)
-- [第8章：Dockerfileの作成と最適化](chapters/chapter08/)
-- [第9章：レジストリとイメージ配布](chapters/chapter09/)
+- [第8章：コンテナセキュリティとRootless運用](chapters/chapter08/)
+- [第9章：systemd・Quadletと本番運用](chapters/chapter09/)
 - [第10章：CI/CDパイプラインの実践](chapters/chapter10/)
 
 ### 第3部: 応用編

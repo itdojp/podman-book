@@ -1,10 +1,10 @@
 ---
 layout: book
 order: 10
-title: "第9章：レジストリとイメージ配布"
+title: "第9章：systemd・Quadletと本番運用"
 ---
 
-# 第9章：レジストリとイメージ配布
+# 第9章：systemd・Quadletと本番運用
 
 ## 本章の意義と学習目標
 

@@ -1,10 +1,10 @@
 ---
 layout: book
 order: 4
-title: "第3章：基本的なコンテナ操作"
+title: "第3章：ホスト設定とRootless環境の最適化"
 ---
 
-# 第3章：基本的なコンテナ操作
+# 第3章：ホスト設定とRootless環境の最適化
 
 ## カーネルパラメータとシステム設定の最適化
 
@@ -446,7 +446,7 @@ force_mask = "0700"
 ### 演習問題
 
 1. Rootless Podmanをセットアップし、動作確認してください
-2. プライベートレジストリを設定し、イメージをプッシュしてください
+2. `/etc/subuid`と`/etc/subgid`の割り当てを確認し、コンテナ内外のUID/GID対応を記録してください
 3. `podman network create`でNetavarkのcustom networkを作成し、`podman network inspect`でsubnetとDNS設定を確認してください
 
 ### 参考資料
@@ -468,7 +468,7 @@ force_mask = "0700"
 
 ## 次に読む
 
-- [第4章：イメージの管理と作成](../chapter04/)
+- [第4章：コンテナの基本操作とイメージ管理](../chapter04/)
 - [目次に戻る](../../)
 
 ---

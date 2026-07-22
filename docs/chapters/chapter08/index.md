@@ -1,10 +1,10 @@
 ---
 layout: book
 order: 9
-title: "第8章：Dockerfileの作成と最適化"
+title: "第8章：コンテナセキュリティとRootless運用"
 ---
 
-# 第8章：Dockerfileの作成と最適化
+# 第8章：コンテナセキュリティとRootless運用
 
 ## 本章の意義と学習目標
 
@@ -475,7 +475,7 @@ podman run \
 
 ## 次に読む
 
-- [第9章：レジストリとイメージ配布](../chapter09/)
+- [第9章：systemd・Quadletと本番運用](../chapter09/)
 - [目次に戻る](../../)
 
 ---

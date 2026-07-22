@@ -21,7 +21,8 @@ title: "Podman学習パス - 初学者向けガイド"
 
 ### 必読章
 1. **第1章**: コンテナ技術の基礎（特に比較表セクション）
-2. **第2章**: インストールと初期設定
+2. **第2章**: Podmanのインストールと初期設定
+3. **第4章**: コンテナの基本操作とイメージ管理
 
 ### 実践演習
 
@@ -65,13 +66,14 @@ podman rm my-first-container
 
 ### 学習目標
 - Webアプリケーションをコンテナで実行できる
+- Containerfileからカスタムイメージを作成できる
 - ボリュームマウントを理解し活用できる
 - ネットワーク設定ができる
 
 ### 必読章
-3. **第3章**: 基本的なコンテナ操作
-4. **第4章**: イメージ作成と管理
-5. **第6章**: ネットワークとストレージ
+4. **第3章**: ホスト設定とRootless環境の最適化
+5. **第5章**: Containerfileとイメージビルド・配布
+6. **第6章**: ネットワークとストレージ管理
 
 ### 実践演習
 
@@ -116,29 +118,10 @@ podman run -d --name new-web \
 curl http://localhost:8081  # データが残っていることを確認
 ```
 
-### 確認テスト
-- [ ] ポートマッピングの仕組みを説明できる
-- [ ] ボリュームとバインドマウントの違いを理解している
-- [ ] 複数のコンテナを連携させることができる
-
-## Stage 3: 応用と本番利用（3〜4週間）
-
-### 学習目標
-- Dockerfileを書いてカスタムイメージを作成できる
-- Pod機能を理解し活用できる
-- systemdとの統合ができる
-
-### 必読章
-6. **第7章**: Podとマルチコンテナ管理
-7. **第8章**: セキュリティとrootlessコンテナ
-8. **第9章**: systemd統合と本番運用
-
-### 実践演習
-
 #### 演習5: カスタムイメージの作成
 ```bash
-# 1. Dockerfileの作成
-cat > Dockerfile << EOF
+# 1. Containerfileの作成
+cat > Containerfile << EOF
 FROM python:3.11-alpine
 WORKDIR /app
 COPY requirements.txt .
@@ -169,6 +152,26 @@ podman build -t my-flask-app .
 podman run -d --name flask-app -p 5000:5000 my-flask-app
 ```
 
+### 確認テスト
+- [ ] ポートマッピングの仕組みを説明できる
+- [ ] Containerfileの主要な命令を理解している
+- [ ] ボリュームとバインドマウントの違いを理解している
+- [ ] 複数のコンテナを連携させることができる
+
+## Stage 3: 応用と本番利用（3〜4週間）
+
+### 学習目標
+- Pod機能を理解し活用できる
+- Rootlessとコンテナセキュリティの実行境界を確認できる
+- systemd・Quadletとの統合ができる
+
+### 必読章
+7. **第7章**: Pod機能と複数コンテナ管理
+8. **第8章**: コンテナセキュリティとRootless運用
+9. **第9章**: systemd・Quadletと本番運用
+
+### 実践演習
+
 #### 演習6: Podの作成と管理
 ```bash
 # 1. Podの作成
@@ -182,10 +185,41 @@ podman run -d --pod webapp-pod --name app python:alpine sleep infinity
 podman exec app sh -c "apk add curl && curl http://localhost"
 ```
 
+#### 演習7: Rootlessセキュリティ境界の確認
+```bash
+# 1. ホスト側のUID/GIDマッピングを確認
+podman unshare cat /proc/self/uid_map
+
+# 2. capabilityをすべて外した検証用コンテナで実効値を確認
+podman run --rm --cap-drop=all alpine \
+  sh -c 'id; grep CapEff /proc/1/status'
+```
+
+#### 演習8: Quadletによるユーザーサービス化
+```ini
+# ~/.config/containers/systemd/stage3-web.container
+[Container]
+Image=docker.io/library/nginx:alpine
+ContainerName=stage3-web
+PublishPort=8082:80
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+systemctl --user daemon-reload
+systemctl --user start stage3-web.service
+systemctl --user status stage3-web.service --no-pager
+```
+
 ### 確認テスト
-- [ ] Dockerfileの主要な命令を理解している
 - [ ] Pod内でのコンテナ間通信の仕組みを説明できる
-- [ ] systemdサービスとしてコンテナを管理できる
+- [ ] Rootlessとcapability制限の実行境界を確認できる
+- [ ] Quadletから生成されたsystemdユーザーサービスを管理できる
 
 ## Stage 4: エンタープライズ対応（4〜6週間）
 
@@ -195,14 +229,14 @@ podman exec app sh -c "apk add curl && curl http://localhost"
 - トラブルシューティングができる
 
 ### 必読章
-9. **第10章**: CI/CDパイプライン構築
-10. **第13章**: マイクロサービスアーキテクチャ
-11. **第14章**: 企業環境での活用
-12. **第15章**: 完全トラブルシューティングガイド
+10. **第10章**: CI/CDパイプラインの実践
+11. **第13章**: マイクロサービスアーキテクチャ
+12. **第14章**: エンタープライズ環境での活用
+13. **第15章**: トラブルシューティング完全ガイド
 
 ### 実践演習
 
-#### 演習7: セキュアな本番デプロイ
+#### 演習9: セキュアな本番デプロイ
 ```bash
 # 1. rootlessコンテナの実行
 podman unshare cat /proc/self/uid_map

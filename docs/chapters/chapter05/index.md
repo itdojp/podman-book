@@ -1,10 +1,10 @@
 ---
 layout: book
 order: 6
-title: "第5章：ストレージとボリューム管理"
+title: "第5章：Containerfileとイメージビルド・配布"
 ---
 
-# 第5章：ストレージとボリューム管理
+# 第5章：Containerfileとイメージビルド・配布
 
 ## 本章の意義と学習目標
 
@@ -464,7 +464,7 @@ podman push --sign-by myemail@example.com localhost:5000/myapp:latest
 
 ## 次に読む
 
-- [第6章：ネットワーキングとポート管理](../chapter06/)
+- [第6章：ネットワークとストレージ管理](../chapter06/)
 - [目次に戻る](../../)
 
 ---

@@ -182,6 +182,15 @@ try {
   );
   passed += 1;
 
+  const uppercaseExtra = path.join(fixtureRoot, 'docs/assets/images/screenshots/chapter01/untracked.PNG');
+  expectFailure(
+    'untracked uppercase PNG',
+    'untracked screenshot PNG',
+    () => fs.copyFileSync(path.join(fixtureRoot, 'docs/assets/images/screenshots/chapter01/01-daemonless-process-audit.png'), uppercaseExtra),
+    () => fs.rmSync(uppercaseExtra, { force: true }),
+  );
+  passed += 1;
+
   const imageFile = path.join(fixtureRoot, 'docs/assets/images/screenshots/chapter01/01-daemonless-process-audit.png');
   const baselineImage = fs.readFileSync(imageFile);
   expectFailure(

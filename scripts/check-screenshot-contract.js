@@ -129,7 +129,7 @@ function listPngFiles(root) {
   return fs.readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(root, entry.name);
     if (entry.isDirectory()) return listPngFiles(full);
-    return entry.isFile() && entry.name.endsWith('.png') ? [full] : [];
+    return entry.isFile() && entry.name.toLowerCase().endsWith('.png') ? [full] : [];
   });
 }
 

@@ -64,6 +64,13 @@ const cases = [
     evidence: 'learning path is missing required outcome marker',
   },
   {
+    name: 'learning exercise sequence drift',
+    file: 'docs/additional/learning-path.md',
+    from: '#### 演習9: セキュアな本番デプロイ',
+    to: '#### 演習8: セキュアな本番デプロイ',
+    evidence: 'learning path exercise sequence',
+  },
+  {
     name: 'screenshot chapter drift',
     file: 'docs/assets/images/screenshots/CHECKLIST.md',
     from: '## chapter15（トラブルシューティング完全ガイド）',

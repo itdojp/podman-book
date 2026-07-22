@@ -300,6 +300,11 @@ function validateStructure(repoRoot) {
   for (const marker of REQUIRED_LEARNING_OUTCOME_MARKERS) {
     if (!learningText.includes(marker)) errors.push(`learning path is missing required outcome marker: ${marker}`);
   }
+  const exerciseNumbers = [...learningText.matchAll(/^#### 演習(\d+):/gm)].map((match) => Number(match[1]));
+  const expectedExerciseNumbers = Array.from({ length: 9 }, (_, index) => index + 1);
+  if (JSON.stringify(exerciseNumbers) !== JSON.stringify(expectedExerciseNumbers)) {
+    errors.push(`learning path exercise sequence: expected ${expectedExerciseNumbers.join(', ')}, got ${exerciseNumbers.join(', ')}`);
+  }
 
   const expectedById = new Map(EXPECTED_CHAPTERS.map((item) => [item.id, item]));
   const linkPattern = /\[([^\]\n]+)\]\(([^)\n]*(chapter\d{2})\/[^)\n]*)\)/g;

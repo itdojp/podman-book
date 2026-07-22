@@ -236,7 +236,7 @@ systemctl --user status stage3-web.service --no-pager
 
 ### 実践演習
 
-#### 演習7: セキュアな本番デプロイ
+#### 演習9: セキュアな本番デプロイ
 ```bash
 # 1. rootlessコンテナの実行
 podman unshare cat /proc/self/uid_map

@@ -57,6 +57,13 @@ const cases = [
     evidence: 'learning path chapter 4',
   },
   {
+    name: 'learning outcome drift',
+    file: 'docs/additional/learning-path.md',
+    from: '#### 演習7: Rootlessセキュリティ境界の確認',
+    to: '#### 演習7: 別の演習',
+    evidence: 'learning path is missing required outcome marker',
+  },
+  {
     name: 'screenshot chapter drift',
     file: 'docs/assets/images/screenshots/CHECKLIST.md',
     from: '## chapter15（トラブルシューティング完全ガイド）',

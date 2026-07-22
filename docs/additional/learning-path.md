@@ -66,6 +66,7 @@ podman rm my-first-container
 
 ### 学習目標
 - Webアプリケーションをコンテナで実行できる
+- Containerfileからカスタムイメージを作成できる
 - ボリュームマウントを理解し活用できる
 - ネットワーク設定ができる
 
@@ -117,29 +118,10 @@ podman run -d --name new-web \
 curl http://localhost:8081  # データが残っていることを確認
 ```
 
-### 確認テスト
-- [ ] ポートマッピングの仕組みを説明できる
-- [ ] ボリュームとバインドマウントの違いを理解している
-- [ ] 複数のコンテナを連携させることができる
-
-## Stage 3: 応用と本番利用（3〜4週間）
-
-### 学習目標
-- Dockerfileを書いてカスタムイメージを作成できる
-- Pod機能を理解し活用できる
-- systemdとの統合ができる
-
-### 必読章
-7. **第7章**: Pod機能と複数コンテナ管理
-8. **第8章**: コンテナセキュリティとRootless運用
-9. **第9章**: systemd・Quadletと本番運用
-
-### 実践演習
-
 #### 演習5: カスタムイメージの作成
 ```bash
-# 1. Dockerfileの作成
-cat > Dockerfile << EOF
+# 1. Containerfileの作成
+cat > Containerfile << EOF
 FROM python:3.11-alpine
 WORKDIR /app
 COPY requirements.txt .
@@ -170,6 +152,26 @@ podman build -t my-flask-app .
 podman run -d --name flask-app -p 5000:5000 my-flask-app
 ```
 
+### 確認テスト
+- [ ] ポートマッピングの仕組みを説明できる
+- [ ] Containerfileの主要な命令を理解している
+- [ ] ボリュームとバインドマウントの違いを理解している
+- [ ] 複数のコンテナを連携させることができる
+
+## Stage 3: 応用と本番利用（3〜4週間）
+
+### 学習目標
+- Pod機能を理解し活用できる
+- Rootlessとコンテナセキュリティの実行境界を確認できる
+- systemd・Quadletとの統合ができる
+
+### 必読章
+7. **第7章**: Pod機能と複数コンテナ管理
+8. **第8章**: コンテナセキュリティとRootless運用
+9. **第9章**: systemd・Quadletと本番運用
+
+### 実践演習
+
 #### 演習6: Podの作成と管理
 ```bash
 # 1. Podの作成
@@ -183,10 +185,41 @@ podman run -d --pod webapp-pod --name app python:alpine sleep infinity
 podman exec app sh -c "apk add curl && curl http://localhost"
 ```
 
+#### 演習7: Rootlessセキュリティ境界の確認
+```bash
+# 1. ホスト側のUID/GIDマッピングを確認
+podman unshare cat /proc/self/uid_map
+
+# 2. capabilityをすべて外した検証用コンテナで実効値を確認
+podman run --rm --cap-drop=all alpine \
+  sh -c 'id; grep CapEff /proc/1/status'
+```
+
+#### 演習8: Quadletによるユーザーサービス化
+```ini
+# ~/.config/containers/systemd/stage3-web.container
+[Container]
+Image=docker.io/library/nginx:alpine
+ContainerName=stage3-web
+PublishPort=8082:80
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+systemctl --user daemon-reload
+systemctl --user start stage3-web.service
+systemctl --user status stage3-web.service --no-pager
+```
+
 ### 確認テスト
-- [ ] Dockerfileの主要な命令を理解している
 - [ ] Pod内でのコンテナ間通信の仕組みを説明できる
-- [ ] systemdサービスとしてコンテナを管理できる
+- [ ] Rootlessとcapability制限の実行境界を確認できる
+- [ ] Quadletから生成されたsystemdユーザーサービスを管理できる
 
 ## Stage 4: エンタープライズ対応（4〜6週間）
 

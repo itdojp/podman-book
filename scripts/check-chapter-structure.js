@@ -105,6 +105,15 @@ const LEGACY_TITLES = [
   '第9章：レジストリとイメージ配布',
 ];
 
+const REQUIRED_LEARNING_OUTCOME_MARKERS = [
+  '- Containerfileからカスタムイメージを作成できる',
+  '#### 演習5: カスタムイメージの作成',
+  '- Rootlessとコンテナセキュリティの実行境界を確認できる',
+  '#### 演習7: Rootlessセキュリティ境界の確認',
+  '- systemd・Quadletとの統合ができる',
+  '#### 演習8: Quadletによるユーザーサービス化',
+];
+
 function readText(file, errors) {
   try {
     return fs.readFileSync(file, 'utf8');
@@ -287,6 +296,9 @@ function validateStructure(repoRoot) {
   }
   for (const required of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15]) {
     if (!learningReferences.has(required)) errors.push(`learning path is missing required chapter reference: ${required}`);
+  }
+  for (const marker of REQUIRED_LEARNING_OUTCOME_MARKERS) {
+    if (!learningText.includes(marker)) errors.push(`learning path is missing required outcome marker: ${marker}`);
   }
 
   const expectedById = new Map(EXPECTED_CHAPTERS.map((item) => [item.id, item]));

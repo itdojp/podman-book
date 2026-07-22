@@ -53,6 +53,16 @@ function expectDirectFailureOnly(name, evidence, derivedEvidence, mutate, restor
   }
 }
 
+function expectSuccess(name, mutate, restore) {
+  mutate();
+  try {
+    const errors = validateScreenshotContract(fixtureRoot);
+    if (errors.length) throw new Error(`${name}: expected success, got:\n${errors.join('\n')}`);
+  } finally {
+    restore();
+  }
+}
+
 copy('docs/assets/images/screenshots');
 copy('docs/chapters');
 copy('package.json');
@@ -140,6 +150,12 @@ try {
   );
   passed += 1;
 
+  expectSuccess(
+    'CRLF chapter portability',
+    () => fs.writeFileSync(chapterFile, baselineChapter.replace(/\n/g, '\r\n')),
+    () => fs.writeFileSync(chapterFile, baselineChapter),
+  );
+
   expectFailure(
     'missing chapter reference',
     'chapter must reference the image exactly once',
@@ -177,7 +193,7 @@ try {
 
   const finalErrors = validateScreenshotContract(fixtureRoot);
   if (finalErrors.length) throw new Error(`Restored fixture failed:\n${finalErrors.join('\n')}`);
-  console.log(`Screenshot contract regression passed: ${passed}/${passed} negative mutations, 1/1 restored baseline.`);
+  console.log(`Screenshot contract regression passed: ${passed}/${passed} negative mutations, 1/1 CRLF portability, 1/1 restored baseline.`);
 } finally {
   fs.rmSync(fixtureRoot, { recursive: true, force: true });
 }

@@ -16,9 +16,9 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "ps -eo comm=",
-        "podman info --format",
-        "podman version --format"
+        "ps -eo comm= | grep -x podman || echo no persistent podman daemon",
+        "podman info --format 'serviceIsRemote={{.Host.ServiceIsRemote}} rootless={{.Host.Security.Rootless}} runtime={{.Host.OCIRuntime.Name}}'",
+        "podman --version"
       ],
       "maskedFields": [
         "host name",
@@ -26,8 +26,8 @@
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 34018,
-      "sha256": "c314ee9844d7f27100873a5421b20ee678e43375b045f5f3bec0bdbcb6d47d6a",
+      "bytes": 40336,
+      "sha256": "fcb20b0dce50bd59759348e10490385d3bc492434447cbaf2226f13e639362af",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -71,7 +71,7 @@
       "sourceCommands": [
         "id -u",
         "podman unshare cat /proc/self/uid_map",
-        "podman run --rm alpine:3.20"
+        "podman run --rm alpine:3.20 sh -c 'id; echo \"container uid_map:\"; cat /proc/self/uid_map'"
       ],
       "maskedFields": [
         "host name",
@@ -79,8 +79,8 @@
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 41142,
-      "sha256": "7f70acd5d25937bf4ea3082db674c118162ed96367ca0e3f2e91d8501f805d66",
+      "bytes": 44250,
+      "sha256": "59e309e849e43fdb3525760125e78daf8d9d26cfd477a3b5fb8973fffb812082",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -98,15 +98,15 @@
       "sourceKind": "terminal-output",
       "sourceCommands": [
         "podman pull docker.io/library/alpine:3.20",
-        "podman images docker.io/library/alpine"
+        "podman images docker.io/library/alpine --format 'table {{.Repository}}\\t{{.Tag}}\\t{{.ID}}\\t{{.Size}}'"
       ],
       "maskedFields": [
         "image digest"
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 53669,
-      "sha256": "fdb93567b77baa38b139f5d15d022160508e40f9cad3d7c7f155d527e22a2f32",
+      "bytes": 59706,
+      "sha256": "001ccc3b4400c181fa27079cca9143dbc781dca9168ca9da03a92be179724811",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -123,6 +123,7 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
+        "sed -n 1,8p Containerfile",
         "podman build --tag localhost/book-qa-image:issue189 .",
         "podman run --rm localhost/book-qa-image:issue189"
       ],
@@ -132,9 +133,9 @@
         "workspace path"
       ],
       "width": 1200,
-      "height": 800,
-      "bytes": 117121,
-      "sha256": "b3d6c23f32d30bbbd774f171f748414fc4f3447a5abeda2152ec7928ca3cb420",
+      "height": 852,
+      "bytes": 132044,
+      "sha256": "d22bc7611959f91bf57918d777f826a32738abe38d4c09ff969f2536f37d3580",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -152,16 +153,17 @@
       "sourceKind": "terminal-output",
       "sourceCommands": [
         "podman port book-qa-web",
-        "curl http://localhost:18080/",
-        "podman volume inspect book-qa-volume"
+        "curl --output /dev/null --write-out HTTP %{http_code} http://localhost:18080/",
+        "podman volume inspect book-qa-volume --format 'name={{.Name}} driver={{.Driver}}'",
+        "podman run --rm --volume book-qa-volume:/data alpine:3.20 cat /data/result.txt"
       ],
       "maskedFields": [
         "bind address"
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 39672,
-      "sha256": "3b748c03ce16a3624b5f4bc25fac9304d78d07e66545278c2b28998f66e6ab71",
+      "bytes": 45036,
+      "sha256": "74b13c8aa776011825968b77f58fc56e4ffc1b714b73559e2db77a05a3e4b566",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -178,16 +180,16 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "podman pod ps --filter name=book-qa-pod",
-        "podman ps --pod --filter name=book-qa-pod-web"
+        "podman pod ps --filter name=book-qa-pod --format 'table {{.Name}}\\t{{.Status}}\\t{{.NumberOfContainers}}'",
+        "podman ps --pod --filter name=book-qa-pod-web --format 'table {{.Names}}\\t{{.Status}}\\t{{.PodName}}'"
       ],
       "maskedFields": [
         "host name"
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 29869,
-      "sha256": "8a155d084704df93fc6aa93a155ce5c22a838738d7ae615f08d41019dfca4403",
+      "bytes": 40510,
+      "sha256": "cd4cd88734ae0bd8e14f86548c2e37fabb686251a4272b5742002f2835499d4e",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -204,8 +206,8 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "podman info --format json",
-        "podman run --rm --cap-drop=all alpine:3.20"
+        "podman info --format json | jq -r '.host.security | \"rootless=\\(.rootless) seccomp=\\(.seccompEnabled) selinux=\\(.selinuxEnabled)\"'",
+        "podman run --rm --cap-drop=all alpine:3.20 sh -c 'id; grep CapEff /proc/1/status'"
       ],
       "maskedFields": [
         "host name",
@@ -213,8 +215,8 @@
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 43262,
-      "sha256": "86d903e7f399c4277abca080807e71fd2a0646914e80a8bb5a08f45718f22ca0",
+      "bytes": 48039,
+      "sha256": "73c557de1dac9e46bb7081f62ac58e61bbe166945fc5d8e1b7b533ecea1ea055",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -233,7 +235,8 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "/usr/libexec/podman/quadlet -user -dryrun"
+        "sed -n 1,20p book-qa.container",
+        "QUADLET_UNIT_DIRS=<workspace>/quadlet /usr/libexec/podman/quadlet -user -dryrun | grep -A 25 -- '---book-qa.service---' | sed -n '1,26p'"
       ],
       "maskedFields": [
         "workspace path",
@@ -241,9 +244,9 @@
         "user name"
       ],
       "width": 1200,
-      "height": 1278,
-      "bytes": 145222,
-      "sha256": "5f12130fc97b05ffd1c644cd9c98bd2f201c84eebbcdc2b3ac1ee0e6a76f5907",
+      "height": 1305,
+      "bytes": 152840,
+      "sha256": "9148b68531b32b8952cc0dd29c0320c22697ec434b6b05f144d67398bcfa0346",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -287,18 +290,19 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "podman kube generate",
-        "podman kube down",
-        "podman kube play"
+        "podman kube generate book-qa-kube | sed -n 1,18p",
+        "podman kube down book-qa.yaml",
+        "podman kube play book-qa.yaml",
+        "podman pod ps --filter name=book-qa-kube --format 'table {{.Name}}\\t{{.Status}}\\t{{.NumberOfContainers}}'"
       ],
       "maskedFields": [
         "container ID",
         "workspace path"
       ],
       "width": 1200,
-      "height": 826,
-      "bytes": 86016,
-      "sha256": "28e4d30b84aa7d2296bb19a7ebfb270d14fd9375b8e6adcf25d235aebb4c78f6",
+      "height": 852,
+      "bytes": 92251,
+      "sha256": "5af0634aa9bddb0a5dd5078e936a0622050701b27f0ad424205accabb438410a",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -307,7 +311,7 @@
       "chapter": "chapter12",
       "file": "docs/assets/images/screenshots/chapter12/01-performance-baseline.png",
       "alt": "起動時間・image size・storage使用量を変更前baselineとして判断する出力",
-      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。単回のwarm/cold未分離値はbenchmarkとして一般化せず、同じ条件で反復する前のbaselineとして扱います。WSL2のcgroup filesystemでは`podman stats`値を信頼できなかったため、実測可能な起動時間・image size・`podman system df`を採用しました。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。単回のwarm/cold未分離値はbenchmarkとして一般化せず、同じ条件で反復する前のbaselineとして扱います。WSL2のcgroup filesystemでは`podman stats`値を信頼できなかったため、実測可能な起動時間とimage sizeを採用しました。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -315,9 +319,8 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "time podman run --rm alpine:3.20 true",
-        "podman image inspect alpine:3.20",
-        "podman system df"
+        "/usr/bin/time -f 'elapsed=%e seconds max-rss=%M KiB' podman run --rm alpine:3.20 true",
+        "podman image inspect alpine:3.20 --format 'size={{.Size}} bytes'"
       ],
       "maskedFields": [
         "host name",
@@ -325,8 +328,8 @@
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 54513,
-      "sha256": "ae587c50bed3ed758b4eb0c60db14d698c557b89ce080445b6a87abf59d097aa",
+      "bytes": 38686,
+      "sha256": "31f86b690996733ccd48cebbccf6555871b54e3ecdee3976bbee4d0aca835cd7",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -343,16 +346,16 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "podman network inspect book-qa-services",
-        "podman inspect book-qa-db book-qa-api"
+        "podman network inspect book-qa-services --format 'name={{.Name}} driver={{.Driver}}'",
+        "podman inspect book-qa-db book-qa-api | jq -r '.[] | \"service=\\(.Name) network=book-qa-services status=\\(.State.Status) health=\\(if (.State.Health.Status // \\\"\\\") == \\\"\\\" then \\\"not-configured\\\" else .State.Health.Status end)\"'"
       ],
       "maskedFields": [
         "organization label"
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 46334,
-      "sha256": "a6ffab804485dc1383d95b7f890e525783c31c6d2ef70a967c459944687ccb40",
+      "bytes": 63793,
+      "sha256": "b934d885a58efb34b6f743b7b394b3915862de1aab8792251e52029202f65367",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -369,7 +372,9 @@
       "capturedAt": "2026-07-23",
       "sourceKind": "terminal-output",
       "sourceCommands": [
-        "isolated two-replica compliance check"
+        "podman inspect book-qa-app-a book-qa-app-b --format '{{.Name}} status={{.State.Status}} health={{.State.Health.Status}} readOnly={{.HostConfig.ReadonlyRootfs}} noNewPrivileges={{join .HostConfig.SecurityOpt \",\"}}'",
+        "podman exec book-qa-app-a grep CapEff /proc/1/status",
+        "podman exec book-qa-app-b grep CapEff /proc/1/status"
       ],
       "maskedFields": [
         "container ID",
@@ -377,8 +382,8 @@
       ],
       "width": 1200,
       "height": 800,
-      "bytes": 46822,
-      "sha256": "c31f8fb7e65cb47df0e0b999d25b62cfd0e90bd51b617e3d9afc043c103e6b9b",
+      "bytes": 69757,
+      "sha256": "44280829c2bcb1861bca7cab5aeff579ee86c86ec5e40fbdfcb6d3c4fa51e2bd",
       "captureTimezone": "Asia/Tokyo (UTC+09:00)",
       "dateBasis": "capture session local date"
     },
@@ -396,11 +401,11 @@
       "sourceKind": "terminal-output",
       "sourceCommands": [
         "podman start book-qa-conflict",
-        "podman events",
-        "podman inspect --format Go-template",
+        "podman events --stream=false --since <failure-time> --filter container=book-qa-conflict",
+        "podman inspect book-qa-owner book-qa-conflict --format '{{.Name}} status={{.State.Status}} publishedPort={{(index (index .NetworkSettings.Ports \\\"80/tcp\\\") 0).HostPort}}'",
         "podman stop book-qa-owner",
         "podman start book-qa-conflict",
-        "curl http://localhost:18085/"
+        "curl --output /dev/null --write-out HTTP %{http_code} http://localhost:18085/"
       ],
       "maskedFields": [
         "container ID",

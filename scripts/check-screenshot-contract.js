@@ -172,7 +172,7 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
     const chapterFile = path.join(repoRoot, 'docs', 'chapters', entry.chapter, 'index.md');
     let chapterText;
     try {
-      chapterText = fs.readFileSync(chapterFile, 'utf8');
+      chapterText = fs.readFileSync(chapterFile, 'utf8').replace(/\r\n/g, '\n');
     } catch (error) {
       errors.push(`${label}: chapter source is missing`);
     }

@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 
 const EXPECTED_CHAPTERS = Array.from({ length: 15 }, (_, index) => `chapter${String(index + 1).padStart(2, '0')}`);
 const MAX_BYTES = 500 * 1024;
@@ -29,12 +30,93 @@ function readJson(file, errors, label) {
   }
 }
 
-function pngDimensions(buffer) {
+const CRC32_TABLE = Array.from({ length: 256 }, (_, value) => {
+  let crc = value;
+  for (let bit = 0; bit < 8; bit += 1) crc = (crc & 1) ? (0xedb88320 ^ (crc >>> 1)) : (crc >>> 1);
+  return crc >>> 0;
+});
+
+function crc32(buffer) {
+  let crc = 0xffffffff;
+  for (const byte of buffer) crc = CRC32_TABLE[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+function decodePng(buffer) {
   if (buffer.length < 24 || !buffer.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) {
-    return null;
+    return { error: 'signature or IHDR is missing' };
   }
-  if (buffer.toString('ascii', 12, 16) !== 'IHDR') return null;
-  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+  let offset = 8;
+  let header;
+  let sawIend = false;
+  let sawPalette = false;
+  const imageData = [];
+  while (offset < buffer.length) {
+    if (offset + 12 > buffer.length) return { error: 'chunk header is truncated' };
+    const length = buffer.readUInt32BE(offset);
+    const typeStart = offset + 4;
+    const dataStart = typeStart + 4;
+    const crcStart = dataStart + length;
+    const nextOffset = crcStart + 4;
+    if (nextOffset > buffer.length) return { error: 'chunk payload is truncated' };
+    const typeBuffer = buffer.subarray(typeStart, dataStart);
+    const type = typeBuffer.toString('ascii');
+    const data = buffer.subarray(dataStart, crcStart);
+    if (crc32(Buffer.concat([typeBuffer, data])) !== buffer.readUInt32BE(crcStart)) {
+      return { error: `${type} chunk CRC is invalid` };
+    }
+    if (!header && type !== 'IHDR') return { error: 'IHDR is not the first chunk' };
+    if (type === 'IHDR') {
+      if (header || length !== 13) return { error: 'IHDR is duplicated or malformed' };
+      header = {
+        width: data.readUInt32BE(0),
+        height: data.readUInt32BE(4),
+        bitDepth: data[8],
+        colorType: data[9],
+        compression: data[10],
+        filter: data[11],
+        interlace: data[12],
+      };
+    } else if (type === 'PLTE') {
+      sawPalette = true;
+    } else if (type === 'IDAT') {
+      if (sawIend) return { error: 'IDAT appears after IEND' };
+      imageData.push(data);
+    } else if (type === 'IEND') {
+      if (length !== 0 || sawIend) return { error: 'IEND is duplicated or malformed' };
+      sawIend = true;
+      if (nextOffset !== buffer.length) return { error: 'data remains after IEND' };
+    }
+    offset = nextOffset;
+  }
+  if (!header || !sawIend || imageData.length === 0) return { error: 'IHDR, IDAT, or IEND is missing' };
+  if (!header.width || !header.height || header.compression !== 0 || header.filter !== 0 || header.interlace !== 0) {
+    return { error: 'unsupported or invalid IHDR fields' };
+  }
+  const colorTypes = {
+    0: { channels: 1, depths: [1, 2, 4, 8, 16] },
+    2: { channels: 3, depths: [8, 16] },
+    3: { channels: 1, depths: [1, 2, 4, 8] },
+    4: { channels: 2, depths: [8, 16] },
+    6: { channels: 4, depths: [8, 16] },
+  };
+  const color = colorTypes[header.colorType];
+  if (!color || !color.depths.includes(header.bitDepth) || (header.colorType === 3 && !sawPalette)) {
+    return { error: 'invalid color type, bit depth, or palette' };
+  }
+  let pixels;
+  try {
+    pixels = zlib.inflateSync(Buffer.concat(imageData));
+  } catch (error) {
+    return { error: `IDAT cannot be inflated: ${error.message}` };
+  }
+  const rowBytes = Math.ceil((header.width * color.channels * header.bitDepth) / 8);
+  const expectedBytes = header.height * (rowBytes + 1);
+  if (pixels.length !== expectedBytes) return { error: 'inflated scanline length is invalid' };
+  for (let row = 0; row < header.height; row += 1) {
+    if (pixels[row * (rowBytes + 1)] > 4) return { error: 'scanline filter type is invalid' };
+  }
+  return { width: header.width, height: header.height };
 }
 
 function listPngFiles(root) {
@@ -136,9 +218,9 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
       errors.push(`${label}: image is missing: ${entry.file}`);
       continue;
     }
-    const dimensions = pngDimensions(buffer);
-    if (!dimensions) {
-      errors.push(`${label}: image is not a valid PNG with IHDR`);
+    const dimensions = decodePng(buffer);
+    if (dimensions.error) {
+      errors.push(`${label}: image is not a valid PNG with complete decodable payload (${dimensions.error})`);
       continue;
     }
     if (dimensions.width < MIN_WIDTH || dimensions.height < MIN_HEIGHT) {

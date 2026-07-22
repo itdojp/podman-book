@@ -124,7 +124,7 @@ title: "図表索引"
 - **掲載箇所**: 第12章
 - **種別**: PNG
 - **目的**: tuning前の測定baselineを記録する
-- **見るべき点**: 起動時間、image size、storage使用量と測定条件の限界
+- **見るべき点**: 起動時間、image sizeと測定条件の限界
 
 ## [図18：service network health]({{ '/chapters/chapter13/#figure-service-network-health' | relative_url }})
 

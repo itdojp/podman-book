@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /* Mutation regression for the fail-closed screenshot contract. */
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { validateScreenshotContract } = require('./check-screenshot-contract');
@@ -188,6 +189,24 @@ try {
     'not a valid PNG',
     () => fs.writeFileSync(imageFile, Buffer.from('not a png')),
     () => fs.writeFileSync(imageFile, baselineImage),
+  );
+  passed += 1;
+
+  expectFailure(
+    'truncated PNG with synchronized metadata',
+    'not a valid PNG with complete decodable payload',
+    () => {
+      const truncated = baselineImage.subarray(0, 33);
+      fs.writeFileSync(imageFile, truncated);
+      const manifest = readManifest();
+      manifest.entries[0].bytes = truncated.length;
+      manifest.entries[0].sha256 = crypto.createHash('sha256').update(truncated).digest('hex');
+      writeManifest(manifest);
+    },
+    () => {
+      fs.writeFileSync(imageFile, baselineImage);
+      fs.writeFileSync(path.join(fixtureRoot, 'docs/assets/images/screenshots/manifest.json'), baselineManifest);
+    },
   );
   passed += 1;
 

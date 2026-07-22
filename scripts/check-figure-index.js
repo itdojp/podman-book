@@ -156,7 +156,7 @@ const expectedFigures = [
     source: 'docs/chapters/chapter12/index.md',
     route: '/chapters/chapter12/',
     kind: 'PNG',
-    marker: '![起動時間・image size・storage使用量を変更前baselineとして判断する出力](../../assets/images/screenshots/chapter12/01-performance-baseline.png)',
+    marker: '![起動時間とimage sizeを変更前baselineとして判断する出力](../../assets/images/screenshots/chapter12/01-performance-baseline.png)',
     asset: 'docs/assets/images/screenshots/chapter12/01-performance-baseline.png',
   },
   {

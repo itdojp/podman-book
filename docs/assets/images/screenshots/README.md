@@ -6,7 +6,7 @@ Issue:
 - 図表強化の候補一覧: Issue #180
 - 章別チェックリスト（実装状況と追加候補）: [CHECKLIST.md](./CHECKLIST.md)
 
-公開中の画像、撮影日、環境、version、mask項目、SHA-256は[manifest.json](./manifest.json)を正本とします。`npm run check:screenshots`は、15章のPNG、hash、重複、本文参照、alt/caption、provenance、既知の機微情報markerをfail-closedで検証します。
+公開中の画像、撮影日・timezone・日付根拠、環境、version、mask項目、SHA-256は[manifest.json](./manifest.json)を正本とします。`npm run check:screenshots`は、15章のPNG、hash、重複、本文参照、alt/caption、provenance、既知の機微情報markerをfail-closedで検証します。
 
 ## 方針（要点）
 

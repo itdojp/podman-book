@@ -73,7 +73,7 @@ echo "- podman unshare: namespace操作"
 
 ![port競合の失敗・event・inspect根拠から復旧を判断する出力](../../assets/images/screenshots/chapter15/01-failure-diagnosis-recovery.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。同じhost portで実際に起動失敗させ、eventと両containerのstateを確認し、owner停止後にcandidateを起動してHTTP 200へ復旧した流れです。container ID、bind address、IPはマスクしています。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。同じhost portで実際に起動失敗させ、eventと両containerのstateを確認し、owner停止後にcandidateを起動してHTTP 200へ復旧した流れです。container ID、bind address、IPはマスクしています。_
 
 ### 15.2 一般的な問題と解決策
 

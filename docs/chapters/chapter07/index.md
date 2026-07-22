@@ -75,7 +75,7 @@ podman run -d --pod mypod redis:alpine
 
 ![Podの名前・状態と配下containerの所属を判断する出力](../../assets/images/screenshots/chapter07/01-pod-membership.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。`book-qa-pod`がRunningで、infra containerを含む2 containerのうちweb containerが同じPod名へ所属することを確認します。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。`book-qa-pod`がRunningで、infra containerを含む2 containerのうちweb containerが同じPod名へ所属することを確認します。_
 
 #### 7.1.2 Pod設計パターン
 

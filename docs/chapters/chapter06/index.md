@@ -398,7 +398,7 @@ podman run \
 
 ![公開portのHTTP疎通とvolume再作成後の永続性を判断する出力](../../assets/images/screenshots/chapter06/01-port-volume-verification.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。公開portの対応とHTTP 200、local volumeのdriver、container再作成後も`persisted`が残ることを確認します。bind addressはマスクしています。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。公開portの対応とHTTP 200、local volumeのdriver、container再作成後も`persisted`が残ることを確認します。bind addressはマスクしています。_
 
 ### 6.5 トラブルシューティング
 

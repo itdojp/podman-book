@@ -154,6 +154,12 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
     if (!entry.alt || !entry.alt.includes('判断')) errors.push(`${label}: alt must state the reader decision point`);
     if (!entry.caption || !entry.caption.includes(entry.capturedAt || '')) errors.push(`${label}: caption must include capturedAt`);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.capturedAt || '')) errors.push(`${label}: capturedAt must use YYYY-MM-DD`);
+    if (!entry.captureTimezone || !entry.dateBasis) errors.push(`${label}: captureTimezone and dateBasis are required`);
+    if (entry.captureTimezone === 'unknown') {
+      if (!entry.caption?.includes('正確な撮影日時は不明')) errors.push(`${label}: unknown capture timezone must be explicit in the caption`);
+    } else if (entry.captureTimezone !== 'Asia/Tokyo (UTC+09:00)' || !entry.caption?.includes('（JST）')) {
+      errors.push(`${label}: capture timezone must be explicit and consistent with the JST caption`);
+    }
     if (!entry.environment || !entry.versions || Object.keys(entry.versions).length === 0) {
       errors.push(`${label}: environment and versions are required`);
     }
@@ -177,6 +183,8 @@ function validateScreenshotContract(repoRoot = path.resolve(__dirname, '..')) {
       alt: entry.alt,
       caption: entry.caption,
       environment: entry.environment,
+      captureTimezone: entry.captureTimezone,
+      dateBasis: entry.dateBasis,
       sourceCommands: entry.sourceCommands,
       maskedFields: entry.maskedFields,
     });

@@ -187,7 +187,7 @@ podman pull --all-tags alpine
 
 ![pullしたimageのtag・ID・sizeがinventoryへ反映されたか判断する出力](../../assets/images/screenshots/chapter04/01-image-pull-inventory.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。`alpine:3.20`のpull完了と、repository・tag・短縮ID・sizeの対応を確認します。digest相当の長いIDはマスクしています。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。`alpine:3.20`のpull完了と、repository・tag・短縮ID・sizeの対応を確認します。digest相当の長いIDはマスクしています。_
 
 **イメージ管理**
 ```bash

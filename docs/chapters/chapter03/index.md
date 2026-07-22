@@ -146,7 +146,7 @@ $ ls -ln /tmp/test/file
 
 ![rootless Podmanでhost UIDとcontainer UIDの対応を判断する出力](../../assets/images/screenshots/chapter03/01-rootless-uid-mapping.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。host userのUID 1000がcontainer内UID 0へ、subuid rangeがcontainer内UID 1以降へ対応していることを確認します。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。host userのUID 1000がcontainer内UID 0へ、subuid rangeがcontainer内UID 1以降へ対応していることを確認します。_
 
 ### ストレージドライバーの選択
 

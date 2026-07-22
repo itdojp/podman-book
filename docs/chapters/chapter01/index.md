@@ -23,7 +23,7 @@ PodmanとDocker EngineはいずれもOCI containerを扱えますが、local Lin
 
 ![Podmanのdaemon常駐有無とrootless実行境界を判断する出力](../../assets/images/screenshots/chapter01/01-daemonless-process-audit.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。常駐Podman processがないこと、remote serviceではないこと、runtimeとversionを確認します。Docker daemonを利用できない撮影環境のため、Docker側のprocess比較は上の概念表で確認してください。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。常駐Podman processがないこと、remote serviceではないこと、runtimeとversionを確認します。Docker daemonを利用できない撮影環境のため、Docker側のprocess比較は上の概念表で確認してください。_
 
 ### DockerとPodmanの比較（確認日: 2026-07-21）
 

@@ -45,7 +45,7 @@ podman stats --no-stream --format json > metrics.json
 
 ![起動時間・image size・storage使用量を変更前baselineとして判断する出力](../../assets/images/screenshots/chapter12/01-performance-baseline.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。単回のwarm/cold未分離値はbenchmarkとして一般化せず、同じ条件で反復する前のbaselineとして扱います。WSL2のcgroup filesystemでは`podman stats`値を信頼できなかったため、実測可能な起動時間・image size・`podman system df`を採用しました。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。単回のwarm/cold未分離値はbenchmarkとして一般化せず、同じ条件で反復する前のbaselineとして扱います。WSL2のcgroup filesystemでは`podman stats`値を信頼できなかったため、実測可能な起動時間・image size・`podman system df`を採用しました。_
 
 **高度なメトリクス収集スクリプト**
 ```bash

@@ -8,7 +8,7 @@
       "chapter": "chapter01",
       "file": "docs/assets/images/screenshots/chapter01/01-daemonless-process-audit.png",
       "alt": "Podmanのdaemon常駐有無とrootless実行境界を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。常駐Podman processがないこと、remote serviceではないこと、runtimeとversionを確認します。Docker daemonを利用できない撮影環境のため、Docker側のprocess比較は上の概念表で確認してください。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。常駐Podman processがないこと、remote serviceではないこと、runtimeとversionを確認します。Docker daemonを利用できない撮影環境のため、Docker側のprocess比較は上の概念表で確認してください。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -27,14 +27,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 34018,
-      "sha256": "c314ee9844d7f27100873a5421b20ee678e43375b045f5f3bec0bdbcb6d47d6a"
+      "sha256": "c314ee9844d7f27100873a5421b20ee678e43375b045f5f3bec0bdbcb6d47d6a",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter02-01-podman-verify-setup",
       "chapter": "chapter02",
       "file": "docs/assets/images/screenshots/chapter02/01-podman-verify-setup.png",
       "alt": "Podmanのversion・rootless・cgroup・network backendと実行成功を判断する出力",
-      "caption": "2026-03-02、Ubuntu 24.04 / rootless Podman 4.9.3。version、cgroups v2、overlay、Netavark、`hello-world`の実行成功を確認します。出力内容は環境により異なります。",
+      "caption": "リポジトリ記録日 2026-03-02（UTC、正確な撮影日時は不明）、Ubuntu 24.04 / rootless Podman 4.9.3。version、cgroups v2、overlay、Netavark、`hello-world`の実行成功を確認します。出力内容は環境により異なります。",
       "environment": "Ubuntu 24.04",
       "versions": {
         "Podman": "4.9.3"
@@ -50,14 +52,16 @@
       "width": 1200,
       "height": 766,
       "bytes": 70519,
-      "sha256": "5a6ff224f4794b011c4d8064330d8da0f55fe1243b82ad1d2a6b1e11c5ba888f"
+      "sha256": "5a6ff224f4794b011c4d8064330d8da0f55fe1243b82ad1d2a6b1e11c5ba888f",
+      "captureTimezone": "unknown",
+      "dateBasis": "source commit date in UTC; exact capture time unavailable"
     },
     {
       "id": "chapter03-01-rootless-uid-mapping",
       "chapter": "chapter03",
       "file": "docs/assets/images/screenshots/chapter03/01-rootless-uid-mapping.png",
       "alt": "rootless Podmanでhost UIDとcontainer UIDの対応を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。host userのUID 1000がcontainer内UID 0へ、subuid rangeがcontainer内UID 1以降へ対応していることを確認します。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。host userのUID 1000がcontainer内UID 0へ、subuid rangeがcontainer内UID 1以降へ対応していることを確認します。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -76,14 +80,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 41142,
-      "sha256": "7f70acd5d25937bf4ea3082db674c118162ed96367ca0e3f2e91d8501f805d66"
+      "sha256": "7f70acd5d25937bf4ea3082db674c118162ed96367ca0e3f2e91d8501f805d66",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter04-01-image-pull-inventory",
       "chapter": "chapter04",
       "file": "docs/assets/images/screenshots/chapter04/01-image-pull-inventory.png",
       "alt": "pullしたimageのtag・ID・sizeがinventoryへ反映されたか判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。`alpine:3.20`のpull完了と、repository・tag・短縮ID・sizeの対応を確認します。digest相当の長いIDはマスクしています。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。`alpine:3.20`のpull完了と、repository・tag・短縮ID・sizeの対応を確認します。digest相当の長いIDはマスクしています。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -100,14 +106,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 53669,
-      "sha256": "fdb93567b77baa38b139f5d15d022160508e40f9cad3d7c7f155d527e22a2f32"
+      "sha256": "fdb93567b77baa38b139f5d15d022160508e40f9cad3d7c7f155d527e22a2f32",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter05-01-containerfile-build",
       "chapter": "chapter05",
       "file": "docs/assets/images/screenshots/chapter05/01-containerfile-build.png",
       "alt": "Containerfileのstageとbuild成功・生成tagの対応を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。2 stageの命令、commit、`localhost/book-qa-image:issue189`のtag、実行結果を対応付けます。container IDとorganization labelはマスクしています。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。2 stageの命令、commit、`localhost/book-qa-image:issue189`のtag、実行結果を対応付けます。container IDとorganization labelはマスクしています。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -126,14 +134,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 117121,
-      "sha256": "b3d6c23f32d30bbbd774f171f748414fc4f3447a5abeda2152ec7928ca3cb420"
+      "sha256": "b3d6c23f32d30bbbd774f171f748414fc4f3447a5abeda2152ec7928ca3cb420",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter06-01-port-volume-verification",
       "chapter": "chapter06",
       "file": "docs/assets/images/screenshots/chapter06/01-port-volume-verification.png",
       "alt": "公開portのHTTP疎通とvolume再作成後の永続性を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。公開portの対応とHTTP 200、local volumeのdriver、container再作成後も`persisted`が残ることを確認します。bind addressはマスクしています。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。公開portの対応とHTTP 200、local volumeのdriver、container再作成後も`persisted`が残ることを確認します。bind addressはマスクしています。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -151,14 +161,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 39672,
-      "sha256": "3b748c03ce16a3624b5f4bc25fac9304d78d07e66545278c2b28998f66e6ab71"
+      "sha256": "3b748c03ce16a3624b5f4bc25fac9304d78d07e66545278c2b28998f66e6ab71",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter07-01-pod-membership",
       "chapter": "chapter07",
       "file": "docs/assets/images/screenshots/chapter07/01-pod-membership.png",
       "alt": "Podの名前・状態と配下containerの所属を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。`book-qa-pod`がRunningで、infra containerを含む2 containerのうちweb containerが同じPod名へ所属することを確認します。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。`book-qa-pod`がRunningで、infra containerを含む2 containerのうちweb containerが同じPod名へ所属することを確認します。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -175,14 +187,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 29869,
-      "sha256": "8a155d084704df93fc6aa93a155ce5c22a838738d7ae615f08d41019dfca4403"
+      "sha256": "8a155d084704df93fc6aa93a155ce5c22a838738d7ae615f08d41019dfca4403",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter08-01-rootless-capability-boundary",
       "chapter": "chapter08",
       "file": "docs/assets/images/screenshots/chapter08/01-rootless-capability-boundary.png",
       "alt": "rootless・seccomp・capability削除の実行境界を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。rootlessとseccompが有効であること、SELinuxは当該Ubuntu環境では無効であること、`--cap-drop=all`後の`CapEff`が0であることを確認します。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。rootlessとseccompが有効であること、SELinuxは当該Ubuntu環境では無効であること、`--cap-drop=all`後の`CapEff`が0であることを確認します。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -200,14 +214,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 43262,
-      "sha256": "86d903e7f399c4277abca080807e71fd2a0646914e80a8bb5a08f45718f22ca0"
+      "sha256": "86d903e7f399c4277abca080807e71fd2a0646914e80a8bb5a08f45718f22ca0",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter09-01-quadlet-generated-unit",
       "chapter": "chapter09",
       "file": "docs/assets/images/screenshots/chapter09/01-quadlet-generated-unit.png",
       "alt": "Quadlet定義が期待するsystemd unitへ変換されるか判断するdry-run出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ Podman・Quadlet 4.9.3 / systemd 255。`.container`のimage・name・port・restartが生成unitへ反映されることをdry-runで確認します。撮影環境ではuser systemd busがofflineのため、稼働状態の証跡ではありません。workspace pathはマスクしています。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ Podman・Quadlet 4.9.3 / systemd 255。`.container`のimage・name・port・restartが生成unitへ反映されることをdry-runで確認します。撮影環境ではuser systemd busがofflineのため、稼働状態の証跡ではありません。workspace pathはマスクしています。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3",
@@ -227,14 +243,16 @@
       "width": 1200,
       "height": 1278,
       "bytes": 145222,
-      "sha256": "5f12130fc97b05ffd1c644cd9c98bd2f201c84eebbcdc2b3ac1ee0e6a76f5907"
+      "sha256": "5f12130fc97b05ffd1c644cd9c98bd2f201c84eebbcdc2b3ac1ee0e6a76f5907",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter10-01-actions-workflow-summary",
       "chapter": "chapter10",
       "file": "docs/assets/images/screenshots/chapter10/01-actions-workflow-summary.png",
       "alt": "GitHub Actionsでcommit・job・artifactが同じ成功runへ対応するか判断する画面",
-      "caption": "2026-07-23、GitHub Actions Web UI。公開main commit `4a7955d`のBook QA runで、status、`qa` job、2 artifactが同じ成功runに属することを確認します。accountとorganizationはマスクしています。この画面はbook QAの実例であり、後続のPodman image build例はworkflow定義とrun logを併せて検証してください。",
+      "caption": "2026-07-23（JST）、GitHub Actions Web UI。公開main commit `4a7955d`のBook QA runで、status、`qa` job、2 artifactが同じ成功runに属することを確認します。accountとorganizationはマスクしています。この画面はbook QAの実例であり、後続のPodman image build例はworkflow定義とrun logを併せて検証してください。",
       "environment": "GitHub Actions Web UI (public, signed-out)",
       "versions": {
         "GitHub Actions UI": "checked 2026-07-23",
@@ -252,14 +270,16 @@
       "width": 1440,
       "height": 1028,
       "bytes": 94071,
-      "sha256": "269d451764ca10e6ac6e3fc6be69a3366265edb018271a7885d20350280180f1"
+      "sha256": "269d451764ca10e6ac6e3fc6be69a3366265edb018271a7885d20350280180f1",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter11-01-kube-round-trip",
       "chapter": "chapter11",
       "file": "docs/assets/images/screenshots/chapter11/01-kube-round-trip.png",
       "alt": "Podから生成したKubernetes YAMLとdown・play後のPod状態を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。生成YAMLの`kind`・`metadata`・`spec`、down後の再play、最終Pod状態を対応付けます。WSL2固有のsyslog初期化warningは結果判定から分離しています。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。生成YAMLの`kind`・`metadata`・`spec`、down後の再play、最終Pod状態を対応付けます。WSL2固有のsyslog初期化warningは結果判定から分離しています。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -278,14 +298,16 @@
       "width": 1200,
       "height": 826,
       "bytes": 86016,
-      "sha256": "28e4d30b84aa7d2296bb19a7ebfb270d14fd9375b8e6adcf25d235aebb4c78f6"
+      "sha256": "28e4d30b84aa7d2296bb19a7ebfb270d14fd9375b8e6adcf25d235aebb4c78f6",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter12-01-performance-baseline",
       "chapter": "chapter12",
       "file": "docs/assets/images/screenshots/chapter12/01-performance-baseline.png",
       "alt": "起動時間・image size・storage使用量を変更前baselineとして判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。単回のwarm/cold未分離値はbenchmarkとして一般化せず、同じ条件で反復する前のbaselineとして扱います。WSL2のcgroup filesystemでは`podman stats`値を信頼できなかったため、実測可能な起動時間・image size・`podman system df`を採用しました。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。単回のwarm/cold未分離値はbenchmarkとして一般化せず、同じ条件で反復する前のbaselineとして扱います。WSL2のcgroup filesystemでは`podman stats`値を信頼できなかったため、実測可能な起動時間・image size・`podman system df`を採用しました。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -304,14 +326,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 54513,
-      "sha256": "ae587c50bed3ed758b4eb0c60db14d698c557b89ce080445b6a87abf59d097aa"
+      "sha256": "ae587c50bed3ed758b4eb0c60db14d698c557b89ce080445b6a87abf59d097aa",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter13-01-service-network-health",
       "chapter": "chapter13",
       "file": "docs/assets/images/screenshots/chapter13/01-service-network-health.png",
       "alt": "複数serviceのcontainer・network・health対応を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine・Alpine 3.20。database processとhealthyなAPIが同じprivate bridge network上でrunningであることを、service単位で確認します。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine・Alpine 3.20。database processとhealthyなAPIが同じprivate bridge network上でrunningであることを、service単位で確認します。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -328,14 +352,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 46334,
-      "sha256": "a6ffab804485dc1383d95b7f890e525783c31c6d2ef70a967c459944687ccb40"
+      "sha256": "a6ffab804485dc1383d95b7f890e525783c31c6d2ef70a967c459944687ccb40",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter14-01-compliance-availability",
       "chapter": "chapter14",
       "file": "docs/assets/images/screenshots/chapter14/01-compliance-availability.png",
       "alt": "2 replicaのhealth・read-only・capability・no-new-privileges合否を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。2 replicaがrunningかつhealthyで、read-only root filesystem、effective capability 0、no-new-privilegesを満たすことを確認します。これは検証用policyの実例であり、組織の正式なcompliance認証を意味しません。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。2 replicaがrunningかつhealthyで、read-only root filesystem、effective capability 0、no-new-privilegesを満たすことを確認します。これは検証用policyの実例であり、組織の正式なcompliance認証を意味しません。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -352,14 +378,16 @@
       "width": 1200,
       "height": 800,
       "bytes": 46822,
-      "sha256": "c31f8fb7e65cb47df0e0b999d25b62cfd0e90bd51b617e3d9afc043c103e6b9b"
+      "sha256": "c31f8fb7e65cb47df0e0b999d25b62cfd0e90bd51b617e3d9afc043c103e6b9b",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     },
     {
       "id": "chapter15-01-failure-diagnosis-recovery",
       "chapter": "chapter15",
       "file": "docs/assets/images/screenshots/chapter15/01-failure-diagnosis-recovery.png",
       "alt": "port競合の失敗・event・inspect根拠から復旧を判断する出力",
-      "caption": "2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。同じhost portで実際に起動失敗させ、eventと両containerのstateを確認し、owner停止後にcandidateを起動してHTTP 200へ復旧した流れです。container ID、bind address、IPはマスクしています。",
+      "caption": "2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。同じhost portで実際に起動失敗させ、eventと両containerのstateを確認し、owner停止後にcandidateを起動してHTTP 200へ復旧した流れです。container ID、bind address、IPはマスクしています。",
       "environment": "Ubuntu 24.04.3 LTS on WSL2",
       "versions": {
         "Podman": "4.9.3"
@@ -380,7 +408,9 @@
       "width": 1200,
       "height": 800,
       "bytes": 72766,
-      "sha256": "7b684112f456f50e9bdb6719ad7c0a5328fccdc4e2328f5a57e1df7e9b96c666"
+      "sha256": "7b684112f456f50e9bdb6719ad7c0a5328fccdc4e2328f5a57e1df7e9b96c666",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "capture session local date"
     }
   ]
 }

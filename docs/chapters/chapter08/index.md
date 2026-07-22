@@ -215,7 +215,7 @@ podman run \
 
 ![rootless・seccomp・capability削除の実行境界を判断する出力](../../assets/images/screenshots/chapter08/01-rootless-capability-boundary.png)
 
-_2026-07-23、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。rootlessとseccompが有効であること、SELinuxは当該Ubuntu環境では無効であること、`--cap-drop=all`後の`CapEff`が0であることを確認します。_
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Alpine 3.20。rootlessとseccompが有効であること、SELinuxは当該Ubuntu環境では無効であること、`--cap-drop=all`後の`CapEff`が0であることを確認します。_
 
 #### 8.3.2 Seccompプロファイル
 

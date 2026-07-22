@@ -284,6 +284,12 @@ podman kube generate mypod > pod.yaml
 podman kube generate -s mypod > deployment.yaml
 ```
 
+<a id="figure-kube-round-trip"></a>
+
+![Podから生成したKubernetes YAMLとdown・play後のPod状態を判断する出力](../../assets/images/screenshots/chapter11/01-kube-round-trip.png)
+
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3、Nginx 1.27-alpine。生成YAMLの`kind`・`metadata`・`spec`、down後の再play、最終Pod状態を対応付けます。WSL2固有のsyslog初期化warningは結果判定から分離しています。_
+
 ※ `-s/--service` で Service 定義も生成できますが、`podman kube play` は Service を再現しません。生成した Service は実クラスタ適用用の雛形として扱ってください。
 
 **生成されるYAMLの例**

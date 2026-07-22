@@ -1,7 +1,7 @@
 # スクリーンショット候補チェックリスト（章別）
 
-本書本文に差し込む「操作画面キャプチャ（ターミナル/GUI/Web UI 等）」の候補一覧です。
-Issue #189 の作業用チェックリストとして運用し、実画像はここでは追加しません（候補一覧整備まで）。
+本書本文に差し込む「操作画面キャプチャ（ターミナル/GUI/Web UI 等）」の実装状況と候補一覧です。
+Issue #189で採用した画像は`[x]`、環境依存または追加候補は`[ ]`で管理します。公開画像のprovenanceは`manifest.json`を参照してください。
 
 - 章タイトルは改訂で変更され得るため、本ファイルでは `chapterXX`（ディレクトリ名）を主キーとして管理します。
 - 格納先/命名/マスキング/キャプションの方針は `docs/assets/images/screenshots/README.md` を参照してください。
@@ -31,10 +31,10 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter01（コンテナ技術の基礎）
 
-- [ ] **[P0]** Docker と Podman のプロセス差分（daemon 有無が分かる画面）
+- [x] **[P0]** Podmanのdaemonless process/service境界（Docker側は概念表で比較）
   - 画面: ターミナル
-  - 前提: 比較対象として Docker が稼働している環境（または同等の比較環境）を用意する。
-  - 撮影ポイント: `dockerd` の常駐有無や、Podman がデーモンレスであることが読み取れる範囲を示す。
+  - 前提: rootless Podmanが稼働するLinux環境。Docker daemonを利用できない場合は、その境界をキャプションへ明記する。
+  - 撮影ポイント: Podman process、remote service、rootless、OCI runtime、version。Docker側は本文の概念表と一次情報で補う。
 
 - [ ] **[P1]** `podman stats --no-stream`（メトリクスの見方）
   - 画面: ターミナル
@@ -43,7 +43,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter02（Podmanのインストールと初期設定）
 
-- [ ] **[P0]** Linux: インストール → `podman run --rm hello-world`（初回成功）
+- [x] **[P0]** Linux: インストール → `podman run --rm hello-world`（初回成功）
   - 画面: ターミナル
   - 前提: 対象ディストリで Podman を未導入の状態から実施（既存環境の場合は検証用VMを推奨）。
   - 撮影ポイント: パッケージ導入の完了と、コンテナ実行が成功したことが分かる出力。
@@ -65,7 +65,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
   - 前提: rootless 運用を前提とした Linux 環境。設定変更が許容される検証環境で実施する。
   - 撮影ポイント: 適用した設定と反映結果が読み取れること（必要なら設定ファイル該当箇所も併記）。
 
-- [ ] **[P0]** UID/GID マッピング確認（ユーザ名前空間の理解を補助）
+- [x] **[P0]** UID/GID マッピング確認（ユーザ名前空間の理解を補助）
   - 画面: ターミナル
   - 前提: rootless 実行。マッピングが確認できる状態（例: `/proc` の表示）で実施する。
   - 撮影ポイント: コンテナ内外で UID/GID がどのように対応しているかが分かる情報。
@@ -82,7 +82,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter04（コンテナの基本操作とイメージ管理）
 
-- [ ] **[P0]** `podman pull` → `podman images`（タグ/サイズ/ID の読み方）
+- [x] **[P0]** `podman pull` → `podman images`（タグ/サイズ/ID の読み方）
   - 画面: ターミナル
   - 前提: ネットワーク到達性があること。例示用に2〜3個のイメージを用意する。
   - 撮影ポイント: pull の結果と、一覧での確認（タグ/サイズ等）が対応していること。
@@ -94,7 +94,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter05（Containerfileとイメージビルド・配布）
 
-- [ ] **[P0]** Containerfileの主要ステージ → `podman build`（定義とビルド結果の対応）
+- [x] **[P0]** Containerfileの主要ステージ → `podman build`（定義とビルド結果の対応）
   - 画面: ターミナル
   - 前提: 本文のマルチステージ例を、秘匿情報を含まない検証用ディレクトリへ用意する。
   - 撮影ポイント: Containerfileの主要ステージと、対応する成功ログ・生成タグが読み取れること。
@@ -106,7 +106,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter06（ネットワークとストレージ管理）
 
-- [ ] **[P0]** `podman run -p` 実行→ `curl` 疎通（ポート対応が分かる画面）
+- [x] **[P0]** `podman run -p` 実行→ `curl` 疎通（ポート対応が分かる画面）
   - 画面: ターミナル
   - 前提: HTTP 等の待受を行う例示用コンテナを起動しておく。ホスト側で疎通確認コマンドが実行できること。
   - 撮影ポイント: 公開ポートと疎通結果が同一画面に収まり、どのポートに対して確認したかが明確なこと。
@@ -116,14 +116,14 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
   - 前提: 対象ネットワークが存在すること。
   - 撮影ポイント: サブネット/ゲートウェイ等の主要項目が分かる範囲を示す。
 
-- [ ] **[P0]** `podman volume create` → `podman volume inspect` → 再作成後のデータ確認
+- [x] **[P0]** `podman volume create` → `podman volume inspect` → 再作成後のデータ確認
   - 画面: ターミナル
   - 前提: 例示用ボリュームと、書き込みを行う検証用コンテナを用意する。
   - 撮影ポイント: ボリューム名、mountpoint相当、コンテナ再作成後も残るデータが対応していること。
 
 ## chapter07（Pod機能と複数コンテナ管理）
 
-- [ ] **[P0]** `podman pod create` → `podman run --pod ...` → `podman pod ps`（Pod 単位管理）
+- [x] **[P0]** `podman pod create` → `podman run --pod ...` → `podman pod ps`（Pod 単位管理）
   - 画面: ターミナル
   - 前提: Pod を作成し、Pod 内に最低1つのコンテナを起動しておく。
   - 撮影ポイント: Pod ID/NAME と、Pod 配下のコンテナの紐づきが理解できること。
@@ -135,10 +135,10 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter08（コンテナセキュリティとRootless運用）
 
-- [ ] **[P0]** rootless判定とUID/GIDマッピング（実行境界の確認）
+- [x] **[P0]** rootless判定とcapability境界（実行境界の確認）
   - 画面: ターミナル
   - 前提: rootless Podman環境で、検証用コンテナを起動しておく。
-  - 撮影ポイント: rootless判定、ホスト側ユーザー、コンテナ内UID/GIDの対応が読み取れること。
+  - 撮影ポイント: rootless・seccompの適用状態と、capability削除後の`CapEff`。UID mappingの詳細はchapter03の画像を参照する。
 
 - [ ] **[P1]** capabilities / seccomp / SELinux の適用状態と拒否結果
   - 画面: ターミナル
@@ -147,10 +147,10 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter09（systemd・Quadletと本番運用）
 
-- [ ] **[P0]** Quadlet（`.container`）定義の編集画面 + `systemctl --user` での有効化/状態確認
+- [x] **[P0]** Quadlet（`.container`）定義 + generator dry-runでのunit反映確認
   - 画面: エディタ/ターミナル
-  - 前提: 利用環境の systemd/Podman が Quadlet をサポートしていること（バージョンはキャプションで明記）。
-  - 撮影ポイント: `.container` の主要キーと、反映後の unit 状態が分かること。
+  - 前提: 利用環境のsystemd/PodmanがQuadletをサポートしていること。user systemd busがofflineの場合は、稼働証跡ではないことを明記する。
+  - 撮影ポイント: `.container`の主要キーと生成unitの対応。実service状態はnative systemd環境での追加候補とする。
 
 - [ ] **[P1]** 既存の生成済みsystemd unitからQuadletへ移行する前後比較
   - 画面: エディタ/ターミナル
@@ -164,7 +164,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter10（CI/CDパイプラインの実践）
 
-- [ ] **[P0]** CI workflowの実行結果（summaryと主要build/test step）
+- [x] **[P0]** CI workflowの実行結果（summaryと主要build/test step）
   - 画面: Web UI
   - 前提: 公開可能な検証用workflowを実行し、account名やorganization情報をマスクする。
   - 撮影ポイント: commit、成功/失敗、Podmanを使う主要step、artifactの対応が分かること。
@@ -176,12 +176,12 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter11（Kubernetesとの統合）
 
-- [ ] **[P0]** `podman kube generate` 実行→生成 YAML の先頭（構造が分かる画面）
+- [x] **[P0]** `podman kube generate` 実行→生成 YAML の先頭（構造が分かる画面）
   - 画面: ターミナル
   - 前提: YAML 生成対象となる Pod/コンテナを用意する。
   - 撮影ポイント: kind/metadata/spec の位置関係が分かる範囲を示す（必要なら先頭のみ表示）。
 
-- [ ] **[P0]** `podman kube play` / `podman kube down`（起動/停止の流れ）
+- [x] **[P0]** `podman kube play` / `podman kube down`（起動/停止の流れ）
   - 画面: ターミナル
   - 前提: play 対象の YAML を用意する。
   - 撮影ポイント: play/down の実行と、対象リソースの状態変化（一覧やログ）が結びつくこと。
@@ -193,10 +193,10 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter12（パフォーマンスチューニング）
 
-- [ ] **[P0]** `podman stats --no-stream` / `podman system df`（ボトルネックの特定）
+- [x] **[P0]** 起動時間 / image size / `podman system df`（変更前baselineの特定）
   - 画面: ターミナル
   - 前提: 負荷条件を記録した検証用コンテナとイメージを用意する。
-  - 撮影ポイント: CPU、memory、network、diskのうち本文で判断に使う列が読み取れること。
+  - 撮影ポイント: 起動時間、image size、storage使用量。WSL2でcgroup statsが信頼できない場合は`podman stats`を採用せず、その制約をキャプションへ明記する。
 
 - [ ] **[P1]** 起動時間またはI/Oの条件固定比較
   - 画面: ターミナル
@@ -205,7 +205,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter13（マイクロサービスアーキテクチャ）
 
-- [ ] **[P0]** 複数serviceのcontainer/network対応とhealth状態
+- [x] **[P0]** 複数serviceのcontainer/network対応とhealth状態
   - 画面: ターミナル
   - 前提: API、database、gateway等の検証用serviceを専用network上で起動する。
   - 撮影ポイント: service名、container、network、healthの対応と、依存関係の判断点が分かること。
@@ -217,7 +217,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter14（エンタープライズ環境での活用）
 
-- [ ] **[P0]** compliance checkと高可用性構成の運用状態
+- [x] **[P0]** compliance checkと高可用性構成の運用状態
   - 画面: ターミナル
   - 前提: 組織固有情報を含まない検証用policyと複数unit構成を用意する。
   - 撮影ポイント: policy項目、合否、冗長化対象、復旧状態の判断点が対応していること。
@@ -229,7 +229,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
 
 ## chapter15（トラブルシューティング完全ガイド）
 
-- [ ] **[P0]** 実際の失敗 → `logs` / `events` / `inspect`による切り分け
+- [x] **[P0]** 実際の失敗 → `events` / `inspect`による切り分けと復旧
   - 画面: ターミナル
   - 前提: ポート競合や権限不足など、安全に再現できる実際の失敗を検証環境で発生させる。
   - 撮影ポイント: 失敗出力、時系列ログ、inspectの根拠、復旧後の成功が対応していること。
@@ -239,7 +239,7 @@ Issue #189 の作業用チェックリストとして運用し、実画像はこ
   - 前提: commandを実行すべき条件と実行しない条件を検証手順で分離する。
   - 撮影ポイント: 事前診断、選択した復旧操作、事後検証の順序が分かること。
 
-## 次の作業（候補一覧の確定フェーズ）
+## 次の作業（追加候補）
 
-- 章ごとに **P0 のみ** を選定し、キャプチャ数の上限（例: 各章 5〜10枚）を決める
-- 本文への差し込み箇所（節単位）を確定し、スクリーンショットを追加する
+- macOS / Windows / native systemd等、現在の撮影環境で真正な出力を取得できない候補は、対象環境を用意できた時点で追加する
+- 追加時も1章あたりの画像数を抑え、既存画像で判断点を説明できる場合は重複を避ける

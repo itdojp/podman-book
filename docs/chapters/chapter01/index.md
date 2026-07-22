@@ -19,6 +19,12 @@ title: "第1章：コンテナ技術の基礎"
 
 PodmanとDocker EngineはいずれもOCI containerを扱えますが、local Linuxでのprocess model、API endpoint、rootlessの有効化方法が異なります。製品名だけで優劣を決めず、運用するmodeと前提条件を揃えて比較します。
 
+<a id="figure-daemonless-process-audit"></a>
+
+![Podmanのdaemon常駐有無とrootless実行境界を判断する出力](../../assets/images/screenshots/chapter01/01-daemonless-process-audit.png)
+
+_2026-07-23（JST）、Ubuntu 24.04.3 LTS（WSL2）/ rootless Podman 4.9.3。常駐Podman processがないこと、remote serviceではないこと、runtimeとversionを確認します。Docker daemonを利用できない撮影環境のため、Docker側のprocess比較は上の概念表で確認してください。_
+
 ### DockerとPodmanの比較（確認日: 2026-07-21）
 
 #### 技術的特徴の比較

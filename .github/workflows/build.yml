@@ -44,6 +44,9 @@ jobs:
     - name: Figure index contract check
       run: npm run check:figure-index
 
+    - name: Screenshot provenance contract check
+      run: npm run check:screenshots
+
     - name: Podman backend contract check
       run: npm run check:podman-backends
 

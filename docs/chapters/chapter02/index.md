@@ -150,9 +150,9 @@ podman run --rm hello-world
 
 <a id="figure-podman-verification-screen"></a>
 
-![Podman セットアップ確認の出力例](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)
+![Podmanのversion・rootless・cgroup・network backendと実行成功を判断する出力](../../assets/images/screenshots/chapter02/01-podman-verify-setup.png)
 
-_Ubuntu 24.04 / Podman 4.9.3 における `podman --version` / `podman info` / `podman run --rm hello-world` の出力例。表示内容は環境により異なります。_
+_リポジトリ記録日 2026-03-02（UTC、正確な撮影日時は不明）、Ubuntu 24.04 / rootless Podman 4.9.3。version、cgroups v2、overlay、Netavark、`hello-world`の実行成功を確認します。出力内容は環境により異なります。_
 
 ### macOS
 

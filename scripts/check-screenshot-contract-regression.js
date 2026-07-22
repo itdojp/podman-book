@@ -26,8 +26,8 @@ function writeManifest(value) {
 }
 
 function expectFailure(name, evidence, mutate, restore) {
-  mutate();
   try {
+    mutate();
     const errors = validateScreenshotContract(fixtureRoot);
     if (!errors.some((error) => error.includes(evidence))) {
       throw new Error(`${name}: expected ${JSON.stringify(evidence)}, got:\n${errors.join('\n')}`);
@@ -38,8 +38,8 @@ function expectFailure(name, evidence, mutate, restore) {
 }
 
 function expectDirectFailureOnly(name, evidence, derivedEvidence, mutate, restore) {
-  mutate();
   try {
+    mutate();
     const errors = validateScreenshotContract(fixtureRoot);
     if (!errors.some((error) => error.includes(evidence))) {
       throw new Error(`${name}: expected ${JSON.stringify(evidence)}, got:\n${errors.join('\n')}`);
@@ -55,8 +55,8 @@ function expectDirectFailureOnly(name, evidence, derivedEvidence, mutate, restor
 }
 
 function expectSuccess(name, mutate, restore) {
-  mutate();
   try {
+    mutate();
     const errors = validateScreenshotContract(fixtureRoot);
     if (errors.length) throw new Error(`${name}: expected success, got:\n${errors.join('\n')}`);
   } finally {
